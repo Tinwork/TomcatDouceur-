@@ -1,0 +1,38 @@
+version: '2'
+services: 
+  tomcat: 
+    build: .
+    image: tinwork/tomcat
+    container_name: tinwork-tomcat
+    depends_on: 
+      - tomcat-db
+    ports: 
+      - 5000:8080
+    volumes:
+      - ./web:/opt/tomcat9/webapps/apps
+    links:
+      - tomcat-db
+
+  tomcat-db:
+    image: mysql:5.7
+    container_name: tomcat-db
+    volumes:
+      - ./sql_data:/var/lib/mysql
+    environment: 
+      MYSQL_ROOT_PASSWORD: tinwork
+      MYSQL_DATABASE: tinwork  
+      MYSQL_USER: jei 
+      MYSQL_PASSWORD: jei 
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: tomcat_phpmyadmin
+    depends_on: 
+      - tomcat-db
+    environment:
+      - PMA_ARBITRARY=1
+    external_links: 
+      - ./sql_data:db
+    ports:
+      - 8080:80
+      
