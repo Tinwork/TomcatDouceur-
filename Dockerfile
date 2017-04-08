@@ -34,10 +34,13 @@ RUN echo "export CATALINA_HOME='/opt/tomcat9'" >> /etc/environment && \
     . ~/.bashrc
 
 # Add user to tomcat 
-RUN echo "<role rolename='manager-gui' />\n<user username='root' password='root' roles='manager-gui'>\n<role rolename='admin-gui' />\n<user username='admin' password='admin' roles='admin-gui,manager-gui'>" >> ./conf/tomcat-user.xml
+RUN echo "<role rolename='manager-gui' />\n<user username='root' password='root' roles='manager-gui'>\n<role rolename='admin-gui' />\n<user username='admin' password='admin' roles='admin-gui,manager-gui'>" >> ./conf/tomcat-users.xml
 
 # Change the server reload config 
 RUN sed -i.bak 's/<Context>/<Context reloadable="true">/g' conf/context.xml
+
+# Add a log files
+RUN touch logs/apps.log
 
 # Run tomcat 
 CMD ./bin/catalina.sh run
