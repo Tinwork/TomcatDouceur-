@@ -17,26 +17,23 @@ public class Connect {
     // Define protected fields
     protected Connection connection;
     protected DataSource dataSource;
-    protected String wsSql;
+    protected String wsSql = "jdbc:mysql://172.21.0.2:3306/tinwork";
 
     // Private fields only accessible within the class
-    private String username;
-    private String pwd;
+    private String username = "root";
+    private String pwd = "tinwork";
 
     /**
      * Connect
      *      Constructor
-     * @param url String
      */
-    public Connect(String url){
-        this.wsSql = url;
-    }
+    public Connect(){}
 
     /**
      * Connect To DB
      *      Connect to the database
      */
-    public Connection connectToDB(){
+    public void connectToDB(){
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             this.connection = DriverManager.getConnection(this.wsSql+"?user="+this.username+"&password="+this.pwd);
@@ -45,7 +42,6 @@ public class Connect {
             // we should log the error here
         }
 
-        return this.connection;
     }
 
     /**

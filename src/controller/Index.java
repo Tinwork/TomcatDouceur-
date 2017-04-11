@@ -1,6 +1,9 @@
 package controller;
 
 import helper.Loghandler;
+import sql.SelectLinks;
+import url.Links;
+import url.UrlEntry;
 
 import javax.servlet.http.HttpServlet;
 import java.io.IOException;
@@ -45,12 +48,22 @@ public class Index extends HttpServlet {
         }
 
         // If we get the URL we can init the URL encoding process
+        UrlEntry processURL = new UrlEntry("", data.get("url"));
 
-        url.Shortern processURL = new url.Shortern("", data.get("url"));
         try {
-            processURL.init();
+            // Init check the validity of the URL and insert the original URL into the database
+            int row = processURL.init();
+
+            // If the init process is completed and successfull then we can generate a shorten url
+            if (row  != -1 && row != 0){
+                SelectLinks links = new SelectLinks();
+                Links link = links.retrieveSQLLink(row);
+
+                // now we can shorten the link
+                link.encodeLongURL();
+            }
         } catch(Exception e){
-            Loghandler.log("an error happened","warn");
+            Loghandler.log(e.toString(),"warn");
         }
 
     }

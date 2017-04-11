@@ -19,10 +19,11 @@ WORKDIR "/opt"
 
 # Download tomcat, extract and rename the folder 
 RUN wget http://mirrors.standaloneinstaller.com/apache/tomcat/tomcat-9/v9.0.0.M19/bin/apache-tomcat-9.0.0.M19.tar.gz && \
-    tar xvf apache-tomcat-9.0.0.M19.tar.gz 
+    tar xvf apache-tomcat-9.0.0.M19.tar.gz
 
 # Rename the folder
-RUN mv apache-tomcat-9.0.0.M19 tomcat9
+RUN mv apache-tomcat-9.0.0.M19 tomcat9 && \
+    rm apache-tomcat-9.0.0.M19.tar.gz
 
 # Change the workdir 
 WORKDIR "tomcat9"
@@ -41,6 +42,12 @@ RUN sed -i.bak 's/<Context>/<Context reloadable="true">/g' conf/context.xml
 
 # Add a log files
 RUN touch logs/apps.log
+
+# Add the JDBC driver into the libs folder
+RUN wget https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.41.tar.gz && \
+    tar -xvf mysql-connector-java-5.1.41.tar.gz && \
+    cp mysql-connector-java-5.1.41/mysql-connector-java-5.1.41-bin.jar /opt/tomcat9/lib/ && \
+    rm mysql-connector-java-5.1.41.tar.gz
 
 # Run tomcat 
 CMD ./bin/catalina.sh run

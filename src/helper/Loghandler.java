@@ -1,5 +1,6 @@
 package helper;
 
+import java.io.File;
 import java.io.IOException;
 import java.security.Security;
 import java.util.logging.FileHandler;
@@ -26,9 +27,11 @@ public class Loghandler {
      */
     public static void log(String data, String level){
         try {
-            file = new FileHandler("/opt/tomcat9/logs/apps.log");
-            logger.addHandler(file);
-            file.setFormatter(formatter);
+            if (logger.getHandlers().length == 0) {
+                file = new FileHandler("/opt/tomcat9/logs/apps.log", 20000, 20, true);
+                logger.addHandler(file);
+                file.setFormatter(formatter);
+            }
 
             logger.log(getLevel(level), data);
         } catch (SecurityException e) {
@@ -37,6 +40,7 @@ public class Loghandler {
             e.printStackTrace();
         }
     }
+
 
     /**
      * Get Level
