@@ -60,7 +60,11 @@ public class Index extends HttpServlet {
                 Links link = links.retrieveSQLLink(row);
 
                 // now we can shorten the link
-                link.encodeLongURL();
+                String short_url = link.encodeLongURL();
+
+                
+                // Now that we have the short url we want to retrieve it to save it into the database
+                processURL.pushShortURL(short_url, row);
             }
         } catch(Exception e){
             Loghandler.log(e.toString(),"warn");

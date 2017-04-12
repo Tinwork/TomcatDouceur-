@@ -16,6 +16,7 @@ public class UrlEntry {
     protected String url;
     protected static final String ALPHABET = "23456789bcdfghjkmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ-_";
     protected static final int BASE = ALPHABET.length();
+    private InsertURL insert;
 
     // Private fields
     private Pattern REGEX = Pattern.compile("(?i)^(?:(?:https?|ftp)://)(?:\\S+(?::\\S*)?@)?(?:(?!(?:10|127)(?:\\.\\d{1,3}){3})(?!(?:169\\.254|192\\.168)(?:\\.\\d{1,3}){2})(?!172\\.(?:1[6-9]|2\\d|3[0-1])(?:\\.\\d{1,3}){2})(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}(?:\\.(?:[1-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))|(?:(?:[a-z\\u00a1-\\uffff0-9]-*)*[a-z\\u00a1-\\uffff0-9]+)(?:\\.(?:[a-z\\u00a1-\\uffff0-9]-*)*[a-z\\u00a1-\\uffff0-9]+)*(?:\\.(?:[a-z\\u00a1-\\uffff]{2,}))\\.?)(?::\\d{2,5})?(?:[/?#]\\S*)?$");
@@ -44,7 +45,7 @@ public class UrlEntry {
            return -1;
 
         // Now we need to check whenever the url is in the database
-        InsertURL insert = new InsertURL(this.url, 1);
+        insert = new InsertURL(this.url, 1);
 
         if(!insert.checkPresenceOfURL())
             return insert.insertData();
@@ -70,5 +71,17 @@ public class UrlEntry {
         Loghandler.log("URL is valid", "info");
 
         return true;
+    }
+
+    public Boolean pushShortURL(String shortURL, int row){
+        try {
+            insert.InsertShortLink(shortURL, row);
+        } catch (Exception e){
+            Loghandler.log(e.toString(), "fatal");
+            return false;
+        }
+
+        return true;
+
     }
 }

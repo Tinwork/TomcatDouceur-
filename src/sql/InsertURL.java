@@ -2,6 +2,8 @@ package sql;
 
 import helper.Loghandler;
 import sun.rmi.log.LogHandler;
+import sun.tools.tree.Expression;
+import sun.tools.tree.StringExpression;
 import url.Links;
 
 import javax.xml.transform.Result;
@@ -72,7 +74,7 @@ public class InsertURL extends Connect{
         String sql = "SELECT * FROM Link WHERE original_link = ?";
 
         try {
-            PreparedStatement stmt = this.connection.prepareStatement(sql);
+            PreparedStatement stmt = this.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             stmt.setString(1, this.original_url);
 
             ResultSet res = stmt.executeQuery();
@@ -86,5 +88,63 @@ public class InsertURL extends Connect{
 
         return true;
     }
+
+    /**
+     * Check Presence Of Short URL
+     * @return
+     */
+    private boolean checkPresenceOfShortURL(String shortURL){
+        String sql = "SELECT * FROM Link WHERE short_link = ?";
+
+        try {
+            PreparedStatement stmt = this.connection.prepareStatement(sql);
+            stmt.setString(1, shortURL);
+
+            ResultSet res = stmt.executeQuery();
+
+            if (!res.next())
+                return false;
+
+        } catch (SQLException e){
+            Loghandler.log(e.toString(), "warn");
+        }
+
+        return true;
+    }
+
+
+    /**
+     * Insert Short Link
+     * @param shortURL
+     * @param rowID
+     */
+    public void InsertShortLink(String shortURL, int rowID) throws Exception{
+        String sql = "UPDATE Link SET short_link = ? WHERE Id = ?";
+
+        try {
+            // In order to avoid collision we need to check whenever the URL is present within the database
+            Boolean isPresent = this.checkPresenceOfShortURL(shortURL);
+
+            if (isPresent)
+                return;
+
+            PreparedStatement stmt = this.connection.prepareStatement(sql);
+
+            stmt.setString(1, shortURL);
+            stmt.setInt(2, rowID);
+
+            // Now execute the request
+            int isAdded = stmt.executeUpdate();
+
+            if (isAdded == 0){
+                throw new Exception("URL "+shortURL+" with ID = "+rowID+" has not been added into the database");
+            }
+
+        } catch (SQLException e){
+            Loghandler.log(e.toString(), "fatal");
+        }
+    }
+
+
 
 }

@@ -1,6 +1,7 @@
 package url;
 
 import helper.Loghandler;
+import sql.InsertURL;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
@@ -18,9 +19,9 @@ public class Links {
     private Date create_date;
     private int id;
     private int count;
-    private final char[] BASE62 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".toCharArray();
+    private static String ALPHABET = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private static int BASE = ALPHABET.length();
     private SecureRandom random = new SecureRandom();
-    private String characters;
 
 
     /**
@@ -39,49 +40,66 @@ public class Links {
     }
 
     /**
-     * Encode Long Url
-     *
+     * Generate ID
+     *          Generate a long id
+     * @return
      */
-    public void encodeLongURL(){
-        Loghandler.log("encode long url", "info");
-        String base62 = this.base62SqlRow();
-        String randHash = this.generateID();
-
-        Loghandler.log("randhash "+String.valueOf(randHash), "info");
-        Loghandler.log("base62 "+base62, "info");
-    }
-
     public String generateID(){
-        return new BigInteger(130, random).toString(7);
+        return new BigInteger(12, random).toString(7);
+    }
+
+
+    /**
+     * Encodes a number to Base62 string
+     *
+     * @return Encoded number
+     */
+    public String encode() {
+        if (this.id == 0) {
+            return ALPHABET.substring(0, 1);
+        }
+
+        StringBuilder code = new StringBuilder(16);
+
+        while (this.id > 0) {
+            int remainder = this.id % BASE;
+            this.id /= BASE;
+
+            code.append(ALPHABET.charAt(remainder));
+        }
+
+        return code.reverse().toString();
+    }
+
+
+    /**
+     * Decodes a Base62 string
+     *
+     * @param code Code to decode
+     * @return Decoded code
+     */
+    public int decode(String code) {
+        int number = 0;
+
+        for (int i = 0; i < code.length(); i++) {
+            int power = code.length() - (i + 1);
+            number += ALPHABET.indexOf(code.charAt(i)) * Math.pow(BASE, power);
+        }
+
+        return number;
     }
 
     /**
-     * Base 62 Sql Row
-     *          Encode a sql row to a base62 value
-     *          Based on the dukky/Base62 Converter
+     * Finalize Short URL
+     *          Finalize the creation of the Hash and the url and push it into the Datbase
+     * @return
      */
-    public String base62SqlRow(){
-        int id = Integer.valueOf(Integer.toString(this.id, 10), 10);
-        Loghandler.log("convertion en cours id "+id, "info");
+    public String encodeLongURL(){
+        String base62 = this.encode();
+        String hashes = this.generateID();
 
-        if (this.id < 0) {
-            throw new IllegalArgumentException("id must be nonnegative");
-        }
+        String id = hashes.concat(base62);
 
-        String ret = "";
-        while (id > 0) {
-            ret = BASE62[((int) this.id % 62)] + ret;
-            id /= 62;
-          //  Loghandler.log("ret: "+ret, "info");
-        }
-
-        return ret;
-    }
-
-    /**
-     * Decode Short Url
-     */
-    public void decodeShortURl(){
-
+        return id;
     }
 }
