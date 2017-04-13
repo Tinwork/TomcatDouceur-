@@ -93,7 +93,7 @@ public class InsertURL extends Connect{
      * Check Presence Of Short URL
      * @return
      */
-    private boolean checkPresenceOfShortURL(String shortURL){
+    public boolean checkPresenceOfShortURL(String shortURL){
         String sql = "SELECT * FROM Link WHERE short_link = ?";
 
         try {

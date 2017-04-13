@@ -23,8 +23,8 @@ public class Index extends HttpServlet {
      * @throws IOException
      */
     public void doGet(javax.servlet.http.HttpServletRequest req, javax.servlet.http.HttpServletResponse res) throws javax.servlet.ServletException, IOException {
-        String[] param = {"user"};
-        HashMap<String, String> data = helper.RequestParse.getParams(req, param);
+        Loghandler.log("get url passed here", "info");
+        this.getServletContext().getRequestDispatcher("WEB-INF/template/index.jsp").forward(req,res);
     }
 
 

@@ -51,4 +51,40 @@ public class SelectLinks extends Connect{
         return link;
     }
 
+    /**
+     * Select Links By Short Link
+     * @param short_url
+     * @return
+     * @throws Exception
+     */
+    public Links SelectLinksByShortLink(String short_url) throws Exception{
+
+        try {
+            PreparedStatement stmt = this.connection.prepareStatement("SELECT * FROM Link WHERE short_link = ?");
+            stmt.setString(1, short_url);
+
+            ResultSet res = stmt.executeQuery();
+
+            if (!res.next()){
+                return null;
+            }
+
+            do{
+                link = new Links(
+                        res.getString("original_link"),
+                        res.getString("short_link"),
+                        res.getInt("Id"),
+                        res.getInt("count"),
+                        res.getDate("create_date")
+                );
+            } while(res.next());
+
+        } catch (SQLException e){
+            Loghandler.log("exception "+e.toString(), "warn");
+        }
+
+
+        return link;
+    }
+
 }

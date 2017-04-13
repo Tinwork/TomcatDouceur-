@@ -102,4 +102,13 @@ public class Links {
 
         return id;
     }
+
+    /**
+     * Get Original URL
+     * @return orig_link
+     */
+    public String getOriginalURL(){
+        Loghandler.log("trying to get the original link", "info");
+        return this.orig_link;
+    }
 }

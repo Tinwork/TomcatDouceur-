@@ -11,4 +11,12 @@
         <servlet-name>Index</servlet-name>
         <url-pattern>/shorturl</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>Parse</servlet-name>
+        <servlet-class>controller.ParseController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Parse</servlet-name>
+        <url-pattern>/*</url-pattern>
+    </servlet-mapping>
 </web-app>
