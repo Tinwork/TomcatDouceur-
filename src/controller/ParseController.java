@@ -20,18 +20,25 @@ public class ParseController extends HttpServlet{
      */
     @Override
     public void doGet(javax.servlet.http.HttpServletRequest req, javax.servlet.http.HttpServletResponse res) throws javax.servlet.ServletException, IOException{
-        Loghandler.log("url is called", "info");
-        Loghandler.log(req.getPathInfo(), "info");
 
-        // Now that we have the url we need to parse
-        ParseURL parser = new ParseURL(req.getPathInfo());
-        String original_url = parser.retrieveLinks();
 
-        if (original_url != null)
-            res.sendRedirect(original_url);
+        String requrl = req.getRequestURI();
+        CharSequence template = "template";
 
-        // Otherwise we need to send an error to the JSP
+        if (!requrl.contains(template)){
+            Loghandler.log("url is called", "info");
+            Loghandler.log(req.getPathInfo(), "info");
 
-        Loghandler.log(original_url, "info");
+            // Now that we have the url we need to parse
+            ParseURL parser = new ParseURL(req.getPathInfo());
+            String original_url = parser.retrieveLinks();
+
+            if (original_url != null)
+                res.sendRedirect(original_url);
+
+            // Otherwise we need to send an error to the JSP
+
+            Loghandler.log(original_url, "info");
+        }
     }
 }

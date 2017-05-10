@@ -38,21 +38,19 @@ public class UrlEntry {
      *      Getting the shorten_url required us to have the ID of the link in the database
      * @return Boolean
      */
-    public int init(){
+    public boolean init() throws Exception{
         Boolean isValid = this.validateURL();
 
         if (!isValid)
-           return -1;
+            throw new Exception("the url is not valid");
 
         // Now we need to check whenever the url is in the database
         insert = new InsertURL(this.url, 1);
 
         if(!insert.checkPresenceOfURL())
-            return insert.insertData();
+            return false;
         else
-            Loghandler.log("not insert", "info");
-
-        return 0;
+            return true;
     }
 
     /**
@@ -73,15 +71,20 @@ public class UrlEntry {
         return true;
     }
 
-    public Boolean pushShortURL(String shortURL, int row){
-        try {
-            insert.InsertShortLink(shortURL, row);
-        } catch (Exception e){
-            Loghandler.log(e.toString(), "fatal");
-            return false;
-        }
+    public void insertAction(String original_url){
+        int userID = 1;
 
-        return true;
+        Links short_link = new Links(original_url, "", 0, 0, null, 0);
+        String shortURL = short_link.encodeLongURL();
+        long hash = short_link.getID();
+
+        InsertURL insert = new InsertURL(original_url, userID);
+
+        try {
+            insert.InsertLink(hash, shortURL);
+        } catch(Exception e){
+            Loghandler.log(e.toString(), "fatal");
+        }
 
     }
 }

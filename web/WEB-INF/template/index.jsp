@@ -15,13 +15,12 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
   </head>
   <body>
-    <form action="shorturl" method="POST">
+    <form action="home" method="POST">
       <div class="input-group">
         <span class="input-group-addon" id="basic-addon1">#</span>
         <input type="text" class="form-control" placeholder="Link" name="url" aria-describedby="basic-addon1" required>
       </div>
       <button type="submit" class="btn btn-primary">Submit</button>
     </form>
-  $END$
   </body>
 </html>

@@ -114,12 +114,13 @@ public class InsertURL extends Connect{
 
 
     /**
-     * Insert Short Link
+     *
+     * @param hash
      * @param shortURL
-     * @param rowID
+     * @throws Exception
      */
-    public void InsertShortLink(String shortURL, int rowID) throws Exception{
-        String sql = "UPDATE Link SET short_link = ? WHERE Id = ?";
+    public void InsertLink(long hash, String shortURL) throws Exception{
+        String sql = "INSERT INTO Link (hashnumber, original_link, short_link, user_id, create_date) VALUES (?, ?, ?, ?, ?)";
 
         try {
             // In order to avoid collision we need to check whenever the URL is present within the database
@@ -130,14 +131,17 @@ public class InsertURL extends Connect{
 
             PreparedStatement stmt = this.connection.prepareStatement(sql);
 
-            stmt.setString(1, shortURL);
-            stmt.setInt(2, rowID);
+            stmt.setLong(1, hash);
+            stmt.setString(2, this.original_url);
+            stmt.setString(3, shortURL);
+            stmt.setInt(4, this.userID);
+            stmt.setDate(5, java.sql.Date.valueOf(java.time.LocalDate.now()));
 
             // Now execute the request
             int isAdded = stmt.executeUpdate();
 
             if (isAdded == 0){
-                throw new Exception("URL "+shortURL+" with ID = "+rowID+" has not been added into the database");
+                throw new Exception("URL "+original_url+" has not been saved in the database");
             }
 
         } catch (SQLException e){

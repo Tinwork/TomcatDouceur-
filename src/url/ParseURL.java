@@ -34,6 +34,13 @@ public class ParseURL {
         try {
 
             Links link = linkSelector.SelectLinksByShortLink(this.shortURL);
+            long id = link.toBase10();
+
+
+            Loghandler.log("id calc "+id+"", "info");
+            if (id != link.getHashID())
+                return null;
+            Loghandler.log("back ID "+String.valueOf(id), "info");
 
             if (link == null)
                 return null;

@@ -15,60 +15,83 @@ public class Links {
     // This class represent what we have as a data in the database for a single link.
     // Use this class to operate a link
     private String orig_link;
-    private String short_link;
-    private Date create_date;
-    private int id;
+    private String short_url;
+    private int sql_id;
     private int count;
+    private Date date;
+    private long id;
+    private long hashid;
     private static String ALPHABET = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     private static int BASE = ALPHABET.length();
-    private SecureRandom random = new SecureRandom();
 
 
     /**
      * Links constructor
      * @param original_url
      * @param short_url
-     * @param id
-     * @param count
      */
-    public Links(String original_url, String short_url, int id, int count, Date date){
+    public Links(String original_url, String short_url, int sql_id, int count, Date date, long hashid){
+        this.short_url = short_url;
         this.orig_link = original_url;
-        this.short_link = short_url;
-        this.create_date = date;
-        this.id = id;
+        this.sql_id = sql_id;
         this.count = count;
+        this.date = date;
+        this.hashid = hashid;
     }
 
     /**
-     * Generate ID
-     *          Generate a long id
+     *
+     * @param uniqID
      * @return
      */
-    public String generateID(){
-        return new BigInteger(12, random).toString(7);
+    public String base10ToBase62(long uniqID){
+        StringBuilder sb = new StringBuilder();
+
+        if (uniqID == 0)
+            return "a";
+
+        while (uniqID > 0)
+            uniqID = generateBase62(sb, uniqID);
+
+        return sb.reverse().toString();
+    }
+
+    /**
+     *
+     * @param sb
+     * @param currentNumb
+     * @return
+     */
+    protected long generateBase62(final StringBuilder sb, long currentNumb){
+        long remaining = currentNumb % BASE;
+        sb.append(ALPHABET.charAt((int) remaining));
+
+        return currentNumb / BASE;
     }
 
 
     /**
-     * Encodes a number to Base62 string
      *
-     * @return Encoded number
+     * @param shortID
+     * @return
      */
-    public String encode() {
-        if (this.id == 0) {
-            return ALPHABET.substring(0, 1);
-        }
+    protected long toBase10(){
+        char[] chars = new StringBuilder(this.short_url).reverse().toString().toCharArray();
+        long n = 0;
+        for (int idx = chars.length - 1; idx >= 0; idx--)
+            n += CalculateBase10(ALPHABET.indexOf(chars[idx]), idx);
 
-        StringBuilder code = new StringBuilder(16);
+        return n;
+    }
 
-        while (this.id > 0) {
-            int remainder = this.id % BASE;
-            this.id /= BASE;
-
-            code.append(ALPHABET.charAt(remainder));
-        }
-
-        return code.reverse().toString();
+    /**
+     *
+     * @param idx
+     * @param pow
+     * @return
+     */
+    protected long CalculateBase10(long idx, long pow){
+        return idx * (long) Math.pow(BASE, pow);
     }
 
 
@@ -95,12 +118,14 @@ public class Links {
      * @return
      */
     public String encodeLongURL(){
-        String base62 = this.encode();
-        String hashes = this.generateID();
+        long rand = 1 + (long) ((Math.random() * (Math.pow(62, 6) - 1)));
+        this.id = rand;
+        Loghandler.log("random value "+String.valueOf(rand), "info");
 
-        String id = hashes.concat(base62);
+        String base62 = this.base10ToBase62(rand);
 
-        return id;
+        Loghandler.log(base62, "info");
+        return base62;
     }
 
     /**
@@ -110,5 +135,21 @@ public class Links {
     public String getOriginalURL(){
         Loghandler.log("trying to get the original link", "info");
         return this.orig_link;
+    }
+
+    /**
+     * getID
+     * @return
+     */
+    public long getID(){
+        return this.id;
+    }
+
+    /**
+     * getHashID
+     * @return
+     */
+    public long getHashID(){
+        return this.hashid;
     }
 }

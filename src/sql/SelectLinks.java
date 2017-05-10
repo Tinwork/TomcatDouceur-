@@ -40,7 +40,8 @@ public class SelectLinks extends Connect{
                         res.getString("short_link"),
                         res.getInt("Id"),
                         res.getInt("count"),
-                        res.getDate("create_date")
+                        res.getDate("create_date"),
+                        res.getLong("hashnumber")
                 );
             }
         } catch (SQLException e){
@@ -75,7 +76,8 @@ public class SelectLinks extends Connect{
                         res.getString("short_link"),
                         res.getInt("Id"),
                         res.getInt("count"),
-                        res.getDate("create_date")
+                        res.getDate("create_date"),
+                        res.getLong("hashnumber")
                 );
             } while(res.next());
 
