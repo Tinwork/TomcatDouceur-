@@ -1,9 +1,6 @@
 package controller;
 
 import helper.Loghandler;
-import sql.InsertURL;
-import sql.SelectLinks;
-import url.Links;
 import url.UrlEntry;
 
 import javax.servlet.annotation.WebServlet;
@@ -14,8 +11,7 @@ import java.util.HashMap;
 /**
  * Created by lookitsmarc on 08/04/2017.
  */
-@WebServlet("/index.jsp")
-public class Index extends HttpServlet {
+public class IndexController extends HttpServlet {
 
     private bean.Error errorBean = new bean.Error();
 
@@ -26,9 +22,7 @@ public class Index extends HttpServlet {
      * @throws IOException
      */
     public void doGet(javax.servlet.http.HttpServletRequest req, javax.servlet.http.HttpServletResponse res) throws javax.servlet.ServletException, IOException {
-        Loghandler.log("get url passed here", "info");
         this.getServletContext().getRequestDispatcher("/WEB-INF/template/index.jsp").forward(req,res);
-        //res.sendRedirect("/test.jsp");
     }
 
 
@@ -45,9 +39,7 @@ public class Index extends HttpServlet {
         if (data.isEmpty()){
             Loghandler.log("data is empty", "warn");
 
-            errorBean.setLevel("warning");
-            errorBean.setError("can't retrieve the URL");
-            req.setAttribute("errorbean", errorBean);
+            req = setBeanAttr(req, "warning", "can't retrieve the URL");
             this.getServletContext().getRequestDispatcher("/WEB-INF/template/index.jsp").forward(req, res);
         }
 
@@ -61,11 +53,32 @@ public class Index extends HttpServlet {
             if (!isPresent) {
                 Loghandler.log("pass here insert", "info");
                 processURL.insertAction(data.get("url"));
+            } else {
+                req = setBeanAttr(req, "warning", "The same URL alredy");
+                this.getServletContext().getRequestDispatcher("/WEB-INF/template/index.jsp").forward(req, res);
             }
 
         } catch(Exception e){
             Loghandler.log(e.toString(),"warn");
-        }
 
+            // Set the bean error
+            req = setBeanAttr(req, "fatal", "can't insert the URL");
+            this.getServletContext().getRequestDispatcher("/WEB-INF/template/index.jsp").forward(req, res);
+        }
+    }
+
+    /**
+     *
+     * @param req
+     * @param level
+     * @param m
+     * @return
+     */
+    public javax.servlet.http.HttpServletRequest setBeanAttr(javax.servlet.http.HttpServletRequest req, String level, String m) {
+        errorBean.setLevel(level);
+        errorBean.setError(m);
+
+        req.setAttribute("error", errorBean);
+        return req;
     }
 }
