@@ -9,7 +9,7 @@ services:
     ports: 
       - 5000:8080
     volumes:
-      - ./web:/opt/tomcat9/webapps/apps
+      - ./web:/opt/tomcat9/webapps/tinwork
     links:
       - tomcat-db
 

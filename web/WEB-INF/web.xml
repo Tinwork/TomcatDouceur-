@@ -5,7 +5,7 @@
          version="3.1">
     <servlet>
         <servlet-name>Index</servlet-name>
-        <servlet-class>controller.Index</servlet-class>
+        <servlet-class>controller.IndexController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Index</servlet-name>
@@ -18,5 +18,21 @@
     <servlet-mapping>
         <servlet-name>Parse</servlet-name>
         <url-pattern>/b/*</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>SignUp</servlet-name>
+        <servlet-class>controller.SignController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SignUp</servlet-name>
+        <url-pattern>/sign</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>Login</servlet-name>
+        <servlet-class>controller.LoginController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Login</servlet-name>
+        <url-pattern>/login</url-pattern>
     </servlet-mapping>
 </web-app>
