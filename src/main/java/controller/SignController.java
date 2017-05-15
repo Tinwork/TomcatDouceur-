@@ -42,8 +42,10 @@ public class SignController extends HttpServlet {
         UserDB usr = new UserDB();
         Boolean presence = usr.userExist(usrData.get("username"));
 
-        if (!presence)
+        if (presence) {
             this.getServletContext().getRequestDispatcher("/WEB-INF/template/signup.jsp").forward(req, res);
+            return;
+        }
 
         // As the user does not exist we can now encrypt it's password and save it into the database
         Password pwd = new Password(usrData.get("password"));

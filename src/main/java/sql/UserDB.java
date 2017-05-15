@@ -34,13 +34,15 @@ public class UserDB extends Connect{
             // Execute the request
             ResultSet res = stmt.executeQuery();
 
-            if (!res.next())
-                return true;
+            if (!res.next()) {
+                Loghandler.log("res next "+String.valueOf(res.next()), "info");
+                return false;
+            }
         } catch (Exception e) {
             Loghandler.log(e.toString(), "warning");
         }
 
-        return false;
+        return true;
     }
 
     /**
@@ -80,7 +82,7 @@ public class UserDB extends Connect{
      * @param username
      * @return
      */
-    public byte[][] selectPwd(String username) {
+    public byte[][] selectPwd(String username){
         String sql = "SELECT hash, salt FROM User WHERE user = ?";
         String pwd = "";
         String salt = "";
@@ -92,8 +94,10 @@ public class UserDB extends Connect{
 
             ResultSet res = stmt.executeQuery();
 
+            Loghandler.log("res "+String.valueOf(res), "info");
+
             if (!res.next()) {
-                return null;
+                return assembly;
             }
 
             do {

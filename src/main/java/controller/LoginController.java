@@ -1,7 +1,6 @@
 package controller;
 
 import bean.Userstate;
-import helper.Loghandler;
 import helper.RequestParse;
 import login.Password;
 import login.Token;
@@ -19,7 +18,7 @@ import java.util.HashMap;
  */
 public class LoginController extends HttpServlet {
 
-
+    private UserDB usr = new UserDB();
     /**
      *
      * @param req
@@ -48,11 +47,12 @@ public class LoginController extends HttpServlet {
 
 
         // Select the hash and the salt from the user
-        UserDB usr = new UserDB();
         byte[][] logData = usr.selectPwd(usrData.get("username"));
 
-        if (logData == null)
-            this.getServletContext().getRequestDispatcher("/login").forward(req, res);
+        if (logData == null) {
+            res.sendRedirect("/tinwork/login");
+            return;
+        }
 
         Password pwd = new Password(null);
 
@@ -62,24 +62,13 @@ public class LoginController extends HttpServlet {
         if (issame) {
             Token tokenHandler = new Token();
             // Generate an access token
-
             String token = tokenHandler.generateToken();
             Userstate bean = setBean(usrData.get("username"), token);
-
-            // Log temporary the token in order to debug
-            Loghandler.log("token "+token, "info");
-
-            HttpSession session = req.getSession();
-            session.setAttribute("userstate", bean);
-            RequestDispatcher dispatcher = req.getRequestDispatcher("/dashboard");
-            dispatcher.forward(req, res);
+            RedirectWithBean(req, res, bean);
         } else {
             this.getServletContext().getRequestDispatcher("/login").forward(req, res);
         }
 
-
-        // We should redirect the user to the login page with an error...
-        Loghandler.log("is same "+String.valueOf(issame), "info");
     }
 
     /**
@@ -95,6 +84,21 @@ public class LoginController extends HttpServlet {
         Userstate state = new Userstate(username, hash);
 
         return state;
+    }
+
+    /**
+     *
+     * @param req
+     * @param res
+     * @param bean
+     * @throws ServletException
+     * @throws IOException
+     */
+    public void RedirectWithBean(javax.servlet.http.HttpServletRequest req, javax.servlet.http.HttpServletResponse res, Userstate bean) throws ServletException, IOException{
+        HttpSession session = req.getSession();
+        session.setAttribute("userstate", bean);
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/dashboard");
+        dispatcher.forward(req, res);
     }
 
 }

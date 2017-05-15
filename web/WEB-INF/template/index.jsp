@@ -38,7 +38,7 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col">
-          <form action="home" method="POST">
+          <form action="home" method="POST" id="urlform">
             <div class="input-group">
               <span class="input-group-addon" id="basic-addon1">URL</span>
               <input type="text" class="form-control" placeholder="Link" name="url" aria-describedby="basic-addon1" required>
@@ -47,6 +47,14 @@
           </form>
         </div>
       </div>
+      <div class="row">
+        <div class="col">
+          <button type="button" class="btn btn-primary addon" data-id="pwd">Add password</button>
+          <button type="button" class="btn btn-success addon" data-id="mail">Add mail</button>
+          <button type="button" class="btn btn-info addon" data-id="date">Add date</button>
+        </div>
+      </div>
     </div>
+    <script type="text/javascript" src="/tinwork/public/js/form.js"></script>
   </body>
 </html>
