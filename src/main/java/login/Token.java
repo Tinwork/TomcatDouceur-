@@ -66,7 +66,7 @@ public class Token {
      * @return
      * @throws Exception
      */
-    public Boolean parseToken(String token) throws Exception{
+    public Boolean parseToken(String token){
         try {
             Algorithm HMAC256 = GenerateAlg();
             // Create an instance of the verifier
@@ -78,7 +78,10 @@ public class Token {
         } catch (JWTVerificationException e) {
             // If pass threw this then the token is the not valid
             Loghandler.log("token is not valid", "info");
-            throw new Exception(e.toString());
+            return false;
+        } catch (Exception e) {
+            Loghandler.log("exception token "+e.toString(), "info");
+            return false;
         }
 
         return true;

@@ -37,6 +37,9 @@
     </nav>
     <div class="container-fluid">
         <p>DASHBOARD</p>
+        <p>${userstate.getToken()}</p>
+
+
     </div>
 </body>
 </html>

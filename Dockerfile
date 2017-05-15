@@ -50,8 +50,29 @@ RUN wget https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.
     rm mysql-connector-java-5.1.41.tar.gz
 
 # Add the Java-jwt dependency to tomcat
-RUN wget http://central.maven.org/maven2/com/auth0/java-jwt/0.1/java-jwt-0.1.jar && \
-    cp java-jwt-0.1.jar /opt/tomcat9/lib/
+RUN wget http://central.maven.org/maven2/com/auth0/java-jwt/3.2.0/java-jwt-3.2.0.jar && \
+    cp java-jwt-3.2.0.jar /opt/tomcat9/lib/ && \
+    rm java-jwt-3.2.0.jar
+
+# Add the Java jackson core to tomcat
+RUN wget http://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-core/2.8.8/jackson-core-2.8.8.jar && \
+    cp jackson-core-2.8.8.jar /opt/tomcat9/lib/ && \
+    rm jackson-core-2.8.8.jar
+
+# Add the Java jackson databind
+RUN wget http://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-databind/2.8.8/jackson-databind-2.8.8.jar && \
+    cp jackson-databind-2.8.8.jar /opt/tomcat9/lib/ && \
+    rm jackson-databind-2.8.8.jar
+
+# Add the Java jackson annotation
+RUN wget http://repo2.maven.org/maven2/com/fasterxml/jackson/core/jackson-annotations/2.8.0/jackson-annotations-2.8.0.jar && \
+    cp jackson-annotations-2.8.0.jar /opt/tomcat9/lib && \
+    rm jackson-annotations-2.8.0.jar
+
+# Add the apache stuff
+RUN wget http://central.maven.org/maven2/commons-codec/commons-codec/1.9/commons-codec-1.9.jar && \
+    cp commons-codec-1.9.jar /opt/tomcat9/lib && \
+    rm commons-codec-1.9.jar
 
 # Run tomcat 
 CMD ./bin/catalina.sh run

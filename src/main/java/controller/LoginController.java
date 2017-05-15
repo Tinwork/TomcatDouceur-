@@ -7,8 +7,10 @@ import login.Password;
 import login.Token;
 import sql.UserDB;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -49,9 +51,8 @@ public class LoginController extends HttpServlet {
         UserDB usr = new UserDB();
         byte[][] logData = usr.selectPwd(usrData.get("username"));
 
-        if (logData.length == 0)
-            throw new ServletException("log data empty");
-
+        if (logData == null)
+            this.getServletContext().getRequestDispatcher("/login").forward(req, res);
 
         Password pwd = new Password(null);
 
@@ -62,15 +63,20 @@ public class LoginController extends HttpServlet {
             Token tokenHandler = new Token();
             // Generate an access token
 
-            //String token = tokenHandler.generateToken();
-            //setBean(req, usrData.get("username"), token);
+            String token = tokenHandler.generateToken();
+            Userstate bean = setBean(usrData.get("username"), token);
 
             // Log temporary the token in order to debug
-            //Loghandler.log("token "+token, "info");
+            Loghandler.log("token "+token, "info");
 
-            // Set the token as the parameter
-            this.getServletContext().getRequestDispatcher("/WEB-INF/template/dashboard.jsp").forward(req, res);
+            HttpSession session = req.getSession();
+            session.setAttribute("userstate", bean);
+            RequestDispatcher dispatcher = req.getRequestDispatcher("/dashboard");
+            dispatcher.forward(req, res);
+        } else {
+            this.getServletContext().getRequestDispatcher("/login").forward(req, res);
         }
+
 
         // We should redirect the user to the login page with an error...
         Loghandler.log("is same "+String.valueOf(issame), "info");
@@ -78,19 +84,17 @@ public class LoginController extends HttpServlet {
 
     /**
      *
-     * @param req
      * @param username
      * @param hash
      * @return
      */
-    public javax.servlet.http.HttpServletRequest setBean(javax.servlet.http.HttpServletRequest req, String username, String hash) {
+    public Userstate setBean(String username, String hash) {
         if (username.isEmpty() && hash.isEmpty())
-            return req;
+            return null;
 
         Userstate state = new Userstate(username, hash);
-        req.setAttribute("userstate", state);
 
-        return req;
+        return state;
     }
 
 }
