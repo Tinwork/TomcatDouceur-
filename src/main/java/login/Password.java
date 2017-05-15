@@ -6,7 +6,6 @@ import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.xml.bind.DatatypeConverter;
-import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
@@ -41,8 +40,6 @@ public class Password {
         byte[] salt = new byte[32];
         random.nextBytes(salt);
         this.salt = salt;
-
-        Loghandler.log("FIRST SALT "+Arrays.toString(this.salt), "info");
 
         return salt;
     }
@@ -99,9 +96,7 @@ public class Password {
     public String getSalt() throws Exception{
 
         String strslat = DatatypeConverter.printBase64Binary(this.salt);
-
-        Loghandler.log("strsalt "+strslat, "info");
-        Loghandler.log("after deconvert "+Arrays.toString(DatatypeConverter.parseBase64Binary(strslat)), "info");
+        Loghandler.log("before sending into db Salt "+Arrays.toString(this.salt), "info");
 
         return strslat;
     }

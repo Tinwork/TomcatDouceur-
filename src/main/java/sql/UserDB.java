@@ -109,7 +109,7 @@ public class UserDB extends Connect{
             byte[] bpwd = DatatypeConverter.parseBase64Binary(pwd);
             byte[] bsalt = DatatypeConverter.parseBase64Binary(salt);
 
-            assembly = new byte[][]{bpwd, bsalt};
+            assembly = new byte[][]{bsalt, bpwd};
 
         } catch (SQLException e) {
             Loghandler.log(e.toString(), "warning");

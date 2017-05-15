@@ -49,5 +49,9 @@ RUN wget https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.
     cp mysql-connector-java-5.1.41/mysql-connector-java-5.1.41-bin.jar /opt/tomcat9/lib/ && \
     rm mysql-connector-java-5.1.41.tar.gz
 
+# Add the Java-jwt dependency to tomcat
+RUN wget http://central.maven.org/maven2/com/auth0/java-jwt/0.1/java-jwt-0.1.jar && \
+    cp java-jwt-0.1.jar /opt/tomcat9/lib/
+
 # Run tomcat 
 CMD ./bin/catalina.sh run
