@@ -8,14 +8,14 @@ import url.Links;
 
 import javax.xml.transform.Result;
 import java.sql.*;
-import java.util.HashMap;
+import java.sql.Date;
+import java.util.*;
 
 /**
  * Created by lookitsmarc on 04/04/2017.
  */
 public class InsertURL extends Connect{
 
-    private String encode_url;
     private String original_url;
     private int userID;
 
@@ -34,19 +34,23 @@ public class InsertURL extends Connect{
      * Insert Data
      *      Insert datas in the database
      */
-    public int insertOriginalURL(){
+    public int insertOriginalURL(String password, String mail, Date start, Date end){
         int updateState = 0;
         int lastRow = 0;
 
         try {
             // Otherwise we try to insert the url in the db
-            String sql = "INSERT INTO Link (original_link, user_id, create_date) VALUES (?, ?, ?)";
+            String sql = "INSERT INTO Link (original_link, user_id, create_date, password, mail, start_date, end_date) VALUES (?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement stmt = this.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
             // Bind the params
             stmt.setString(1, this.original_url);
             stmt.setInt(2, this.userID);
             stmt.setDate(3, java.sql.Date.valueOf(java.time.LocalDate.now()));
+            stmt.setString(4, password);
+            stmt.setString(5, mail);
+            stmt.setDate(6, start);
+            stmt.setDate(7, end);
 
             updateState = stmt.executeUpdate();
 

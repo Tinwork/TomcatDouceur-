@@ -74,5 +74,10 @@ RUN wget http://central.maven.org/maven2/commons-codec/commons-codec/1.9/commons
     cp commons-codec-1.9.jar /opt/tomcat9/lib && \
     rm commons-codec-1.9.jar
 
+# Add apache validator
+RUN wget http://central.maven.org/maven2/commons-validator/commons-validator/1.6/commons-validator-1.6.jar && \
+    cp commons-validator-1.6.jar /opt/tomcat9/lib && \
+    rm commons-validator-1.6.jar
+
 # Run tomcat 
 CMD ./bin/catalina.sh run

@@ -1,5 +1,6 @@
 package controller;
 
+import helper.Helper;
 import helper.Loghandler;
 import helper.RequestParse;
 import login.Password;
@@ -43,6 +44,11 @@ public class SignController extends HttpServlet {
         Boolean presence = usr.userExist(usrData.get("username"));
 
         if (presence) {
+            this.getServletContext().getRequestDispatcher("/WEB-INF/template/signup.jsp").forward(req, res);
+            return;
+        }
+
+        if (!Helper.validateMail(usrData.get("mail"))) {
             this.getServletContext().getRequestDispatcher("/WEB-INF/template/signup.jsp").forward(req, res);
             return;
         }

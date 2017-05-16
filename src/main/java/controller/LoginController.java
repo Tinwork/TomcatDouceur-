@@ -45,7 +45,6 @@ public class LoginController extends HttpServlet {
         if (usrData.get("username").isEmpty() || usrData.get("password").isEmpty())
             this.getServletContext().getRequestDispatcher("/WEB-INF/template/login.jsp").forward(req, res);
 
-
         // Select the hash and the salt from the user
         byte[][] logData = usr.selectPwd(usrData.get("username"));
 

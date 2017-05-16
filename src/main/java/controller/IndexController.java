@@ -33,28 +33,25 @@ public class IndexController extends HttpServlet {
      * @throws IOException
      */
     public void doPost(javax.servlet.http.HttpServletRequest req, javax.servlet.http.HttpServletResponse res) throws javax.servlet.ServletException, IOException{
-        String[] param = {"url"};
+        String[] param = {"url", "password", "mail", "start_date", "end_date"};
         HashMap<String, String> data = helper.RequestParse.getParams(req, param);
 
         if (data.isEmpty()){
-            Loghandler.log("data is empty", "warn");
-
             req = setBeanAttr(req, "warning", "can't retrieve the URL");
             this.getServletContext().getRequestDispatcher("/WEB-INF/template/index.jsp").forward(req, res);
         }
 
         // If we get the URL we can init the URL encoding process
-        UrlEntry processURL = new UrlEntry("", data.get("url"));
+        UrlEntry processURL = new UrlEntry(data.get("password"), data.get("url"));
 
         try {
             // Init check the validity of the URL and insert the original URL into the database
-            Boolean isPresent = processURL.init();
+            Boolean isPresValid = processURL.init();
 
-            if (!isPresent) {
-                Loghandler.log("pass here insert", "info");
-                processURL.insertAction(data.get("url"));
+            if (!isPresValid) {
+                processURL.insertAction(data);
             } else {
-                req = setBeanAttr(req, "warning", "The same URL alredy");
+                req = setBeanAttr(req, "warning", "The same URL already exist");
                 this.getServletContext().getRequestDispatcher("/WEB-INF/template/index.jsp").forward(req, res);
             }
 

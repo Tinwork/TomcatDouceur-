@@ -76,7 +76,7 @@ public class Password {
      * @return
      * @throws Exception
      */
-    public String encrypt() throws Exception{
+    public String encrypt(){
         String hashes = null;
         char[] pwd = this.pwd.toCharArray();
         byte[] salt = generateRandomSalt();

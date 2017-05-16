@@ -46,20 +46,6 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="Maven: org.apache.oltu.oauth2:org.apache.oltu.oauth2.common:1.0.2" level="project" />
-    <orderEntry type="library" name="Maven: org.json:json:20140107" level="project" />
-    <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.9" level="project" />
-    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.7" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.oltu.oauth2:org.apache.oltu.oauth2.client:1.0.2" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.oltu.oauth2:org.apache.oltu.oauth2.jwt:1.0.2" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.oltu.commons:org.apache.oltu.commons.encodedtoken:1.0.0" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.oltu.commons:org.apache.oltu.commons.json:1.0.0" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.oltu.oauth2:org.apache.oltu.oauth2.authzserver:1.0.0" level="project" />
-    <orderEntry type="library" name="Maven: com.auth0:java-jwt:3.2.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.8.4" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.8.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: com.fasterxml.jackson.core:jackson-core:2.8.4" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.bouncycastle:bcprov-jdk15on:1.55" level="project" />
     <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
@@ -69,5 +55,24 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="Maven: org.apache.oltu.oauth2:org.apache.oltu.oauth2.common:1.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.json:json:20140107" level="project" />
+    <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.9" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.7" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.oltu.oauth2:org.apache.oltu.oauth2.client:1.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.oltu.oauth2:org.apache.oltu.oauth2.jwt:1.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.oltu.commons:org.apache.oltu.commons.encodedtoken:1.0.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.oltu.commons:org.apache.oltu.commons.json:1.0.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.oltu.oauth2:org.apache.oltu.oauth2.authzserver:1.0.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.auth0:java-jwt:3.2.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.8.4" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.8.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.fasterxml.jackson.core:jackson-core:2.8.4" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.bouncycastle:bcprov-jdk15on:1.55" level="project" />
+    <orderEntry type="library" name="Maven: commons-validator:commons-validator:1.6" level="project" />
+    <orderEntry type="library" name="Maven: commons-beanutils:commons-beanutils:1.9.2" level="project" />
+    <orderEntry type="library" name="Maven: commons-digester:commons-digester:1.8.1" level="project" />
+    <orderEntry type="library" name="Maven: commons-logging:commons-logging:1.2" level="project" />
+    <orderEntry type="library" name="Maven: commons-collections:commons-collections:3.2.2" level="project" />
   </component>
 </module>

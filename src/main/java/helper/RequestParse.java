@@ -25,7 +25,7 @@ public class RequestParse {
                 dataMap.put(wanted[i], req.getParameter(wanted[i]));
             }
         } catch (Exception e){
-            Loghandler.log(e.toString(), "info");
+            Loghandler.log("parse req : "+e.toString(), "warn");
         }
 
         return dataMap;

@@ -1,8 +1,13 @@
 package url;
 
+import helper.Helper;
 import helper.Loghandler;
 import sql.InsertURL;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -12,7 +17,6 @@ import java.util.regex.Pattern;
 public class UrlEntry {
 
     // Protected fields
-    protected String password;
     protected String url;
     protected static final String ALPHABET = "23456789bcdfghjkmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ-_";
     protected static final int BASE = ALPHABET.length();
@@ -28,7 +32,6 @@ public class UrlEntry {
      */
     public UrlEntry(String pwd, String url){
         this.url = url;
-        this.password = pwd;
     }
 
     /**
@@ -71,17 +74,48 @@ public class UrlEntry {
         return true;
     }
 
-    public void insertAction(String original_url) throws Exception{
+    /**
+     *
+     * @param data
+     * @throws Exception
+     */
+    public void insertAction(HashMap<String, String> data) throws Exception{
+
+
+        String original_url = data.get("url");
+        String password = data.get("password");
+        String mail = data.get("mail");
+
+        Loghandler.log("start date "+data.get("start_date"), "info");
+        Loghandler.log("end date "+data.get("end_date"), "info");
+
+        java.sql.Date start = StringToSQLDate(data.get("start_date"));
+        java.sql.Date end = StringToSQLDate(data.get("end_date"));
+
+        Loghandler.log("start date after"+start, "info");
+        Loghandler.log("end date after"+end, "info");
+
         int userID = 1;
+
         InsertURL insert = new InsertURL(original_url, userID);
 
+        // Reassigning the value using the hash value
+        String hashpwd = LinkPwd.hash(returnValidStrParam(password));
+
+        // Steps are a bit special for the mail
+        // If the mail is not correct then we set the mail at null
+        if (!Helper.validateMail(mail)) {
+            mail = null;
+        }
+
+        String nmail = returnValidStrParam(mail);
+
         // We're encoding the short URL based on a random number and the row id of the database
-        int row = insert.insertOriginalURL();
+        int row = insert.insertOriginalURL(hashpwd, nmail, start, end);
 
         Links short_link = new Links(original_url, "", 0, 0, null, 0);
         String shortURL = short_link.encodeLongURL(row);
         long hash = short_link.getID();
-
 
         try {
             insert.insertShortLink(hash, shortURL, row);
@@ -89,5 +123,37 @@ public class UrlEntry {
             Loghandler.log(e.toString(), "fatal");
             throw new Exception(e.toString());
         }
+    }
+
+    /**
+     *
+     * @param param
+     * @return
+     */
+    public String returnValidStrParam(String param){
+        if (param == null || param.isEmpty()) {
+            return "";
+        }
+
+        return param;
+    }
+
+    /**
+     *
+     * @param date
+     * @return
+     */
+    public java.sql.Date StringToSQLDate(String date){
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        java.sql.Date sql = null;
+
+        try {
+            Date parsed = format.parse(date);
+            sql = new java.sql.Date(parsed.getTime());
+        } catch (ParseException e) {
+            Loghandler.log(e.toString(), "warn");
+        }
+
+        return sql;
     }
 }
