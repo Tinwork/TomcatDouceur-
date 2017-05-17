@@ -1,11 +1,14 @@
 package url;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import helper.Loghandler;
+import org.json.JSONObject;
 import sql.InsertURL;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.sql.Date;
+import java.util.HashMap;
 
 /**
  * Created by lookitsmarc on 11/04/2017.
@@ -16,9 +19,18 @@ public class Links {
     // Use this class to operate a link
     private String orig_link;
     private String short_url;
+    private String password;
+    private String mail;
+    private String mulPwd;
+
     private int sql_id;
     private int count;
+
     private Date date;
+    private Date start_date;
+    private Date end_date;
+
+    private Boolean captcha;
     private long id;
     private long hashid;
     private static String ALPHABET = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -30,13 +42,19 @@ public class Links {
      * @param original_url
      * @param short_url
      */
-    public Links(String original_url, String short_url, int sql_id, int count, Date date, long hashid){
+    public Links(String original_url, String short_url, int sql_id, int count, Date date, long hashid, String password, String mulPwd, Boolean captcha, String mail, Date start_date, Date end_date){
         this.short_url = short_url;
         this.orig_link = original_url;
         this.sql_id = sql_id;
         this.count = count;
         this.date = date;
         this.hashid = hashid;
+        this.password = password;
+        this.captcha = captcha;
+        this.mail = mail;
+        this.start_date = start_date;
+        this.end_date = end_date;
+        this.mulPwd = mulPwd;
     }
 
     /**
@@ -129,6 +147,12 @@ public class Links {
         return base62;
     }
 
+    /**
+     *
+     * @param row
+     * @param rand
+     * @return
+     */
     public Long concatLong(int row, long rand) {
         long concat = Long.valueOf(String.valueOf(rand) + String.valueOf(row));
 
@@ -145,6 +169,23 @@ public class Links {
     }
 
     /**
+     *
+     * @return
+     */
+    public HashMap<String, Boolean> getConstrain(){
+        HashMap<String, Boolean> constrain = new HashMap<String, Boolean>();
+
+        constrain.put("password", this.password == null ? false : true);
+        constrain.put("captcha", this.captcha == null ? false : true);
+        constrain.put("mail", this.mail == null ? false : true);
+        constrain.put("start_date", this.start_date == null ? false : true);
+        constrain.put("end_date", this.end_date == null ? false : true);
+        constrain.put("mulPwd", this.mulPwd == null ? false : true);
+
+        return constrain;
+    }
+
+    /**
      * getID
      * @return
      */
@@ -158,5 +199,16 @@ public class Links {
      */
     public long getHashID(){
         return this.hashid;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public JSONObject getMulPwd(){
+        JSONObject json = new JSONObject();
+        json.getJSONObject(this.mulPwd);
+
+        return json;
     }
 }

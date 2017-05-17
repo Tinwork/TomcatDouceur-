@@ -52,6 +52,8 @@
           <button type="button" class="btn btn-primary addon" data-id="pwd">Add password</button>
           <button type="button" class="btn btn-success addon" data-id="mail">Add mail</button>
           <button type="button" class="btn btn-info addon" data-id="date">Add date</button>
+          <button type="button" class="btn btn-info addon" data-id="captcha">Add captcha</button>
+          <button type="button" class="btn btn-info addon" data-id="pwds">Add multiple password</button>
         </div>
       </div>
     </div>

@@ -79,5 +79,10 @@ RUN wget http://central.maven.org/maven2/commons-validator/commons-validator/1.6
     cp commons-validator-1.6.jar /opt/tomcat9/lib && \
     rm commons-validator-1.6.jar
 
+# Add org.json
+RUN wget http://central.maven.org/maven2/org/json/json/20160810/json-20160810.jar && \
+    cp json-20160810.jar /opt/tomcat9/lib && \
+    rm json-20160810.jar
+
 # Run tomcat 
 CMD ./bin/catalina.sh run

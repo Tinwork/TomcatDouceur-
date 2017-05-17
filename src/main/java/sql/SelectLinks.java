@@ -41,7 +41,13 @@ public class SelectLinks extends Connect{
                         res.getInt("Id"),
                         res.getInt("count"),
                         res.getDate("create_date"),
-                        res.getLong("hashnumber")
+                        res.getLong("hashnumber"),
+                        res.getString("password"),
+                        res.getString("multiple_password"),
+                        res.getBoolean("captcha"),
+                        res.getString("mail"),
+                        res.getDate("start_date"),
+                        res.getDate("end_date")
                 );
             }
         } catch (SQLException e){
@@ -77,14 +83,19 @@ public class SelectLinks extends Connect{
                         res.getInt("Id"),
                         res.getInt("count"),
                         res.getDate("create_date"),
-                        res.getLong("hashnumber")
+                        res.getLong("hashnumber"),
+                        res.getString("password"),
+                        res.getString("multiple_password"),
+                        res.getBoolean("captcha"),
+                        res.getString("mail"),
+                        res.getDate("start_date"),
+                        res.getDate("end_date")
                 );
             } while(res.next());
 
         } catch (SQLException e){
             Loghandler.log("exception "+e.toString(), "warn");
         }
-
 
         return link;
     }

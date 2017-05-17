@@ -1,6 +1,7 @@
 package sql;
 
 import helper.Loghandler;
+import org.json.JSONObject;
 import sun.rmi.log.LogHandler;
 import sun.tools.tree.Expression;
 import sun.tools.tree.StringExpression;
@@ -34,13 +35,14 @@ public class InsertURL extends Connect{
      * Insert Data
      *      Insert datas in the database
      */
-    public int insertOriginalURL(String password, String mail, Date start, Date end){
+    public int insertOriginalURL(String password, String mail, Date start, Date end, Boolean captcha, JSONObject json){
         int updateState = 0;
         int lastRow = 0;
 
         try {
             // Otherwise we try to insert the url in the db
-            String sql = "INSERT INTO Link (original_link, user_id, create_date, password, mail, start_date, end_date) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            // There's no way to bind the param with variable... a part from using Spring framework...
+            String sql = "INSERT INTO Link (original_link, user_id, create_date, password, mail, start_date, end_date, captcha, multiple_password) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement stmt = this.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
             // Bind the params
@@ -51,6 +53,8 @@ public class InsertURL extends Connect{
             stmt.setString(5, mail);
             stmt.setDate(6, start);
             stmt.setDate(7, end);
+            stmt.setBoolean(8, captcha);
+            stmt.setString(9, json.length() == 0 ? null : json.toString());
 
             updateState = stmt.executeUpdate();
 

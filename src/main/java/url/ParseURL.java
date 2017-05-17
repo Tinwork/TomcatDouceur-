@@ -4,6 +4,8 @@ import helper.Loghandler;
 import sql.InsertURL;
 import sql.SelectLinks;
 
+import java.util.HashMap;
+
 /**
  * Created by lookitsmarc on 13/04/2017.
  */
@@ -26,21 +28,26 @@ public class ParseURL {
     /**
      * Retrieve Links
      * @return
+     * @TODO Return a Link instance and process the link inside the Controller as well as handling the constrain
      */
     public String retrieveLinks(){
-        Loghandler.log("exception", "short url");
         String originalURL = "";
 
         try {
 
             Links link = linkSelector.SelectLinksByShortLink(this.shortURL);
+
+            // Now we need to check whenever there're some addional options in order to convert the retrieve the Links such as the password
+            HashMap<String, Boolean> constrain = link.getConstrain();
+
+            if (constrain.containsValue(true)) {
+                // Build a JSP with a constrain bean and the Link instance so we can then compare the value...
+
+            }
+
             long id = link.toBase10();
-
-
-            Loghandler.log("id calc "+id+"", "info");
             if (id != link.getHashID())
                 return null;
-            Loghandler.log("back ID "+String.valueOf(id), "info");
 
             if (link == null)
                 return null;
@@ -52,4 +59,5 @@ public class ParseURL {
 
         return originalURL;
     }
+
 }

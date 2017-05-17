@@ -28,7 +28,25 @@ const formFactory = (() => {
                 <input class="form-control" type="date" value="" id="example-datetime-local-input" name="end_date">
               </div>
             </div>
-        `    
+        `,
+        captcha: `
+             <div class="form-check">
+                <label class="form-check-label">
+                    <input type="radio" class="form-check-input" name="captcha" id="optionsRadios2" value="enable">
+                    Enable captcha
+                </label>
+            </div>
+        `,
+        pwds: `
+            <div class="input-group pwd" >
+              <span class="input-group-addon" id="password">Password 1</span>
+              <input type="text" class="form-control" placeholder="" name="passwords-one" aria-describedby="password">
+            </div>
+            <div class="input-group pwd" >
+              <span class="input-group-addon" id="password">Password 2</span>
+              <input type="text" class="form-control" placeholder="" name="passwords-two" aria-describedby="password">
+            </div>
+        `
     });
 
     /**

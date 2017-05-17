@@ -2,6 +2,7 @@ package url;
 
 import helper.Helper;
 import helper.Loghandler;
+import org.json.JSONObject;
 import sql.InsertURL;
 
 import java.text.ParseException;
@@ -18,6 +19,14 @@ public class UrlEntry {
 
     // Protected fields
     protected String url;
+    protected String pwd;
+    protected String mail;
+    protected Boolean captcha;
+    protected JSONObject mulPwd;
+    protected java.sql.Date start;
+    protected java.sql.Date end;
+
+
     protected static final String ALPHABET = "23456789bcdfghjkmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ-_";
     protected static final int BASE = ALPHABET.length();
     private InsertURL insert;
@@ -26,12 +35,18 @@ public class UrlEntry {
     private Pattern REGEX = Pattern.compile("(?i)^(?:(?:https?|ftp)://)(?:\\S+(?::\\S*)?@)?(?:(?!(?:10|127)(?:\\.\\d{1,3}){3})(?!(?:169\\.254|192\\.168)(?:\\.\\d{1,3}){2})(?!172\\.(?:1[6-9]|2\\d|3[0-1])(?:\\.\\d{1,3}){2})(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}(?:\\.(?:[1-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))|(?:(?:[a-z\\u00a1-\\uffff0-9]-*)*[a-z\\u00a1-\\uffff0-9]+)(?:\\.(?:[a-z\\u00a1-\\uffff0-9]-*)*[a-z\\u00a1-\\uffff0-9]+)*(?:\\.(?:[a-z\\u00a1-\\uffff]{2,}))\\.?)(?::\\d{2,5})?(?:[/?#]\\S*)?$");
 
     /**
-     * Url Entry
-     * @param pwd
-     * @param url
+     *
+     * @param data
      */
-    public UrlEntry(String pwd, String url){
-        this.url = url;
+    public UrlEntry(HashMap<String, String> data, HashMap<String, String> passwords){
+        this.url = data.get("url");
+        this.pwd = returnValidStrParam(data.get("password"));
+        this.mail = returnValidStrParam(data.get("mail"));
+        this.start = StringToSQLDate(data.get("start_date"));
+        this.end = StringToSQLDate(data.get("end_date"));
+        this.captcha = data.get("captcha") == null ? false : true;
+        this.mulPwd = buildMulPwd(passwords);
+
     }
 
     /**
@@ -76,44 +91,25 @@ public class UrlEntry {
 
     /**
      *
-     * @param data
      * @throws Exception
      */
-    public void insertAction(HashMap<String, String> data) throws Exception{
-
-
-        String original_url = data.get("url");
-        String password = data.get("password");
-        String mail = data.get("mail");
-
-        Loghandler.log("start date "+data.get("start_date"), "info");
-        Loghandler.log("end date "+data.get("end_date"), "info");
-
-        java.sql.Date start = StringToSQLDate(data.get("start_date"));
-        java.sql.Date end = StringToSQLDate(data.get("end_date"));
-
-        Loghandler.log("start date after"+start, "info");
-        Loghandler.log("end date after"+end, "info");
-
+    public void insertAction() throws Exception{
         int userID = 1;
+        InsertURL insert = new InsertURL(this.url, userID);
+        String hashpwd = LinkPwd.hash(this.pwd);
 
-        InsertURL insert = new InsertURL(original_url, userID);
-
-        // Reassigning the value using the hash value
-        String hashpwd = LinkPwd.hash(returnValidStrParam(password));
-
-        // Steps are a bit special for the mail
-        // If the mail is not correct then we set the mail at null
+        // Steps are bit special for the mail. If the mail is not correct then we set the mail at null
         if (!Helper.validateMail(mail)) {
             mail = null;
         }
 
-        String nmail = returnValidStrParam(mail);
+        this.mail = returnValidStrParam(this.mail);
 
         // We're encoding the short URL based on a random number and the row id of the database
-        int row = insert.insertOriginalURL(hashpwd, nmail, start, end);
+        int row = insert.insertOriginalURL(hashpwd, this.mail, this.start, this.end, this.captcha, this.mulPwd);
 
-        Links short_link = new Links(original_url, "", 0, 0, null, 0);
+        // @TODO if i have time i shall pass the HashMap instead of the entire parse datas though...
+        Links short_link = new Links(this.url, "", 0, 0, null, 0, null, null, null, null, null, null);
         String shortURL = short_link.encodeLongURL(row);
         long hash = short_link.getID();
 
@@ -143,9 +139,14 @@ public class UrlEntry {
      * @param date
      * @return
      */
-    public java.sql.Date StringToSQLDate(String date){
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+    private java.sql.Date StringToSQLDate(String date){
+
         java.sql.Date sql = null;
+        if (date == null)
+            return sql;
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
 
         try {
             Date parsed = format.parse(date);
@@ -156,4 +157,26 @@ public class UrlEntry {
 
         return sql;
     }
+
+    /**
+     *
+     * @param pwds
+     * @return
+     */
+    final private JSONObject buildMulPwd(HashMap<String, String> pwds){
+        JSONObject json = new JSONObject();
+
+        int idx = 0;
+        for (String pwd : pwds.keySet()){
+            Loghandler.log("password "+pwds.get(pwd), "info");
+            if (pwds.get(pwd) != null){
+                json.put(pwd, pwds.get(pwd));
+            }
+
+            idx++;
+        }
+
+        return json;
+    }
+
 }
