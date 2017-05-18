@@ -2,9 +2,6 @@
 
 # Project 
 
-This project is a shorten URL J2EE app made as a project given within the Java course. So what the purpose ? 
-Well, it shorten URL and save it into the database with several options such as :
-
 This project is a shorten URL webapp made using Java's web technology J2EE. This project is a work given during the Java Course. Two version will be released. This first one using no framework, only Plain Java Classes, Object, Interfaces...) 
 This shorten URL app give you the following possibilites: 
 
