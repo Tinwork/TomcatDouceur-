@@ -1,7 +1,5 @@
 # Tinwork tomcat 
 
-## Note this is currently in construction. The project will not work at the current state. I will update this readme when jsp and it's controller will be created. 
-
 # Project 
 
 This project is a shorten URL J2EE app made as a project given within the Java course. So what the purpose ? 
@@ -35,3 +33,4 @@ Et voilà !
 * JDK >= 8
 * We use Intellij IDEA to help us with the development
 * Download the JDBC driver and the Tomcat driver 
+* Use maven to import every libs which are used by the project
