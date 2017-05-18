@@ -103,7 +103,6 @@ public class UrlEntry {
             mail = null;
         }
 
-        this.mail = returnValidStrParam(this.mail);
 
         // We're encoding the short URL based on a random number and the row id of the database
         int row = insert.insertOriginalURL(hashpwd, this.mail, this.start, this.end, this.captcha, this.mulPwd);

@@ -2,6 +2,7 @@ package url;
 
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import helper.Loghandler;
+import jdk.nashorn.internal.parser.JSONParser;
 import org.json.JSONObject;
 import sql.InsertURL;
 
@@ -176,7 +177,7 @@ public class Links {
         HashMap<String, Boolean> constrain = new HashMap<String, Boolean>();
 
         constrain.put("password", this.password == null ? false : true);
-        constrain.put("captcha", this.captcha == null ? false : true);
+        constrain.put("captcha", this.captcha == null || !this.captcha ? false : true);
         constrain.put("mail", this.mail == null ? false : true);
         constrain.put("start_date", this.start_date == null ? false : true);
         constrain.put("end_date", this.end_date == null ? false : true);
@@ -206,9 +207,48 @@ public class Links {
      * @return
      */
     public JSONObject getMulPwd(){
-        JSONObject json = new JSONObject();
-        json.getJSONObject(this.mulPwd);
+        JSONObject json = new JSONObject(this.mulPwd);
 
         return json;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public int getMulPwdLength(){
+        JSONObject json = new JSONObject(this.mulPwd);
+        return json.length();
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getPassword(){
+        return this.password;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getMail(){
+        return this.mail;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Boolean getCaptcha(){
+        return this.captcha;
+    }
+
+    /**
+     *
+     */
+    public void isDateValid(){
+
     }
 }

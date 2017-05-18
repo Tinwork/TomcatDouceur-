@@ -8,7 +8,7 @@ import java.util.HashMap;
 /**
  * Created by lookitsmarc on 17/05/2017.
  */
-public class Constrain {
+public class Constraint {
     // Use by constructor
     private Links link;
     private HashMap<String, Boolean> constrain;
@@ -16,15 +16,16 @@ public class Constrain {
     // Class's properties
     private String pwd;
     private String mail;
+    private String original_url;
     private JSONObject mulPwd;
 
 
     /**
-     * Constrain
+     * Constraint
      * @param link
      * @param constrain
      */
-    public Constrain(Links link, HashMap<String, Boolean> constrain) {
+    public Constraint(Links link, HashMap<String, Boolean> constrain) {
         this.link = link;
         this.constrain = constrain;
     }
@@ -59,7 +60,7 @@ public class Constrain {
      * @return
      */
     public String getMail() {
-        return mail;
+        return "ddooooo";
     }
 
     /**
@@ -68,5 +69,21 @@ public class Constrain {
      */
     public void setMail(String mail) {
         this.mail = mail;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getOriginalURL() {
+        return link.getOriginalURL();
+    }
+
+    /**
+     *
+     * @return
+     */
+    public int getMulPwdLength(){
+        return link.getMulPwdLength();
     }
 }

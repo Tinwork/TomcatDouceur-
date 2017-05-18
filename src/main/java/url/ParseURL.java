@@ -13,6 +13,7 @@ public class ParseURL {
 
     protected String shortURL;
     protected SelectLinks linkSelector;
+    protected Links link;
 
     /**
      * Parse URL
@@ -27,37 +28,19 @@ public class ParseURL {
 
     /**
      * Retrieve Links
+     * Instead of retrieving the link directly this method will set 2 variable which will be use to get the original_ur
+     * and the constraint
      * @return
      * @TODO Return a Link instance and process the link inside the Controller as well as handling the constrain
      */
-    public String retrieveLinks(){
-        String originalURL = "";
-
+    public Links retrieveLinks(){
         try {
-
-            Links link = linkSelector.SelectLinksByShortLink(this.shortURL);
-
-            // Now we need to check whenever there're some addional options in order to convert the retrieve the Links such as the password
-            HashMap<String, Boolean> constrain = link.getConstrain();
-
-            if (constrain.containsValue(true)) {
-                // Build a JSP with a constrain bean and the Link instance so we can then compare the value...
-
-            }
-
-            long id = link.toBase10();
-            if (id != link.getHashID())
-                return null;
-
-            if (link == null)
-                return null;
-
-            originalURL = link.getOriginalURL();
+            link = linkSelector.SelectLinksByShortLink(this.shortURL);
         } catch (Exception e){
             Loghandler.log(e.toString(), "warn");
         }
 
-        return originalURL;
+        return link;
     }
 
 }

@@ -84,5 +84,11 @@ RUN wget http://central.maven.org/maven2/org/json/json/20160810/json-20160810.ja
     cp json-20160810.jar /opt/tomcat9/lib && \
     rm json-20160810.jar
 
+# Add jstl
+RUN wget http://central.maven.org/maven2/javax/servlet/jstl/1.2/jstl-1.2.jar && \
+    cp jstl-1.2.jar /opt/tomcat9/lib && \
+    rm jstl-1.2.jar
+
+
 # Run tomcat 
 CMD ./bin/catalina.sh run

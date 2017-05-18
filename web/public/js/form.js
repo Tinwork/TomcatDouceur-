@@ -40,11 +40,11 @@ const formFactory = (() => {
         pwds: `
             <div class="input-group pwd" >
               <span class="input-group-addon" id="password">Password 1</span>
-              <input type="text" class="form-control" placeholder="" name="passwords-one" aria-describedby="password">
+              <input type="text" class="form-control" placeholder="" name="passwords-1" aria-describedby="password">
             </div>
             <div class="input-group pwd" >
               <span class="input-group-addon" id="password">Password 2</span>
-              <input type="text" class="form-control" placeholder="" name="passwords-two" aria-describedby="password">
+              <input type="text" class="form-control" placeholder="" name="passwords-2" aria-describedby="password">
             </div>
         `
     });

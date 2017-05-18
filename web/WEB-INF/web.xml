@@ -43,4 +43,12 @@
         <servlet-name>Dashboard</servlet-name>
         <url-pattern>/dashboard</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>Dao</servlet-name>
+        <servlet-class>controller.DaoController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Dao</servlet-name>
+        <url-pattern>/dao</url-pattern>
+    </servlet-mapping>
 </web-app>

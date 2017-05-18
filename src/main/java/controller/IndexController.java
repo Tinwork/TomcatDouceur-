@@ -34,7 +34,7 @@ public class IndexController extends HttpServlet {
      */
     public void doPost(javax.servlet.http.HttpServletRequest req, javax.servlet.http.HttpServletResponse res) throws javax.servlet.ServletException, IOException{
         String[] param = {"url", "password", "mail", "start_date", "end_date", "captcha"};
-        String []mulpwd = {"passwords-one", "passwords-two", "passwords-three"};
+        String []mulpwd = {"passwords-1", "passwords-2", "passwords-3"};
 
         HashMap<String, String> data = helper.RequestParse.getParams(req, param);
         HashMap<String, String> datapwd = helper.RequestParse.getParams(req, mulpwd);
