@@ -6,15 +6,17 @@ package bean;
 public class Userstate {
     private String username;
     private String token;
+    private int userID;
 
     /**
      * Constructor
      * @param username
      * @param token
      */
-    public Userstate(String username, String token){
+    public Userstate(String username, String token, int userID){
         this.username = username;
         this.token = token;
+        this.userID = userID;
     }
 
     /**
@@ -48,4 +50,13 @@ public class Userstate {
     public void setToken(String token) {
         this.token = token;
     }
+
+    /**
+     *
+     * @return
+     */
+    public int getUserID() {
+        return userID;
+    }
+
 }

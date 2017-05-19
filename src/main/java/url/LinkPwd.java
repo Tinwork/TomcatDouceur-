@@ -1,6 +1,7 @@
 package url;
 
 import helper.Loghandler;
+import sun.rmi.log.LogHandler;
 
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
@@ -68,7 +69,8 @@ public class LinkPwd {
         // Get a byte array of the password
         byte[] dbPwd = DatatypeConverter.parseBase64Binary(dbpwd);
         // In order to test we're going to call the hash method where we're going to generate a new hash with the actual input password
-        byte[] actualHash = DatatypeConverter.parseBase64Binary(LinkPwd.hash(actualpwd));
+        String pwd = LinkPwd.hash(actualpwd);
+        byte[] actualHash = DatatypeConverter.parseBase64Binary(pwd);
 
         return Arrays.equals(dbPwd, actualHash);
     }

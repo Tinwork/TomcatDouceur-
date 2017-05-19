@@ -121,4 +121,29 @@ public class UserDB extends Connect{
 
         return assembly;
     }
+
+    public int selectUserID(String username){
+        String sql = "SELECT id FROM User where user = ?";
+        int userID = 0;
+
+        try {
+            PreparedStatement stmt = this.connection.prepareStatement(sql);
+            stmt.setString(1, username);
+
+            ResultSet res = stmt.executeQuery();
+
+            if (!res.next()) {
+                return 1;
+            }
+
+            do {
+                userID = res.getInt("id");
+            } while(res.next());
+
+        } catch (SQLException e) {
+            Loghandler.log(e.toString(), "fatal");
+        }
+
+        return userID;
+    }
 }

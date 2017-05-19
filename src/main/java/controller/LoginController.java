@@ -60,9 +60,10 @@ public class LoginController extends HttpServlet {
 
         if (issame) {
             Token tokenHandler = new Token();
+            int id = usr.selectUserID(usrData.get("username"));
             // Generate an access token
             String token = tokenHandler.generateToken();
-            Userstate bean = setBean(usrData.get("username"), token);
+            Userstate bean = setBean(usrData.get("username"), token, id);
             RedirectWithBean(req, res, bean);
         } else {
             this.getServletContext().getRequestDispatcher("/login").forward(req, res);
@@ -76,11 +77,11 @@ public class LoginController extends HttpServlet {
      * @param hash
      * @return
      */
-    public Userstate setBean(String username, String hash) {
+    public Userstate setBean(String username, String hash, int id) {
         if (username.isEmpty() && hash.isEmpty())
             return null;
 
-        Userstate state = new Userstate(username, hash);
+        Userstate state = new Userstate(username, hash, id);
 
         return state;
     }

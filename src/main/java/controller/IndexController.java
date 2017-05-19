@@ -38,6 +38,7 @@ public class IndexController extends HttpServlet {
 
         HashMap<String, String> data = helper.RequestParse.getParams(req, param);
         HashMap<String, String> datapwd = helper.RequestParse.getParams(req, mulpwd);
+        int userID = helper.RequestParse.retrieveUser(req);
 
         if (data.isEmpty()){
             req = setBeanAttr(req, "warning", "can't retrieve the URL");
@@ -66,6 +67,7 @@ public class IndexController extends HttpServlet {
             this.getServletContext().getRequestDispatcher("/home").forward(req, res);
         }
     }
+
 
     /**
      *

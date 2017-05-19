@@ -38,7 +38,7 @@ public class DaoController extends HttpServlet{
      * @throws IOException
      */
     public void doPost(javax.servlet.http.HttpServletRequest req, javax.servlet.http.HttpServletResponse res) throws ServletException, IOException {
-        String[] params = {"password", "mail", "password-1", "password-2", "password-3"};
+        String[] params = {"password", "mail", "passwords-1", "passwords-2", "passwords-3"};
         HashMap<String, String> postChecking = RequestParse.getParams(req, params);
         Loghandler.log("post checking "+postChecking.toString(), "info");
 

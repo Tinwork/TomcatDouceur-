@@ -58,8 +58,12 @@ public class ParseURL {
             String key = constraint[i];
 
             try {
-                validity = linkInstance.checkParamIntegrety(key, d);
-
+                if (key == "mulPwd") {
+                    validity = linkInstance.checkMulPwdIntegrity(postDatas);
+                } else {
+                    validity = linkInstance.checkParamIntegrety(key, d);
+                }
+                
                 if (!validity) {
                     return false;
                 }
@@ -72,9 +76,5 @@ public class ParseURL {
 
         return validity;
     }
-
-
-
-
 
 }

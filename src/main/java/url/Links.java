@@ -10,6 +10,7 @@ import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.sql.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  * Created by lookitsmarc on 11/04/2017.
@@ -261,8 +262,6 @@ public class Links {
             case "mail":
                 validity = this.mail.equals(inputValue);
                 break;
-            case "mulPwd":
-                break;
             case "captcha":
                 validity = this.captcha;
                 break;
@@ -272,4 +271,26 @@ public class Links {
 
         return validity;
     }
+
+    /**
+     * Check Multiple Password Integrit
+     * @param postDatas
+     * @return
+     */
+    public Boolean checkMulPwdIntegrity(HashMap<String, String> postDatas){
+       // We're going to check the value of the password input by the user and the password saved into the database
+        Boolean validity = false;
+       JSONObject mulPwd = new JSONObject(this.mulPwd);
+       Iterator<String> keys = mulPwd.keys();
+
+       while (keys.hasNext()) {
+           String key = keys.next();
+           String dbpwd = mulPwd.getString(key);
+
+           validity = LinkPwd.checkValidity(dbpwd, postDatas.get(key));
+       }
+
+       return validity;
+    }
+
 }

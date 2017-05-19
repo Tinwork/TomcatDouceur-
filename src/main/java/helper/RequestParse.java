@@ -1,5 +1,6 @@
 package helper;
 
+import bean.Userstate;
 import sun.rmi.log.LogHandler;
 
 import java.sql.ResultSet;
@@ -10,6 +11,8 @@ import java.util.HashMap;
  * Created by lookitsmarc on 08/04/2017.
  */
 public class RequestParse {
+
+    private static int userID;
 
     /**
      * Get Params
@@ -29,6 +32,26 @@ public class RequestParse {
         }
 
         return dataMap;
+    }
+
+    /**
+     *
+     * @param req
+     * @return
+     */
+    public static int retrieveUser(javax.servlet.http.HttpServletRequest req) {
+        Object userstate = req.getSession().getAttribute("userstate");
+
+        if (userstate == null) {
+            // Returning 1 mean that the link is anonymous and not track by the app
+            return 1;
+        }
+
+        // Cast the Java Object into the Userstate bean instance
+        Userstate user = (Userstate) userstate;
+
+        // Retrieve the id
+        return user.getUserID();
     }
 
 }

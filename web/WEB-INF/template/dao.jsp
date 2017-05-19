@@ -65,7 +65,7 @@
             <c:forEach var = "i" begin = "1" end = "${constraint.getMulPwdLength()}">
                 <div class="input-group">
                     <span class="input-group-addon" id="mulpwd">Password ${i}</span>
-                    <input type="text" class="form-control" placeholder="Mail" name="password-${i}" aria-describedby="basic-addon1" required>
+                    <input type="text" class="form-control" placeholder="Mail" name="passwords-${i}" aria-describedby="basic-addon1" required>
                 </div>
             </c:forEach>
         </c:if>
