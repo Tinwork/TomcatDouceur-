@@ -1,16 +1,15 @@
-# Tinwork tomcat 
-
-## Note this is currently in construction. The project will not work at the current state. I will update this readme when jsp and it's controller will be created. 
+# Tinwork tomcat
 
 # Project 
 
-This project is a shorten URL J2EE app made as a project given within the Java course. So what the purpose ? 
-Well, it shorten URL and save it into the database with several options such as :
+This project is a shorten URL webapp made using Java's web technology J2EE. This project is a work given during the Java Course. Two version will be released. This first one using no framework, only Plain Java Classes, Object, Interfaces...) 
+This shorten URL app give you the following possibilites: 
 
-* Adding a password
-* Adding a custom URL
-* Share the custom URL
-* Restricted the URL in some given context
+* Adding a single to a multiple password to your short url
+* Make it private by restricting the access to an email (Multi email support will be analysis)
+* Restrict during an amount of time 
+* Verify by a captcha 
+* For user's URL you'll get statistics of the popularity of your shortern URL
 
 # Install 
 
@@ -35,3 +34,4 @@ Et voilà !
 * JDK >= 8
 * We use Intellij IDEA to help us with the development
 * Download the JDBC driver and the Tomcat driver 
+* Use maven to import every libs which are used by the project
