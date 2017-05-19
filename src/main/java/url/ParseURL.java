@@ -43,4 +43,38 @@ public class ParseURL {
         return link;
     }
 
+    /**
+     * Check Constraint
+     *          Check the constraint of the Short URL
+     * @param constraint
+     * @param postDatas
+     * @param linkInstance
+     * @return
+     */
+    public static boolean checkConstraint(String[] constraint, HashMap<String, String> postDatas, Links linkInstance){
+        Boolean validity = false;
+        for (int i = 0; i < constraint.length - 1; i++){
+            String d = postDatas.get(constraint[i]);
+            String key = constraint[i];
+
+            try {
+                validity = linkInstance.checkParamIntegrety(key, d);
+
+                if (!validity) {
+                    return false;
+                }
+
+            } catch (Exception e) {
+                Loghandler.log(e.toString(), "fatal");
+                return false;
+            }
+        }
+
+        return validity;
+    }
+
+
+
+
+
 }

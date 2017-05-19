@@ -247,8 +247,29 @@ public class Links {
 
     /**
      *
+     * @param constraint
+     * @param inputValue
+     * @return
+     * @throws Exception
      */
-    public void isDateValid(){
+    public Boolean checkParamIntegrety(String constraint, String inputValue) throws Exception{
+        Boolean validity = false;
+        switch (constraint) {
+            case "password":
+                validity = LinkPwd.checkValidity(this.password, inputValue);
+                break;
+            case "mail":
+                validity = this.mail.equals(inputValue);
+                break;
+            case "mulPwd":
+                break;
+            case "captcha":
+                validity = this.captcha;
+                break;
+            default:
+                throw new Exception(constraint+" is not supported");
+        }
 
+        return validity;
     }
 }

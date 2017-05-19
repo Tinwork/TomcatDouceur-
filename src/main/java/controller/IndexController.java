@@ -41,7 +41,7 @@ public class IndexController extends HttpServlet {
 
         if (data.isEmpty()){
             req = setBeanAttr(req, "warning", "can't retrieve the URL");
-            this.getServletContext().getRequestDispatcher("/WEB-INF/template/index.jsp").forward(req, res);
+            this.getServletContext().getRequestDispatcher("/home").forward(req, res);
         }
 
         // If we get the URL we can init the URL encoding process
@@ -55,7 +55,7 @@ public class IndexController extends HttpServlet {
                 processURL.insertAction();
             } else {
                 req = setBeanAttr(req, "warning", "The same URL already exist");
-                this.getServletContext().getRequestDispatcher("/WEB-INF/template/index.jsp").forward(req, res);
+                this.getServletContext().getRequestDispatcher("/home").forward(req, res);
             }
 
         } catch(Exception e){
@@ -63,7 +63,7 @@ public class IndexController extends HttpServlet {
 
             // Set the bean error
             req = setBeanAttr(req, "fatal", "can't insert the URL");
-            this.getServletContext().getRequestDispatcher("/WEB-INF/template/index.jsp").forward(req, res);
+            this.getServletContext().getRequestDispatcher("/home").forward(req, res);
         }
     }
 

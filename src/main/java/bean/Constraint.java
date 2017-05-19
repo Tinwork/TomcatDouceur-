@@ -1,9 +1,12 @@
 package bean;
 
+import helper.Loghandler;
 import org.json.JSONObject;
 import url.Links;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  * Created by lookitsmarc on 17/05/2017.
@@ -37,6 +40,33 @@ public class Constraint {
      */
     public Boolean getConstrain(String type) {
         return this.constrain.get(type);
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String[] getAllConstraint() {
+
+        String[] listOfConstraint = new String[1];
+
+        int arrayIndex = 0;
+        int i = 0;
+        for (HashMap.Entry<String, Boolean> entry : constrain.entrySet()) {
+            // If one of the entry is true then set it into the string container
+            if (entry.getValue()) {
+                listOfConstraint[i] = entry.getKey();
+
+                if (arrayIndex == 0)
+                    arrayIndex = 2;
+                else
+                    arrayIndex++;
+                i++;
+                listOfConstraint = Arrays.copyOf(listOfConstraint, arrayIndex);
+            }
+        }
+
+        return listOfConstraint;
     }
 
     /**
@@ -85,5 +115,13 @@ public class Constraint {
      */
     public int getMulPwdLength(){
         return link.getMulPwdLength();
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Links getLinkInstance() {
+        return this.link;
     }
 }

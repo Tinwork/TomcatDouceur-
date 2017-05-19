@@ -169,7 +169,8 @@ public class UrlEntry {
         for (String pwd : pwds.keySet()){
             Loghandler.log("password "+pwds.get(pwd), "info");
             if (pwds.get(pwd) != null){
-                json.put(pwd, pwds.get(pwd));
+                String hashes = LinkPwd.hash(pwds.get(pwd));
+                json.put(pwd, hashes);
             }
 
             idx++;
