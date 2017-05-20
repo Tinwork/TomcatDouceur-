@@ -1,9 +1,10 @@
 package controller;
 
+import account.Mailer;
 import helper.Helper;
 import helper.Loghandler;
 import helper.RequestParse;
-import login.Password;
+import account.Password;
 import sql.UserDB;
 
 import javax.servlet.ServletException;
@@ -59,7 +60,17 @@ public class SignController extends HttpServlet {
         try {
             String hash = pwd.encrypt();
             String salt = pwd.getSalt();
-            usr.insertUser(usrData.get("username"), hash, salt, usrData.get("mail"));
+            Boolean isInsert = usr.insertUser(usrData.get("username"), hash, salt, usrData.get("mail"));
+
+            if (!isInsert) {
+                Loghandler.log("is not insert", "info");
+                this.getServletContext().getRequestDispatcher("/WEB-INF/template/signup.jsp").forward(req,res);
+                return;
+            }
+
+            // Otherwise send a mail
+            Mailer mail = new Mailer(usrData.get("mail"), usrData.get("username"));
+            mail.sendMail();
 
         } catch (Exception e) {
             Loghandler.log(e.toString(), "fatal");

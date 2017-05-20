@@ -2,8 +2,8 @@ package controller;
 
 import bean.Userstate;
 import helper.RequestParse;
-import login.Password;
-import login.Token;
+import account.Password;
+import account.Token;
 import sql.UserDB;
 
 import javax.servlet.RequestDispatcher;
@@ -18,7 +18,7 @@ import java.util.HashMap;
  */
 public class LoginController extends HttpServlet {
 
-    private UserDB usr = new UserDB();
+    private final UserDB usr = new UserDB();
     /**
      *
      * @param req

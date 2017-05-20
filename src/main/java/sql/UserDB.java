@@ -83,7 +83,7 @@ public class UserDB extends Connect{
      * @return
      */
     public byte[][] selectPwd(String username){
-        String sql = "SELECT hash, salt FROM User WHERE user = ?";
+        String sql = "SELECT hash, salt FROM User WHERE user = ? AND status = ?";
         String pwd = "";
         String salt = "";
         byte[][] assembly = null;
@@ -91,6 +91,7 @@ public class UserDB extends Connect{
         try {
             PreparedStatement stmt = this.connection.prepareStatement(sql);
             stmt.setString(1, username);
+            stmt.setBoolean(2, true);
 
             ResultSet res = stmt.executeQuery();
 
@@ -145,5 +146,30 @@ public class UserDB extends Connect{
         }
 
         return userID;
+    }
+
+    /**
+     *
+     * @param username
+     * @return
+     */
+    public Boolean activateUser(String username) {
+        String sql = "UPDATE User SET status = ? WHERE user = ?";
+
+        try {
+            PreparedStatement stmt = this.connection.prepareStatement(sql);
+            stmt.setBoolean(1, true);
+            stmt.setString(2, username);
+
+            int isUpdate = stmt.executeUpdate();
+
+            if (isUpdate == 0)
+                return false;
+        } catch (SQLException e) {
+            Loghandler.log(e.toString(), "warn");
+            return false;
+        }
+
+        return true;
     }
 }

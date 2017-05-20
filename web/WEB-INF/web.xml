@@ -3,6 +3,23 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
+    <resource-ref>
+        <description>
+            Resource reference to a factory for javax.mail.Session
+            instances that may be used for sending electronic mail
+            messages, preconfigured to connect to the appropriate
+            SMTP server.
+        </description>
+        <res-ref-name>
+            mail/Session
+        </res-ref-name>
+        <res-type>
+            javax.mail.Session
+        </res-type>
+        <res-auth>
+            Container
+        </res-auth>
+    </resource-ref>
     <servlet>
         <servlet-name>Index</servlet-name>
         <servlet-class>controller.IndexController</servlet-class>
@@ -50,5 +67,13 @@
     <servlet-mapping>
         <servlet-name>Dao</servlet-name>
         <url-pattern>/dao</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>Register</servlet-name>
+        <servlet-class>controller.RegisterController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Register</servlet-name>
+        <url-pattern>/register</url-pattern>
     </servlet-mapping>
 </web-app>

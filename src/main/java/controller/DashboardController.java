@@ -1,8 +1,7 @@
 package controller;
 
 import bean.Userstate;
-import helper.Loghandler;
-import login.Token;
+import account.Token;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -30,7 +29,7 @@ public class DashboardController extends HttpServlet{
         if (isProfilValid)
             this.getServletContext().getRequestDispatcher("/WEB-INF/template/dashboard.jsp").forward(req, res);
         else
-            res.sendRedirect("/tinwork/login");
+            res.sendRedirect("/tinwork/account");
     }
 
     public void doPost(javax.servlet.http.HttpServletRequest req, javax.servlet.http.HttpServletResponse res) throws ServletException, IOException{
@@ -39,7 +38,7 @@ public class DashboardController extends HttpServlet{
         if (isProfilValid)
             this.getServletContext().getRequestDispatcher("/WEB-INF/template/dashboard.jsp").forward(req, res);
         else
-            res.sendRedirect("/tinwork/login");
+            res.sendRedirect("/tinwork/account");
     }
 
     public Boolean processRequest(javax.servlet.http.HttpServletRequest req, javax.servlet.http.HttpServletResponse res){

@@ -35,10 +35,13 @@ RUN echo "export CATALINA_HOME='/opt/tomcat9'" >> /etc/environment && \
     . ~/.bashrc
 
 # Add user to tomcat 
-RUN echo "<role rolename='manager-gui' />\n<user username='root' password='root' roles='manager-gui'>\n<role rolename='admin-gui' />\n<user username='admin' password='admin' roles='admin-gui,manager-gui'>" >> ./conf/tomcat-users.xml
+RUN sed -i.bak "\$i <role rolename='manager-gui' />\n<user username='root' password='root' roles='manager-gui'>\n<role rolename='admin-gui' />\n<user username='admin' password='admin' roles='admin-gui,manager-gui'>" conf/tomcat-users.xml
 
-# Change the server reload config 
+# Change the server reload config
 RUN sed -i.bak 's/<Context>/<Context reloadable="true">/g' conf/context.xml
+
+# Update the context
+RUN sed -i.bak '$ i\<Resource name="mail/Session" auth="Container" type="javax.mail.Session" mail.smtp.host="localhost"/>' conf/context.xml
 
 # Add a log files
 RUN touch logs/apps.log
@@ -88,6 +91,11 @@ RUN wget http://central.maven.org/maven2/org/json/json/20160810/json-20160810.ja
 RUN wget http://central.maven.org/maven2/javax/servlet/jstl/1.2/jstl-1.2.jar && \
     cp jstl-1.2.jar /opt/tomcat9/lib && \
     rm jstl-1.2.jar
+
+# Add java mail
+RUN wget http://central.maven.org/maven2/javax/mail/mail/1.4.7/mail-1.4.7.jar && \
+    cp mail-1.4.7.jar /opt/tomcat9/lib && \
+    rm mail-1.4.7.jar
 
 
 # Run tomcat 

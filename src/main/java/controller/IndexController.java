@@ -46,7 +46,7 @@ public class IndexController extends HttpServlet {
         }
 
         // If we get the URL we can init the URL encoding process
-        UrlEntry processURL = new UrlEntry(data, datapwd);
+        UrlEntry processURL = new UrlEntry(data, datapwd, userID);
 
         try {
             // Init check the validity of the URL and insert the original URL into the database

@@ -1,4 +1,4 @@
-package login;
+package account;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
@@ -6,16 +6,17 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import helper.Loghandler;
+import sun.security.provider.SHA;
 
 import java.io.IOException;
 
 /**
  * Created by lookitsmarc on 15/05/2017.
  */
-public class Token {
+public class Token implements TokenIface{
 
-    private final String ISSUER = "tinwork";
-
+    protected final String ISSUER = "tinwork";
+    protected DecodedJWT token;
 
     /**
      * Constructor
@@ -24,8 +25,12 @@ public class Token {
     }
 
 
-
-    private Algorithm GenerateAlg() throws Exception{
+    /**
+     *
+     * @return
+     * @throws Exception
+     */
+    protected Algorithm GenerateAlg() throws Exception{
         Algorithm HMAC256;
         Loghandler.log("generating the algo", "info");
         try {
@@ -50,7 +55,7 @@ public class Token {
             Algorithm HMAC256 = GenerateAlg();
             Loghandler.log("beginning to generate the token", "info");
             token = JWT.create()
-                    .withIssuer(ISSUER)
+                    .withIssuer(this.ISSUER)
                     .sign(HMAC256);
         } catch (Exception e) {
             Loghandler.log(e.toString(), "info");
@@ -75,6 +80,9 @@ public class Token {
                     .build();
 
             DecodedJWT jwt = verifier.verify(token);
+
+            // Set the token
+            this.token = jwt;
         } catch (JWTVerificationException e) {
             // If pass threw this then the token is the not valid
             Loghandler.log("token is not valid", "info");

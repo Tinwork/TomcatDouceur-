@@ -25,6 +25,7 @@ public class UrlEntry {
     protected JSONObject mulPwd;
     protected java.sql.Date start;
     protected java.sql.Date end;
+    protected int userID;
 
 
     protected static final String ALPHABET = "23456789bcdfghjkmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ-_";
@@ -38,7 +39,7 @@ public class UrlEntry {
      *
      * @param data
      */
-    public UrlEntry(HashMap<String, String> data, HashMap<String, String> passwords){
+    public UrlEntry(HashMap<String, String> data, HashMap<String, String> passwords, int userID){
         this.url = data.get("url");
         this.pwd = returnValidStrParam(data.get("password"));
         this.mail = returnValidStrParam(data.get("mail"));
@@ -46,7 +47,7 @@ public class UrlEntry {
         this.end = StringToSQLDate(data.get("end_date"));
         this.captcha = data.get("captcha") == null ? false : true;
         this.mulPwd = buildMulPwd(passwords);
-
+        this.userID = userID;
     }
 
     /**
@@ -94,8 +95,7 @@ public class UrlEntry {
      * @throws Exception
      */
     public void insertAction() throws Exception{
-        int userID = 1;
-        InsertURL insert = new InsertURL(this.url, userID);
+        InsertURL insert = new InsertURL(this.url, this.userID);
         String hashpwd = LinkPwd.hash(this.pwd);
 
         // Steps are bit special for the mail. If the mail is not correct then we set the mail at null

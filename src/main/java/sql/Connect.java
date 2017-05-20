@@ -17,7 +17,7 @@ public class Connect {
     // Define protected fields
     protected Connection connection;
     protected DataSource dataSource;
-    protected String wsSql = "jdbc:mysql://172.21.0.2:3306/tinwork";
+    protected String wsSql = "jdbc:mysql://tomcat-db:3306/tinwork";
 
     // Private fields only accessible within the class
     private String username = "root";

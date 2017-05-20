@@ -35,4 +35,14 @@ services:
       - ./sql_data:db
     ports:
       - 8080:80
+
+  mail:
+    image: namshi/smtp
+    ports:
+      - 25:25
+    volumes:
+      - ./maildata:/var/spool/postfix
+    environment:
+       GMAIL_USER: tinworkfiestar@gmail.com
+       GMAIL_PASSWORD: tinworkfiestarJei
       
