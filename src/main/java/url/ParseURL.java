@@ -1,5 +1,6 @@
 package url;
 
+import helper.Helper;
 import helper.Loghandler;
 import sql.InsertURL;
 import sql.SelectLinks;
@@ -60,12 +61,15 @@ public class ParseURL {
             try {
                 if (key == "mulPwd") {
                     validity = linkInstance.checkMulPwdIntegrity(postDatas);
-                } else {
-                    validity = linkInstance.checkParamIntegrety(key, d);
                 }
-                
-                if (!validity) {
-                    return false;
+                else if (key == "captcha") {
+                    validity = Helper.checkRecaptcha(postDatas.get("g-recaptcha-response"));
+                }
+                else if (key == "start_date" || key == "end_date") {
+                    validity = Helper.validateDate(linkInstance.getStart_date(), linkInstance.getEnd_date());
+                }
+                else {
+                    validity = linkInstance.checkParamIntegrety(key, d);
                 }
 
             } catch (Exception e) {

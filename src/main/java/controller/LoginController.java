@@ -61,7 +61,11 @@ public class LoginController extends HttpServlet {
         if (issame) {
             Token tokenHandler = new Token();
             int id = usr.selectUserID(usrData.get("username"));
-            // Generate an access token
+
+            // Set the id
+            tokenHandler.setId(id);
+
+            // Generate the token
             String token = tokenHandler.generateToken();
             Userstate bean = setBean(usrData.get("username"), token, id);
             RedirectWithBean(req, res, bean);

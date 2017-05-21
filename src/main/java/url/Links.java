@@ -248,6 +248,22 @@ public class Links {
 
     /**
      *
+     * @return
+     */
+    public Date getStart_date(){
+        return this.start_date;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Date getEnd_date(){
+        return this.end_date;
+    }
+
+    /**
+     *
      * @param constraint
      * @param inputValue
      * @return

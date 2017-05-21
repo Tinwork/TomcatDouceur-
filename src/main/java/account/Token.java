@@ -9,6 +9,8 @@ import helper.Loghandler;
 import sun.security.provider.SHA;
 
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by lookitsmarc on 15/05/2017.
@@ -17,6 +19,8 @@ public class Token implements TokenIface{
 
     protected final String ISSUER = "tinwork";
     protected DecodedJWT token;
+    protected int id;
+    protected final Date NOW = new Date();
 
     /**
      * Constructor
@@ -56,6 +60,8 @@ public class Token implements TokenIface{
             Loghandler.log("beginning to generate the token", "info");
             token = JWT.create()
                     .withIssuer(this.ISSUER)
+                    .withClaim("id", this.id)
+                    .withExpiresAt(getNextHours())
                     .sign(HMAC256);
         } catch (Exception e) {
             Loghandler.log(e.toString(), "info");
@@ -81,6 +87,12 @@ public class Token implements TokenIface{
 
             DecodedJWT jwt = verifier.verify(token);
 
+            // check if the date is correct
+            Date expire = jwt.getExpiresAt();
+
+            if (!this.NOW.before(expire))
+                return false;
+
             // Set the token
             this.token = jwt;
         } catch (JWTVerificationException e) {
@@ -93,5 +105,25 @@ public class Token implements TokenIface{
         }
 
         return true;
+    }
+
+    /**
+     *
+     * @param id
+     */
+    public void setId(int id){
+        this.id = id;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Date getNextHours() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.HOUR_OF_DAY, 1);
+
+        return calendar.getTime();
     }
 }

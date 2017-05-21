@@ -13,7 +13,6 @@ import java.util.Date;
  */
 public class Validity extends Token implements TokenIface {
 
-    private final Date date = new Date();
     private String username;
 
     /**
@@ -37,7 +36,7 @@ public class Validity extends Token implements TokenIface {
             token = JWT.create()
                     .withIssuer(super.ISSUER)
                     .withClaim("username", this.username)
-                    .withIssuedAt(this.date)
+                    .withIssuedAt(super.NOW)
                     .withExpiresAt(this.getNextHours())
                     .sign(HMAC256);
         } catch (Exception e) {
@@ -62,7 +61,7 @@ public class Validity extends Token implements TokenIface {
 
         // Now we need to check if the date is still valid..
         Date expiresAt = super.token.getExpiresAt();
-        if (!expiresAt.after(this.date)) {
+        if (!expiresAt.after(super.NOW)) {
             return null;
         }
 
@@ -73,9 +72,9 @@ public class Validity extends Token implements TokenIface {
      * Return the next hours Date.now + 1 hour
      * @return
      */
-    private Date getNextHours() {
+    public Date getNextHours() {
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(this.date);
+        calendar.setTime(super.NOW);
         calendar.add(Calendar.HOUR_OF_DAY, 1);
 
         return calendar.getTime();
