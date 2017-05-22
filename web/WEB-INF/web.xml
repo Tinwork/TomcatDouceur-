@@ -76,4 +76,14 @@
         <servlet-name>Register</servlet-name>
         <url-pattern>/register</url-pattern>
     </servlet-mapping>
+
+    <!-- CSV handler -->
+    <servlet>
+        <servlet-name>CSV</servlet-name>
+        <servlet-class>controller.CsvController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CSV</servlet-name>
+        <url-pattern>/csv</url-pattern>
+    </servlet-mapping>
 </web-app>
