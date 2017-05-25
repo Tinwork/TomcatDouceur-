@@ -1,5 +1,7 @@
 package helper;
 
+import account.Token;
+import bean.Userstate;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.json.JSONObject;
 
@@ -20,6 +22,7 @@ final public class Helper {
 
     private final static String secret = "6LfmAiIUAAAAAI1Q3PZPlFFm_Xp1fE9xDz-VmB7m";
     private final static Date now = new Date();
+    private static int userid;
 
     /**
      * Validate Mail
@@ -184,5 +187,39 @@ final public class Helper {
             return true;
 
         return false;
+    }
+
+    public static Boolean processRequest(javax.servlet.http.HttpServletRequest req, javax.servlet.http.HttpServletResponse res){
+        Object bean = req.getSession().getAttribute("userstate");
+
+        if (bean == null)
+            return false;
+
+        Userstate userstate  = (Userstate) bean;
+        userid = userstate.getUserID();
+
+        if (!tokenValidity(userstate.getToken()))
+            return false;
+
+        return true;
+    }
+
+
+    /**
+     *
+     * @param token
+     * @return
+     */
+    public static Boolean tokenValidity(String token) {
+        Token tokenize = new Token();
+        return tokenize.parseToken(token);
+    }
+
+    /**
+     *
+     * @return
+     */
+    public static int retrieveUserID(){
+       return userid;
     }
 }
