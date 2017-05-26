@@ -34,12 +34,12 @@ public class Bulk {
     public void insertData(){
         // Loop threw the array list
         for (HashMap<String, String> data : this.list) {
-            Loghandler.log("data : "+data.toString(), "info");
             // if the data is empty then skip the data
             if (data.isEmpty())
                 continue;
 
             // Get the password
+            Loghandler.log(data.toString(), "info");
             UrlEntry processURL = new UrlEntry(data, getPassword(data.get("mulpwd")), userID);
 
             try {
@@ -63,6 +63,7 @@ public class Bulk {
      * @return
      */
     public HashMap<String, String> getPassword(String pwd){
+        Loghandler.log("pwd orig "+pwd, "info");
         HashMap<String, String> pwdMap = new HashMap<String, String>();
 
         if (pwd == null) {
@@ -73,11 +74,11 @@ public class Bulk {
             return pwdMap;
         }
 
-        String[] pwds = pwd.split(",");
+        String[] pwds = pwd.split("/");
 
         int idx = 0;
         while (idx < pwds.length) {
-            pwdMap.put("passwords-"+idx, pwds[idx]);
+            pwdMap.put("passwords-"+(idx+1), pwds[idx]);
             idx++;
         }
 

@@ -3,8 +3,10 @@ package csv;
 import helper.Loghandler;
 import javax.servlet.http.Part;
 import java.io.*;
-import java.lang.reflect.Array;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -76,8 +78,6 @@ public class Csvparser {
             return null;
 
         for (int idx = 0; idx < line.length; idx++) {
-            Loghandler.log(line[0], "info");
-            Loghandler.log("length "+line.length, "info");
             switch (idx) {
                 case 0:
                     csvData.put("url", line[0]);
@@ -89,17 +89,45 @@ public class Csvparser {
                     csvData.put("captcha", line[2]);
                     break;
                 case 3:
-                    csvData.put("start_date", line[3]);
+                    csvData.put("start_date", parseCSVDate(line[3]));
                     break;
                 case 4:
-                    csvData.put("end_date", line[4]);
+                    csvData.put("end_date", parseCSVDate(line[4]));
                     break;
                 case 5:
                     csvData.put("mulpwd", line[5]);
                     break;
+                case 6:
+                    csvData.put("mail", line[6]);
             }
         }
 
+        Loghandler.log("csv "+csvData.toString(), "info");
+
         return csvData;
     }
+
+    /**
+     *
+     * @param date
+     * @return
+     */
+    private static String parseCSVDate(String date){
+        // Assuming that the date format is the following : DD/MM/YYYY
+        String newDate = "";
+        if (date.isEmpty()) {
+            return null;
+        }
+
+        try {
+            Date fromCSV = new SimpleDateFormat("dd/MM/yy").parse(date);
+            newDate = new SimpleDateFormat("yyyy-MM-dd").format(fromCSV);
+        } catch (ParseException e) {
+            Loghandler.log(e.toString(), "warn");
+        }
+
+
+        return newDate;
+    }
 }
+
