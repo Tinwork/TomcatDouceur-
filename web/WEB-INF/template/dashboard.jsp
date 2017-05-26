@@ -38,8 +38,13 @@
     <div class="container-fluid">
         <p>DASHBOARD</p>
         <p>${userstate.getToken()}</p>
-
-
+        <form action="csv" method="post" enctype="multipart/form-data">
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1">CSV</span>
+                <input type="file" class="form-control" placeholder="Link" name="csv" aria-describedby="basic-addon1" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
     </div>
 </body>
 </html>

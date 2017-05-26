@@ -97,6 +97,10 @@ RUN wget http://central.maven.org/maven2/javax/mail/mail/1.4.7/mail-1.4.7.jar &&
     cp mail-1.4.7.jar /opt/tomcat9/lib && \
     rm mail-1.4.7.jar
 
+# Add csv parser
+RUN wget http://central.maven.org/maven2/org/apache/commons/commons-csv/1.4/commons-csv-1.4.jar && \
+    cp commons-csv-1.4.jar /opt/tomcat9/lib && \
+    rm commons-csv-1.4.jar
 
 # Run tomcat 
 CMD ./bin/catalina.sh run

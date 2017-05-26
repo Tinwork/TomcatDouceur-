@@ -18,7 +18,6 @@ import java.util.HashMap;
  */
 public class LoginController extends HttpServlet {
 
-    private final UserDB usr = new UserDB();
     /**
      *
      * @param req
@@ -38,6 +37,7 @@ public class LoginController extends HttpServlet {
      * @throws IOException
      */
     public void doPost(javax.servlet.http.HttpServletRequest req, javax.servlet.http.HttpServletResponse res) throws ServletException, IOException {
+        UserDB usr = new UserDB();
         // Retrieve the user, pwd
         String[] param = {"username","password"};
         HashMap<String, String> usrData =  RequestParse.getParams(req, param);
@@ -72,7 +72,6 @@ public class LoginController extends HttpServlet {
         } else {
             this.getServletContext().getRequestDispatcher("/login").forward(req, res);
         }
-
     }
 
     /**
