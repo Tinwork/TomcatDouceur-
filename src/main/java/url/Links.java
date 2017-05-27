@@ -44,11 +44,10 @@ public class Links {
      * @param original_url
      * @param short_url
      */
-    public Links(String original_url, String short_url, int sql_id, int count, Date date, long hashid, String password, String mulPwd, Boolean captcha, String mail, Date start_date, Date end_date){
+    public Links(String original_url, String short_url, int sql_id, Date date, long hashid, String password, String mulPwd, Boolean captcha, String mail, Date start_date, Date end_date){
         this.short_url = short_url;
         this.orig_link = original_url;
         this.sql_id = sql_id;
-        this.count = count;
         this.date = date;
         this.hashid = hashid;
         this.password = password;
@@ -133,7 +132,7 @@ public class Links {
 
     /**
      * Finalize Short URL
-     *          Finalize the creation of the Hash and the url and push it into the Datbase
+     *          Finalize the creation of the Hash and the UrlAPI and push it into the Datbase
      * @return
      */
     public String encodeLongURL(int row){
@@ -221,6 +220,12 @@ public class Links {
         JSONObject json = new JSONObject(this.mulPwd);
         return json.length();
     }
+
+    /**
+     *
+     * @return
+     */
+    public int getSQLID(){ return this.sql_id; };
 
     /**
      *

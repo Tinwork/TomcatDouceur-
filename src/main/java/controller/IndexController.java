@@ -3,6 +3,7 @@ package controller;
 import helper.Loghandler;
 import url.UrlEntry;
 
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import java.io.IOException;
@@ -21,7 +22,7 @@ public class IndexController extends HttpServlet {
      * @throws javax.servlet.ServletException
      * @throws IOException
      */
-    public void doGet(javax.servlet.http.HttpServletRequest req, javax.servlet.http.HttpServletResponse res) throws javax.servlet.ServletException, IOException {
+    public void doGet(javax.servlet.http.HttpServletRequest req, javax.servlet.http.HttpServletResponse res) throws ServletException, IOException {
         this.getServletContext().getRequestDispatcher("/WEB-INF/template/index.jsp").forward(req,res);
     }
 
@@ -32,7 +33,7 @@ public class IndexController extends HttpServlet {
      * @throws javax.servlet.ServletException
      * @throws IOException
      */
-    public void doPost(javax.servlet.http.HttpServletRequest req, javax.servlet.http.HttpServletResponse res) throws javax.servlet.ServletException, IOException{
+    public void doPost(javax.servlet.http.HttpServletRequest req, javax.servlet.http.HttpServletResponse res) throws ServletException, IOException{
         String[] param = {"url", "password", "mail", "start_date", "end_date", "captcha"};
         String []mulpwd = {"passwords-1", "passwords-2", "passwords-3"};
 
@@ -43,6 +44,7 @@ public class IndexController extends HttpServlet {
         if (data.isEmpty()){
             req = setBeanAttr(req, "warning", "can't retrieve the URL");
             this.getServletContext().getRequestDispatcher("/home").forward(req, res);
+            return;
         }
 
         // If we get the URL we can init the URL encoding process
@@ -55,8 +57,8 @@ public class IndexController extends HttpServlet {
             if (!isPresValid) {
                 processURL.insertAction();
             } else {
-                req = setBeanAttr(req, "warning", "The same URL already exist");
-                this.getServletContext().getRequestDispatcher("/home").forward(req, res);
+                res.sendRedirect("/tinwork/home");
+                return;
             }
 
         } catch(Exception e){
@@ -64,7 +66,8 @@ public class IndexController extends HttpServlet {
 
             // Set the bean error
             req = setBeanAttr(req, "fatal", "can't insert the URL");
-            this.getServletContext().getRequestDispatcher("/home").forward(req, res);
+            res.sendRedirect("/tinwork/home");
+            return;
         }
     }
 

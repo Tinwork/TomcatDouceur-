@@ -24,7 +24,7 @@ public class ParseURL {
 
         this.shortURL = url.split("/")[1];
         this.linkSelector = new SelectLinks();
-        Loghandler.log(this.shortURL+" short url value", "info");
+        Loghandler.log(this.shortURL+" short Url value", "info");
     }
 
     /**

@@ -126,4 +126,12 @@ public class Token implements TokenIface{
 
         return calendar.getTime();
     }
+
+    /**
+     *
+     * @return
+     */
+    public int getUserID(){
+        return this.token.getClaim("id").asInt();
+    }
 }

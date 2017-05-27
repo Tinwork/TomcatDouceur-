@@ -1,11 +1,16 @@
 package helper;
 
 import bean.Userstate;
+import org.json.JSONObject;
+import org.json.JSONString;
 import sun.rmi.log.LogHandler;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  * Created by lookitsmarc on 08/04/2017.
@@ -32,6 +37,37 @@ public class RequestParse {
         }
 
         return dataMap;
+    }
+
+    /**
+     *
+     * @param req
+     * @param
+     * @return
+     */
+    public static HashMap<String, String> getJSONParams(javax.servlet.http.HttpServletRequest req, String[] paramwanted){
+        HashMap<String, String> jsondata = new HashMap<String, String>();
+        StringBuilder buffer = new StringBuilder();
+
+        try {
+            BufferedReader reader = req.getReader();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                buffer.append(line);
+            }
+            String data = buffer.toString();
+
+            // convert the data into a json object
+            JSONObject json = new JSONObject(data);
+
+            for (int i = 0; i < paramwanted.length; i++) {
+                jsondata.put(paramwanted[i], json.getString(paramwanted[i]));
+            }
+        } catch (IOException e) {
+            Loghandler.log("json parse "+e.toString(), "info");
+        }
+
+        return jsondata;
     }
 
     /**

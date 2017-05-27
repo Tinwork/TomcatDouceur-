@@ -40,7 +40,7 @@ public class InsertURL extends Connect{
         int lastRow = 0;
 
         try {
-            // Otherwise we try to insert the url in the db
+            // Otherwise we try to insert the Url in the db
             // There's no way to bind the param with variable... a part from using Spring framework...
             String sql = "INSERT INTO Link (original_link, user_id, create_date, password, mail, start_date, end_date, captcha, multiple_password) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement stmt = this.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -91,7 +91,8 @@ public class InsertURL extends Connect{
                 return false;
 
         } catch (Exception e){
-            Loghandler.log(e.toString()+" check presence of url", "fatal");
+            Loghandler.log(e.toString()+" check presence of Url", "fatal");
+            return true;
         }
 
         return true;

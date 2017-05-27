@@ -64,7 +64,7 @@ public class UrlEntry {
             throw new Exception("the url is not valid");
 
         // Now we need to check whenever the url is in the database
-        insert = new InsertURL(this.url, 1);
+        insert = new InsertURL(this.url, this.userID);
 
         if(!insert.checkPresenceOfURL())
             return false;
@@ -86,7 +86,6 @@ public class UrlEntry {
         }
 
         Loghandler.log("URL is valid", "info");
-
         return true;
     }
 
@@ -108,7 +107,7 @@ public class UrlEntry {
         int row = insert.insertOriginalURL(hashpwd, this.mail, this.start, this.end, this.captcha, this.mulPwd);
 
         // @TODO if i have time i shall pass the HashMap instead of the entire parse datas though...
-        Links short_link = new Links(this.url, "", 0, 0, null, 0, null, null, null, null, null, null);
+        Links short_link = new Links(this.url, "", 0, null, 0, null, null, null, null, null, null);
         String shortURL = short_link.encodeLongURL(row);
         long hash = short_link.getID();
 

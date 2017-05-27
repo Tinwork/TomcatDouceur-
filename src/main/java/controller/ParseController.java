@@ -3,6 +3,7 @@ package controller;
 import bean.Constraint;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import helper.Loghandler;
+import sql.CountURL;
 import url.Links;
 import url.ParseURL;
 
@@ -25,7 +26,7 @@ public class ParseController extends HttpServlet{
     @Override
     public void doGet(javax.servlet.http.HttpServletRequest req, javax.servlet.http.HttpServletResponse res) throws javax.servlet.ServletException, IOException{
 
-
+        CountURL counterURI = new CountURL();
         String requrl = req.getRequestURI();
         CharSequence template = "template";
 
@@ -33,7 +34,7 @@ public class ParseController extends HttpServlet{
             Loghandler.log("url is called", "info");
             Loghandler.log(req.getPathInfo(), "info");
 
-            // Now that we have the url we need to parse
+            // Now that we have the UrlAPI we need to parse
             ParseURL parser = new ParseURL(req.getPathInfo());
             Links link = parser.retrieveLinks();
 
@@ -50,12 +51,13 @@ public class ParseController extends HttpServlet{
             }
 
             String url = link.getOriginalURL();
+            // Update the count table
+            counterURI.updateCount(link.getSQLID());
 
             if (url != null)
                 res.sendRedirect(url);
 
             // Otherwise we need to send an error to the JSP
-
             Loghandler.log(url, "info");
         }
     }

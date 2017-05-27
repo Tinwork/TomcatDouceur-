@@ -2,6 +2,8 @@ package sql;
 
 import com.sun.org.apache.bcel.internal.generic.Select;
 import helper.Loghandler;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import url.Links;
 
 import java.sql.PreparedStatement;
@@ -16,46 +18,49 @@ public class SelectLinks extends Connect{
 
     // Instance of Links
     private Links link;
+    private JSONArray jsonArr = new JSONArray();
 
     public SelectLinks(){
         this.connectToDB();
     }
 
     /**
-     * Retrieve SQL Link
-     * @return Links
+     *
+     * @param userID
+     * @return
+     * @throws Exception
      */
-    public Links retrieveSQLLink(int row){
-        Loghandler.log("row :"+row, "info");
+    public JSONArray selectLinksByUserID(int userID) throws Exception{
+        String sql = "SELECT id, original_link, short_link, create_date FROM Link WHERE user_id = ?";
+
         try {
-            PreparedStatement stmt = this.connection.prepareStatement("SELECT * FROM Link WHERE id = ?");
-            stmt.setInt(1, row);
+            PreparedStatement stmt = this.connection.prepareStatement(sql);
+            stmt.setInt(1, userID);
 
-            // Execute the query
             ResultSet res = stmt.executeQuery();
-
-            while(res.next()){
-                link = new Links(
-                        res.getString("original_link"),
-                        res.getString("short_link"),
-                        res.getInt("Id"),
-                        res.getInt("count"),
-                        res.getDate("create_date"),
-                        res.getLong("hashnumber"),
-                        res.getString("password"),
-                        res.getString("multiple_password"),
-                        res.getBoolean("captcha"),
-                        res.getString("mail"),
-                        res.getDate("start_date"),
-                        res.getDate("end_date")
-                );
+            if (!res.next()) {
+                Loghandler.log("data is null for user id "+userID, "info");
+                return null;
             }
-        } catch (SQLException e){
-            Loghandler.log("Not initialized", "warn");
-            Loghandler.log(e.toString()+" select fatal", "fatal");
+
+            do {
+                JSONObject link = new JSONObject();
+                link.put("original_link", res.getString("original_link"))
+                    .put("short_link", res.getString("short_link"))
+                    .put("create_date", res.getDate("create_date"))
+                    .put("id", res.getInt("id"));
+
+                this.jsonArr.put(link);
+            } while(res.next());
+
+        } catch (SQLException e) {
+            Loghandler.log("unexpected error while retrieving the link for user "+userID, "fatal");
+            Loghandler.log(e.toString(), "fatal");
+
+            throw new Exception("unable to retrieve links");
         }
 
-        return link;
+        return this.jsonArr;
     }
 
     /**
@@ -81,7 +86,6 @@ public class SelectLinks extends Connect{
                         res.getString("original_link"),
                         res.getString("short_link"),
                         res.getInt("Id"),
-                        res.getInt("count"),
                         res.getDate("create_date"),
                         res.getLong("hashnumber"),
                         res.getString("password"),
