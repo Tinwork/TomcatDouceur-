@@ -189,6 +189,12 @@ final public class Helper {
         return false;
     }
 
+    /**
+     *
+     * @param req
+     * @param res
+     * @return
+     */
     public static Boolean processRequest(javax.servlet.http.HttpServletRequest req, javax.servlet.http.HttpServletResponse res){
         Object bean = req.getSession().getAttribute("userstate");
 
@@ -212,8 +218,12 @@ final public class Helper {
      */
     public static Boolean tokenValidity(String token) {
         Token tokenize = new Token();
-        return tokenize.parseToken(token);
+        Boolean isValid = tokenize.parseToken(token);
+        userid = tokenize.getUserID();
+
+        return isValid;
     }
+
 
     /**
      *

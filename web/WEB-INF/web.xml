@@ -86,4 +86,23 @@
         <servlet-name>CSV</servlet-name>
         <url-pattern>/csv</url-pattern>
     </servlet-mapping>
+
+    <!-- Rest API -->
+    <servlet>
+        <servlet-name>ApiURL</servlet-name>
+        <servlet-class>api.GetURL</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ApiURL</servlet-name>
+        <url-pattern>/api/url</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>ApiCount</servlet-name>
+        <servlet-class>api.GetCount</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ApiCount</servlet-name>
+        <url-pattern>/api/stat</url-pattern>
+    </servlet-mapping>
 </web-app>

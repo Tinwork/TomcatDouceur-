@@ -29,7 +29,7 @@ public class DashboardController extends HttpServlet{
         if (isProfilValid)
             this.getServletContext().getRequestDispatcher("/WEB-INF/template/dashboard.jsp").forward(req, res);
         else
-            res.sendRedirect("/tinwork/dashboard");
+            res.sendRedirect("/tinwork/login");
     }
 
     public void doPost(javax.servlet.http.HttpServletRequest req, javax.servlet.http.HttpServletResponse res) throws ServletException, IOException{
@@ -38,6 +38,6 @@ public class DashboardController extends HttpServlet{
         if (isProfilValid)
             this.getServletContext().getRequestDispatcher("/WEB-INF/template/dashboard.jsp").forward(req, res);
         else
-            res.sendRedirect("/tinwork/dashboard");
+            res.sendRedirect("/tinwork/login");
     }
 }

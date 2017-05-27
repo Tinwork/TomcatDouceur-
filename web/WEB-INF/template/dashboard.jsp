@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: lookitsmarc
@@ -15,6 +16,8 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
 </head>
 <body>
+    <c:set var = "token" value="${userstate.getToken()}"></c:set>
+    <c:set var = "username" value="${userstate.getUsername()}"></c:set>
     <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -36,8 +39,14 @@
         </div>
     </nav>
     <div class="container-fluid">
-        <p>DASHBOARD</p>
-        <p>${userstate.getToken()}</p>
+        <!-- user card -->
+        <div id="card" style="width: 20rem;" data-token="<c:out value="${token}"/>">
+            <img class="card-img-top" src="/tinwork/public/image/default-user.jpg" alt="Card image cap">
+            <div class="card-block">
+                <h4 class="card-title">Dashboard</h4>
+                <p class="card-text">Welcome <c:out value="${username}"></c:out></p>
+            </div>
+        </div>
         <form action="csv" method="post" enctype="multipart/form-data">
             <div class="input-group">
                 <span class="input-group-addon" id="basic-addon1">CSV</span>
@@ -45,6 +54,19 @@
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
+        <button type="button" class="btn btn-secondary" id="geturl">Get URL</button>
+        <table id="url">
+            <thead>
+                <tr>
+                    <th>Original link</th>
+                    <th>Short link</th>
+                    <th>Original link</th>
+                    <th>#</th>
+                </tr>
+            </thead>
+            <tbody id="body"></tbody>
+        </table>
     </div>
+    <script type="text/javascript" src="/tinwork/public/js/dashboard.js"></script>
 </body>
 </html>
