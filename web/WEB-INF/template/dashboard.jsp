@@ -11,6 +11,8 @@
 <head>
     <title>$Title$</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <link rel="stylesheet" href="/tinwork/public/css/style.css">
+    <link rel="stylesheet" href="/tinwork/public/css/dashboard.css">
     <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
@@ -22,7 +24,10 @@
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <a class="navbar-brand" href="#">Tinwork</a>
+        <a class="navbar-brand" href="#">
+            <img src="/tinwork/public/image/logo.jpg" width="30" height="30" alt="">
+            Tinwork
+        </a>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
@@ -32,19 +37,47 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/tinwork/sign">Signup</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/tinwork/login">Signin</a>
-                </li>
             </ul>
         </div>
     </nav>
     <div class="container-fluid">
-        <!-- user card -->
-        <div id="card" style="width: 20rem;" data-token="<c:out value="${token}"/>">
-            <img class="card-img-top" src="/tinwork/public/image/default-user.jpg" alt="Card image cap">
-            <div class="card-block">
-                <h4 class="card-title">Dashboard</h4>
-                <p class="card-text">Welcome <c:out value="${username}"></c:out></p>
+        <div class="jumbotron jumbotron-fluid">
+            <div class="container">
+                <h3 class="display-6">Profile</h3>
+                <div class="row">
+                    <div class="col">
+                        <!-- user card -->
+                        <div id="card" data-token="<c:out value="${token}"/>">
+                            <img class="card-img-top" src="/tinwork/public/image/default-user.jpg" alt="Card image cap">
+                            <div class="card-block">
+                                <h4 class="card-title">Dashboard</h4>
+                                <p class="card-text">Welcome <c:out value="${username}"></c:out></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group row">
+                            <label for="username" class="col-2 col-form-label">Username</label>
+                            <div class="col-10">
+                                <input class="form-control" type="text" value="" id="username">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="password" class="col-2 col-form-label">Password</label>
+                            <div class="col-10">
+                                <input class="form-control" type="text" value="" id="password">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="mail" class="col-2 col-form-label">Email</label>
+                            <div class="col-10">
+                                <input class="form-control" type="text" value="" id="mail">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
+
             </div>
         </div>
         <form action="csv" method="post" enctype="multipart/form-data">

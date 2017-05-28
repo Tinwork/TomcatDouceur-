@@ -1,0 +1,32 @@
+#no-margin {
+    margin-bottom: 0px;
+}
+
+.center-text {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom:10px;
+}
+
+#urlform .input-group , .signup .input-group{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+
+.jumbotron {
+    background-color: transparent;
+}
+
+nav {
+    background-color: #3D3D3D;
+}
+
+.bottom{
+    position: absolute;
+    bottom:0;
+    width: 100%;
+    padding: 10px;
+}
+
+

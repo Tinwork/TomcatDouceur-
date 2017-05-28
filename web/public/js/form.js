@@ -55,7 +55,7 @@ const formFactory = (() => {
      */
     const addComponent = (type, DOMBind) => {
         console.log(fields[type]);
-        document.getElementById(DOMBind).insertAdjacentHTML('afterbegin', fields[type]);
+        document.getElementById(DOMBind).insertAdjacentHTML('beforeend', fields[type]);
     };
 
     /**
