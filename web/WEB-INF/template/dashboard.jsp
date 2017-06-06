@@ -59,19 +59,19 @@
                         <div class="form-group row">
                             <label for="username" class="col-2 col-form-label">Username</label>
                             <div class="col-10">
-                                <input class="form-control" type="text" value="" id="username">
+                                <input class="form-control" type="text" value="" id="username" name="username">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="password" class="col-2 col-form-label">Password</label>
                             <div class="col-10">
-                                <input class="form-control" type="text" value="" id="password">
+                                <input class="form-control" type="text" value="" id="password" name="password">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="mail" class="col-2 col-form-label">Email</label>
                             <div class="col-10">
-                                <input class="form-control" type="text" value="" id="mail">
+                                <input class="form-control" type="text" value="" id="mail" name="mail">
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
