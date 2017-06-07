@@ -1,5 +1,6 @@
 package sql;
 
+import account.Password;
 import helper.Loghandler;
 
 import javax.xml.bind.DatatypeConverter;
@@ -8,6 +9,7 @@ import java.nio.charset.Charset;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 
 /**
  * Created by lookitsmarc on 14/05/2017.
@@ -105,8 +107,6 @@ public class UserDB extends Connect{
                 pwd = res.getString("hash");
                 salt = res.getString("salt");
 
-                Loghandler.log("password in res"+pwd, "info");
-                Loghandler.log("salt in res"+salt, "info");
             } while(res.next());
 
 
@@ -172,4 +172,51 @@ public class UserDB extends Connect{
 
         return true;
     }
+
+    /**
+     * I am ashamed by this flag system. At least it should works great
+     * @param userid
+     * @param data
+     * @return
+     */
+    public Boolean UpdateUserFlow(int userid, HashMap<String, String> data) {
+        // First we need to check if the old password is valid
+        String oldpwd = data.get("oldpwd");
+        byte[][] dbPwd = this.selectPwd(data.get("username"));
+
+        // we need to check if the old password is the same with the current one input
+        // Checking the validity of both password..
+        Password pwd = new Password(data.get("password"));
+        Boolean isSame = pwd.compareHash(data.get("oldpwd").toCharArray(), dbPwd[0], dbPwd[1]);
+
+        if (!isSame) {
+            return false;
+        }
+
+        try {
+            String hashes = pwd.encrypt();
+            String salt = pwd.getSalt();
+
+            // Now we can update the user
+            String sql = "UPDATE User SET user = ?, hash = ?, salt = ? where id = ?";
+            PreparedStatement stmt = this.connection.prepareStatement(sql);
+
+            stmt.setString(1, data.get("username"));
+            stmt.setString(2, hashes);
+            stmt.setString(3, salt);
+            stmt.setInt(4, userid);
+
+            int resUpdate = stmt.executeUpdate();
+
+            if (resUpdate != 0)
+                return false;
+
+        } catch (SQLException e) {
+            Loghandler.log("sql exception "+e.toString(), "warn");
+        } catch (Exception e) {
+            Loghandler.log("Password exception "+e.toString(), "warn");
+        }
+        return true;
+    }
+
 }
