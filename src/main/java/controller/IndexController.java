@@ -1,5 +1,6 @@
 package controller;
 
+import helper.Dispatch;
 import helper.Loghandler;
 import url.UrlEntry;
 
@@ -51,12 +52,15 @@ public class IndexController extends HttpServlet {
         UrlEntry processURL = new UrlEntry(data, datapwd, userID);
 
         try {
+            Loghandler.log("check url validity", "warn");
             // Init check the validity of the URL and insert the original URL into the database
             Boolean isPresValid = processURL.init();
+
 
             if (!isPresValid) {
                 processURL.insertAction();
             } else {
+                Loghandler.log("url does exist", "warn");
                 res.sendRedirect("/tinwork/home");
                 return;
             }
@@ -69,6 +73,8 @@ public class IndexController extends HttpServlet {
             res.sendRedirect("/tinwork/home");
             return;
         }
+
+        Dispatch.dispatchSuccess(req, res, "Link successfully added", "200", "/home");
     }
 
 

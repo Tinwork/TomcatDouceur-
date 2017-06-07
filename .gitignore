@@ -1,2 +1,4 @@
  .idea/
 sql_data/
+.WEB-INF/classes
+.lib

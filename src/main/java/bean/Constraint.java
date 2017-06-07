@@ -109,13 +109,6 @@ public class Constraint {
         return link.getOriginalURL();
     }
 
-    /**
-     *
-     * @return
-     */
-    public int getMulPwdLength(){
-        return link.getMulPwdLength();
-    }
 
     /**
      *

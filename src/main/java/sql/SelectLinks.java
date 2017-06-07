@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
 
 /**
  * Created by lookitsmarc on 11/04/2017.
@@ -82,16 +83,18 @@ public class SelectLinks extends Connect{
             }
 
             do{
+                HashMap<String, String> datas = new HashMap<String, String>();
+                datas.put("original_link", res.getString("original_link"));
+                datas.put("short_link", res.getString("short_link"));
+                datas.put("password", res.getString("password"));
+                datas.put("multiple_password", res.getString("multiple_password"));
+                datas.put("mail", res.getString("mail"));
+
                 link = new Links(
-                        res.getString("original_link"),
-                        res.getString("short_link"),
+                        datas,
                         res.getInt("Id"),
-                        res.getDate("create_date"),
                         res.getLong("hashnumber"),
-                        res.getString("password"),
-                        res.getString("multiple_password"),
                         res.getBoolean("captcha"),
-                        res.getString("mail"),
                         res.getDate("start_date"),
                         res.getDate("end_date")
                 );

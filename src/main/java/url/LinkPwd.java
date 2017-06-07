@@ -29,7 +29,11 @@ public class LinkPwd {
      */
     public static String hash(String password) {
 
-        if (password.isEmpty() || password == null){
+        if (password == null){
+            return null;
+        }
+
+        if (password.isEmpty()) {
             return null;
         }
 

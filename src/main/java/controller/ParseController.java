@@ -52,7 +52,7 @@ public class ParseController extends HttpServlet{
 
             String url = link.getOriginalURL();
             // Update the count table
-            counterURI.updateCount(link.getSQLID());
+            counterURI.updateCount(link.getRow());
 
             if (url != null)
                 res.sendRedirect(url);
