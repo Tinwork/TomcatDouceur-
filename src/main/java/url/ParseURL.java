@@ -24,9 +24,7 @@ public class ParseURL {
 
         String[] splitURL = url.split("/");
         this.shortURL = splitURL[splitURL.length - 1];
-//        this.shortURL = url.split("/");
         this.linkSelector = new SelectLinks();
-        Loghandler.log(this.shortURL+" short Url value", "info");
     }
 
     /**
@@ -75,7 +73,6 @@ public class ParseURL {
                 }
 
             } catch (Exception e) {
-                Loghandler.log(e.toString(), "fatal");
                 return false;
             }
         }

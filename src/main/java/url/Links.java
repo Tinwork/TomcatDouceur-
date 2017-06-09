@@ -1,5 +1,6 @@
 package url;
 
+import helper.Loghandler;
 import org.json.JSONObject;
 
 
@@ -52,6 +53,8 @@ public class Links {
      */
     public HashMap<String, Boolean> getConstrain(){
         HashMap<String, Boolean> constrain = new HashMap<String, Boolean>();
+
+        Loghandler.log("CONSTRAINT "+this.strDatas.toString(), "info");
 
         constrain.put("password", this.strDatas.get("password") == null ? false : true);
         constrain.put("captcha", this.captcha == null || !this.captcha ? false : true);
@@ -153,14 +156,15 @@ public class Links {
     public Boolean checkMulPwdIntegrity(HashMap<String, String> postDatas){
        // We're going to check the value of the password input by the user and the password saved into the database
        Boolean validity = false;
+       // Mulpwd is the password that exist in the database
        JSONObject mulPwd = new JSONObject(this.strDatas.get("multiple_password"));
        Iterator<String> keys = mulPwd.keys();
 
-       while (keys.hasNext()) {
+       while (keys.hasNext() && !validity) {
            String key = keys.next();
            String dbpwd = mulPwd.getString(key);
 
-           validity = LinkPwd.checkValidity(dbpwd, postDatas.get(key));
+           validity = LinkPwd.checkValidity(dbpwd, postDatas.get("passwords"));
        }
 
        return validity;

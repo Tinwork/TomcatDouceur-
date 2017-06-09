@@ -101,17 +101,10 @@ final public class Helper {
     private static Boolean containMulPwd(HashMap<String, String> postDatas){
         // Not the best way though... we should pass by some javascript instead of this
         Boolean ispresent = false;
-        String[] optskey = {"passwords-1", "passwords-2", "passwords-3"};
+        String optskey = "passwords";
 
-        // We ensure that at least one of the passwords is present within the postDatas
-        int i = 0;
-        while(i < optskey.length && !ispresent) {
-            if (postDatas.containsKey(optskey[i])) {
+        if (postDatas.containsKey(optskey))
                 ispresent = true;
-            }
-
-            i++;
-        }
 
         return ispresent;
     }

@@ -1,4 +1,7 @@
  .idea/
 sql_data/
-.WEB-INF/classes
-.lib
+WEB-INF/classes
+lib
+maildata
+sql_data
+target
