@@ -31,7 +31,8 @@ public class Bulk {
      *
      * @throws Exception
      */
-    public void insertData(){
+    public Boolean insertData(){
+        Boolean isInsert = false;
         // Loop threw the array list
         for (HashMap<String, String> data : this.list) {
             // if the data is empty then skip the data
@@ -40,8 +41,10 @@ public class Bulk {
 
             // Merge the datas
             ShortFactory processURL = new ShortFactory(this.MergeHashMap(data, getPassword(data.get("mulpwd"))), userID);
-            Boolean isValid = processURL.initProcess();
+            isInsert = processURL.initProcess();
         }
+
+        return isInsert;
     }
 
     /**

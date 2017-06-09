@@ -30,11 +30,11 @@
     </servlet-mapping>
     <servlet>
         <servlet-name>Parse</servlet-name>
-        <servlet-class>controller.ParseController</servlet-class>
+        <servlet-class>controller.ParseShortURLController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Parse</servlet-name>
-        <url-pattern>/b/*</url-pattern>
+        <url-pattern>/</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>SignUp</servlet-name>

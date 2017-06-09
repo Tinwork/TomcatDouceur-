@@ -5,6 +5,7 @@ import helper.Dispatch;
 import helper.Helper;
 import helper.Loghandler;
 import helper.RequestParse;
+import sql.CountURL;
 import url.Links;
 import url.ParseURL;
 
@@ -41,6 +42,7 @@ public class DaoController extends HttpServlet{
      * @throws IOException
      */
     public void doPost(javax.servlet.http.HttpServletRequest req, javax.servlet.http.HttpServletResponse res) throws ServletException, IOException {
+        CountURL counter = new CountURL();
         String[] params = {"password", "mail", "passwords", "g-recaptcha-response"};
 
         // Store the datas
@@ -71,6 +73,8 @@ public class DaoController extends HttpServlet{
             Dispatch.dispatchError(req, res, PATH,"datas are invalid");
             return;
         }
+
+        counter.updateCount(linkInstance.getRow());
 
         res.sendRedirect(linkInstance.getOriginalURL());
     }

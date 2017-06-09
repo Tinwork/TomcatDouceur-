@@ -54,8 +54,15 @@ public class CsvController extends HttpServlet {
         // Launch a background process
         // Yes we get the userid using the helper... I didn't though about getting the bean here
         Bulk bulk = new Bulk(list, Helper.retrieveUserID());
-        // Hope that it will pass ..
-        bulk.insertData();
+        Boolean insertStatus = bulk.insertData();
+
+        if (!insertStatus) {
+            Dispatch.dispatchError(req, res, PATH, "unable to save the CSV in the database");
+            return;
+        }
+
+        Dispatch.dispatchSuccess(req, res, "Data insert", "200", PATH);
+        return;
     }
 
     /**
