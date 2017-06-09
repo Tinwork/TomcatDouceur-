@@ -79,6 +79,8 @@ final public class Helper {
                     break;
                 case "end_date":
                     break;
+                case "max_use":
+                    break;
                 default:
                     if (postDatas.get(constraintList[i]) == null) {
                         return false;

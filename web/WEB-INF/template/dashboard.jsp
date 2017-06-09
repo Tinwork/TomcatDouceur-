@@ -63,6 +63,12 @@
                             </div>
                         </div>
                         <div class="form-group row">
+                            <label for="password" class="col-2 col-form-label">Old password</label>
+                            <div class="col-10">
+                                <input class="form-control" type="text" value="" id="old-password" name="old-password">
+                            </div>
+                        </div>
+                        <div class="form-group row">
                             <label for="password" class="col-2 col-form-label">Password</label>
                             <div class="col-10">
                                 <input class="form-control" type="text" value="" id="password" name="password">
@@ -74,7 +80,7 @@
                                 <input class="form-control" type="text" value="" id="mail" name="mail">
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" class="btn btn-primary" id="submit-update">Submit</button>
                     </div>
                 </div>
 

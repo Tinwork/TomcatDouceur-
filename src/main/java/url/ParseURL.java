@@ -53,26 +53,35 @@ public class ParseURL {
      * @return
      */
     public static boolean checkConstraint(String[] constraint, HashMap<String, String> postDatas, Links linkInstance){
+
         Boolean validity = false;
         for (int i = 0; i < constraint.length - 1; i++){
             String d = postDatas.get(constraint[i]);
             String key = constraint[i];
 
-            try {
-                if (key == "mulPwd") {
-                    validity = linkInstance.checkMulPwdIntegrity(postDatas);
-                }
-                else if (key == "captcha") {
-                    validity = Helper.checkRecaptcha(postDatas.get("g-recaptcha-response"));
-                }
-                else if (key == "start_date" || key == "end_date") {
-                    validity = Helper.validateDate(linkInstance.getStart_date(), linkInstance.getEnd_date());
-                }
-                else {
-                    validity = linkInstance.checkParamIntegrety(key, d);
-                }
 
+            try {
+                switch(key) {
+                    case "mulPwd":
+                        validity = linkInstance.checkMulPwdIntegrity(postDatas);
+                        break;
+                    case "captcha":
+                        validity = Helper.checkRecaptcha(postDatas.get("g-recaptcha-response"));
+                        break;
+                    case "max_use":
+                        Loghandler.log("key "+key, "info");
+                        validity = linkInstance.checkCount();
+                        break;
+                    case "start_date":
+                    case "end_date":
+                        validity = Helper.validateDate(linkInstance.getStart_date(), linkInstance.getEnd_date());
+                        break;
+                    default:
+                        validity = linkInstance.checkParamIntegrety(key, d);
+
+                }
             } catch (Exception e) {
+                Loghandler.log(e.toString(), "fatal");
                 return false;
             }
         }

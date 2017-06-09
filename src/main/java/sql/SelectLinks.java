@@ -96,7 +96,8 @@ public class SelectLinks extends Connect{
                         res.getLong("hashnumber"),
                         res.getBoolean("captcha"),
                         res.getDate("start_date"),
-                        res.getDate("end_date")
+                        res.getDate("end_date"),
+                        res.getInt("set_max_use")
                 );
             } while(res.next());
 

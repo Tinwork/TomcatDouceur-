@@ -1,6 +1,7 @@
 package controller;
 
 import bean.Constraint;
+import helper.Loghandler;
 import sql.CountURL;
 import url.Links;
 import url.ParseURL;
@@ -34,6 +35,7 @@ public class ParseShortURLController extends HttpServlet {
         // Retrieve the constraint of the link
         HashMap<String,Boolean> constraint = link.getConstrain();
 
+        Loghandler.log("constraint "+constraint.toString(), "info");
         // if one of the constrait is present
         if (constraint.containsValue(true)) {
             // Now we redirect the user to the jsp and also send the bean

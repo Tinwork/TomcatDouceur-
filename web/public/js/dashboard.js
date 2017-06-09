@@ -41,6 +41,28 @@
                 .catch(e => console.log(e));
             },
             exclude: true
+        },
+        BindUserUpdate: {
+            id: 'submit-update',
+            callback: (id) => {
+                const token = _.getDOMAttr('card', ['data-token'])
+                const data = Object.assign({}, {
+                   username: document.getElementById('username').value,
+                   oldpwd: document.getElementById('old-password').value,
+                   pwd: document.getElementById('password').value,
+                   mail: document.getElementById('mail').value,
+                   'data-token': token['data-token']
+                });
+
+                _.fetch({
+                    req: 'api/account',
+                    type: 'POST',
+                    props: data
+                })
+                .then(res => console.log(res))
+                .catch(e => console.log(e));
+            },
+            exclude: false
         }
     });
 

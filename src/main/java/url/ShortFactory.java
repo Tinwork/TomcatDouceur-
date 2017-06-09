@@ -83,10 +83,13 @@ public class ShortFactory {
         // Captcha
         Boolean captcha = this.userDatas.get("captcha") == null ? false : true;
 
+        // Max_use
+        int max_use = this.userDatas.get("max_use") == null ? 0 : Integer.parseInt(this.userDatas.get("max_use"));
+
         // Build the multiple passwords
         JSONObject multiplePwd = this.buildMulPwd(this.userDatas);
         // Insert the datas
-        this.row = this.insertFactory.insertOriginalURL(hashUserPwd, mail, this.startDate, this.endDate, captcha, this.buildMulPwd(this.userDatas));
+        this.row = this.insertFactory.insertOriginalURL(hashUserPwd, mail, this.startDate, this.endDate, captcha, this.buildMulPwd(this.userDatas), max_use);
 
         if (this.row == 0)
             throw new Exception("insert has failed");

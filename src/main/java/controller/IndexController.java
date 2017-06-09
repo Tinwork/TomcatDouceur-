@@ -33,7 +33,7 @@ public class IndexController extends HttpServlet {
      * @throws IOException
      */
     public void doPost(javax.servlet.http.HttpServletRequest req, javax.servlet.http.HttpServletResponse res) throws ServletException, IOException{
-        String[] param = {"url", "password", "mail", "start_date", "end_date", "captcha", "passwords-1", "passwords-2", "passwords-3"};
+        String[] param = {"url", "password", "mail", "start_date", "end_date", "captcha", "passwords-1", "passwords-2", "passwords-3", "max_use"};
 
         HashMap<String, String> data = helper.RequestParse.getParams(req, param);
         int userID = helper.RequestParse.retrieveUser(req);

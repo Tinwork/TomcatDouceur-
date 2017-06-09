@@ -1,7 +1,9 @@
 package url;
 
 import helper.Loghandler;
+import org.json.JSONArray;
 import org.json.JSONObject;
+import sql.CountURL;
 
 
 import java.sql.Date;
@@ -20,6 +22,7 @@ public class Links {
     private Date start_date;
     private Date end_date;
     private Boolean captcha;
+    private int max_use;
 
 
     /**
@@ -31,12 +34,13 @@ public class Links {
      * @param startDate
      * @param endDate
      */
-    public Links(HashMap<String, String> urlDatas, int sql_id, long hashid, boolean captcha, Date startDate, Date endDate){
+    public Links(HashMap<String, String> urlDatas, int sql_id, long hashid, boolean captcha, Date startDate, Date endDate, int max_use){
         this.strDatas = urlDatas;
         this.sql_id = sql_id;
         this.captcha = captcha;
         this.start_date = startDate;
         this.end_date = endDate;
+        this.max_use = max_use;
     }
 
     /**
@@ -54,14 +58,13 @@ public class Links {
     public HashMap<String, Boolean> getConstrain(){
         HashMap<String, Boolean> constrain = new HashMap<String, Boolean>();
 
-        Loghandler.log("CONSTRAINT "+this.strDatas.toString(), "info");
-
         constrain.put("password", this.strDatas.get("password") == null ? false : true);
         constrain.put("captcha", this.captcha == null || !this.captcha ? false : true);
         constrain.put("mail", this.strDatas.get("mail") == null ? false : true);
         constrain.put("start_date", this.start_date == null ? false : true);
         constrain.put("end_date", this.end_date == null ? false : true);
         constrain.put("mulPwd", this.strDatas.get("multiple_password") == null ? false : true);
+        constrain.put("max_use", this.max_use == 0 ? false : true);
 
         return constrain;
     }
@@ -168,6 +171,23 @@ public class Links {
        }
 
        return validity;
+    }
+
+    /**
+     * Check Count
+     * @return
+     */
+    public Boolean checkCount() {
+        CountURL counter = new CountURL();
+        JSONArray jarr = counter.getCount(this.sql_id);
+
+        if (jarr == null)
+            return true;
+
+        if (this.max_use > jarr.length())
+            return true;
+
+        return false;
     }
 
 }

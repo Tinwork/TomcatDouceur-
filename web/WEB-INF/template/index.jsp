@@ -63,6 +63,7 @@
               <button type="button" class="btn btn-info addon" data-id="date">Add date</button>
               <button type="button" class="btn btn-info addon" data-id="captcha">Add captcha</button>
               <button type="button" class="btn btn-info addon" data-id="pwds">Add multiple password</button>
+              <button type="button" class="btn btn-info addon" data-id="maxUse">Add max use</button>
             </div>
           </div>
           <p class="lead center-text">Short your url whenever you want. At anytime, anywhere.</p>
