@@ -2,6 +2,7 @@ package controller;
 
 import bulk.Bulk;
 import csv.Csvparser;
+import helper.Dispatch;
 import helper.Helper;
 import helper.Loghandler;
 import helper.RequestParse;
@@ -20,6 +21,8 @@ import java.util.HashMap;
 @MultipartConfig
 public class CsvController extends HttpServlet {
 
+    protected final String PATH = "/WEB-INF/template/dashboard.jsp";
+
     /**
      *
      * @param req
@@ -31,8 +34,8 @@ public class CsvController extends HttpServlet {
         // Retrieving the Java's bean
         Boolean isValid = Helper.processRequest(req, res);
 
-        // @TODO should redirect towar something
         if (!isValid) {
+            Dispatch.dispatchError(req, res, PATH, "CSV is not valid");
             return;
         }
 
@@ -41,7 +44,7 @@ public class CsvController extends HttpServlet {
 
         if (filename == null) {
             Loghandler.log("data is empty", "info");
-            this.getServletContext().getRequestDispatcher("/dashboard").forward(req, res);
+            Dispatch.dispatchError(req, res, PATH, "datas are empty");
             return;
         }
 

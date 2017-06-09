@@ -22,7 +22,9 @@ public class ParseURL {
      */
     public ParseURL(String url){
 
-        this.shortURL = url.split("/")[1];
+        String[] splitURL = url.split("/");
+        this.shortURL = splitURL[splitURL.length - 1];
+//        this.shortURL = url.split("/");
         this.linkSelector = new SelectLinks();
         Loghandler.log(this.shortURL+" short Url value", "info");
     }

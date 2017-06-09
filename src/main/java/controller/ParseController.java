@@ -7,6 +7,9 @@ import sql.CountURL;
 import url.Links;
 import url.ParseURL;
 
+import javax.servlet.Filter;
+import javax.servlet.Servlet;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import java.io.IOException;
 import java.util.HashMap;
@@ -29,13 +32,12 @@ public class ParseController extends HttpServlet{
         CountURL counterURI = new CountURL();
         String requrl = req.getRequestURI();
         CharSequence template = "template";
+        Loghandler.log("url exist "+req.getRequestURL(), "warn");
 
         if (!requrl.contains(template)){
-            Loghandler.log("url is called", "info");
-            Loghandler.log(req.getPathInfo(), "info");
 
             // Now that we have the UrlAPI we need to parse
-            ParseURL parser = new ParseURL(req.getPathInfo());
+            ParseURL parser = new ParseURL(req.getRequestURL().toString());
             Links link = parser.retrieveLinks();
 
             // Now that we have retrieve the link we might need to check if there're any constraint on it
@@ -56,6 +58,9 @@ public class ParseController extends HttpServlet{
 
             if (url != null)
                 res.sendRedirect(url);
+            else {
+                res.sendRedirect("/tinwork/home");
+            }
 
             // Otherwise we need to send an error to the JSP
             Loghandler.log(url, "info");

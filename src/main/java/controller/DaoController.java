@@ -1,6 +1,7 @@
 package controller;
 
 import bean.Constraint;
+import helper.Dispatch;
 import helper.Helper;
 import helper.Loghandler;
 import helper.RequestParse;
@@ -17,6 +18,8 @@ import java.util.HashMap;
  */
 public class DaoController extends HttpServlet{
 
+    protected final String PATH = "/WEB-INF/template/dao.jsp";
+
     /**
      *
      * @param req
@@ -25,7 +28,7 @@ public class DaoController extends HttpServlet{
      * @throws IOException
      */
     public void doGet(javax.servlet.http.HttpServletRequest req, javax.servlet.http.HttpServletResponse res) throws ServletException, IOException {
-        this.getServletContext().getRequestDispatcher("/WEB-INF/template/dao.jsp").forward(req, res);
+        this.getServletContext().getRequestDispatcher(PATH).forward(req, res);
     }
 
     /**
@@ -42,7 +45,6 @@ public class DaoController extends HttpServlet{
 
         // Store the datas
         HashMap<String, String> postChecking = RequestParse.getParams(req, params);
-        Loghandler.log("post checking "+postChecking.toString(), "info");
 
         Object objConst = req.getSession().getAttribute("constraint");
         Constraint constraint = (Constraint) objConst;
@@ -60,12 +62,12 @@ public class DaoController extends HttpServlet{
 
         // If the datas is not empty
         if (!Helper.checkConstraintEmptyness(listConstraint, postChecking)) {
-            Loghandler.log("some data are missing", "warn");
+            Dispatch.dispatchError(req, res, PATH,"some datas are missing");
             return;
         }
 
         if (!ParseURL.checkConstraint(listConstraint, postChecking, linkInstance)) {
-            Loghandler.log("some datas does are invalid", "warn");
+            Dispatch.dispatchError(req, res, PATH,"datas are invalid");
             return;
         }
 

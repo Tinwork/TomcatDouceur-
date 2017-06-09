@@ -13,7 +13,6 @@ import java.util.HashMap;
  */
 public class IndexController extends HttpServlet {
 
-    private bean.Error errorBean = new bean.Error();
     private final String path = "/WEB-INF/template/index.jsp";
 
     /**
@@ -40,7 +39,7 @@ public class IndexController extends HttpServlet {
         int userID = helper.RequestParse.retrieveUser(req);
 
         if (data.isEmpty()){
-            Dispatch.dispatchError(req, res, path, "can not retrieve the URL", req.getServletContext());
+            Dispatch.dispatchError(req, res, path, "can not retrieve the URL");
             return;
         }
 
@@ -50,7 +49,7 @@ public class IndexController extends HttpServlet {
         Boolean isInsert = processURL.initProcess();
 
         if (!isInsert) {
-            Dispatch.dispatchError(req, res, path, "Insert failed for URL " + data.get("url"), req.getServletContext());
+            Dispatch.dispatchError(req, res, path, "Insert failed for URL " + data.get("url"));
             return;
         }
 

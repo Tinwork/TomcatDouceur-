@@ -2,6 +2,7 @@ package controller;
 
 import bean.Userstate;
 import account.Token;
+import helper.Dispatch;
 import helper.Helper;
 
 import javax.servlet.ServletException;
@@ -13,6 +14,8 @@ import java.io.IOException;
  */
 public class DashboardController extends HttpServlet{
 
+    protected final String PATH = "/WEB-INF/template/dashboard.jsp";
+    protected final String PATH_ERR = "/login";
 
     /**
      *
@@ -26,18 +29,33 @@ public class DashboardController extends HttpServlet{
         // Now what we need to do is to check the token validity
         Boolean isProfilValid = Helper.processRequest(req, res);
 
-        if (isProfilValid)
-            this.getServletContext().getRequestDispatcher("/WEB-INF/template/dashboard.jsp").forward(req, res);
-        else
-            res.sendRedirect("/tinwork/login");
+        if (isProfilValid) {
+            Dispatch.dispatchSuccess(req, res, "", "" ,PATH);
+            return;
+        }
+        else {
+            Dispatch.dispatchError(req, res, PATH_ERR, "bad username or password");
+            return;
+        }
     }
 
+    /**
+     *
+     * @param req
+     * @param res
+     * @throws ServletException
+     * @throws IOException
+     */
     public void doPost(javax.servlet.http.HttpServletRequest req, javax.servlet.http.HttpServletResponse res) throws ServletException, IOException{
         Boolean isProfilValid = Helper.processRequest(req, res);
 
-        if (isProfilValid)
-            this.getServletContext().getRequestDispatcher("/WEB-INF/template/dashboard.jsp").forward(req, res);
-        else
-            res.sendRedirect("/tinwork/login");
+        if (isProfilValid) {
+            Dispatch.dispatchSuccess(req, res, "", "", PATH);
+            return;
+        }
+        else {
+            Dispatch.dispatchError(req, res, PATH_ERR, "bad username or password");
+            return;
+        }
     }
 }

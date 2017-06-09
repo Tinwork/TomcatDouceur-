@@ -1,6 +1,7 @@
 package controller;
 
 import bean.Userstate;
+import helper.Dispatch;
 import helper.RequestParse;
 import account.Password;
 import account.Token;
@@ -18,6 +19,8 @@ import java.util.HashMap;
  */
 public class LoginController extends HttpServlet {
 
+    protected final String PATH = "/WEB-INF/template/login.jsp";
+
     /**
      *
      * @param req
@@ -26,7 +29,7 @@ public class LoginController extends HttpServlet {
      * @throws IOException
      */
     public void doGet(javax.servlet.http.HttpServletRequest req, javax.servlet.http.HttpServletResponse res) throws ServletException, IOException {
-        this.getServletContext().getRequestDispatcher("/WEB-INF/template/login.jsp").forward(req,res);
+        Dispatch.dispatchSuccess(req, res, "", "", PATH);
     }
 
     /**
@@ -42,14 +45,16 @@ public class LoginController extends HttpServlet {
         String[] param = {"username","password"};
         HashMap<String, String> usrData =  RequestParse.getParams(req, param);
 
-        if (usrData.get("username").isEmpty() || usrData.get("password").isEmpty())
-            this.getServletContext().getRequestDispatcher("/WEB-INF/template/login.jsp").forward(req, res);
+        if (usrData.get("username").isEmpty() || usrData.get("password").isEmpty()) {
+            Dispatch.dispatchError(req, res, PATH, "datas are empty");
+            return;
+        }
 
         // Select the hash and the salt from the user
         byte[][] logData = usr.selectPwd(usrData.get("username"));
 
         if (logData == null) {
-            res.sendRedirect("/tinwork/login");
+            Dispatch.dispatchError(req, res, PATH, "login datas are empty");
             return;
         }
 
@@ -70,7 +75,8 @@ public class LoginController extends HttpServlet {
             Userstate bean = setBean(usrData.get("username"), token, id);
             RedirectWithBean(req, res, bean);
         } else {
-            this.getServletContext().getRequestDispatcher("/login").forward(req, res);
+            Dispatch.dispatchError(req, res, PATH, "invalid user");
+            return;
         }
     }
 

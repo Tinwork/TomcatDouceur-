@@ -23,7 +23,6 @@ public class RegisterController extends HttpServlet {
      *
      * @param req
      * @param res
-     * @TODO Add a bean which return an error
      * @throws ServletException
      * @throws IOException
      */
@@ -34,13 +33,13 @@ public class RegisterController extends HttpServlet {
         // Check the validity of the token
 
         if (validityToken.get("token") == null)
-            Dispatch.dispatchError(req, res, "/sign", "token is null", req.getServletContext());
+            Dispatch.dispatchError(req, res, "/sign", "token is null");
 
         this.validity = new Validity("");
         Boolean isTokenValid = validity.parseToken(validityToken.get("token"));
 
         if (!isTokenValid) {
-            Dispatch.dispatchError(req, res, "/sign", "invalid token", req.getServletContext());
+            Dispatch.dispatchError(req, res, "/sign", "invalid token");
             return;
         }
 
@@ -48,21 +47,19 @@ public class RegisterController extends HttpServlet {
         String payload = this.validity.getPayload();
 
         if (payload == null) {
-            Dispatch.dispatchError(req, res, "/sign", "invalid payload", req.getServletContext());
+            Dispatch.dispatchError(req, res, "/sign", "invalid payload");
             return;
         }
-
-        Loghandler.log("payload :"+payload, "info");
 
         // Activate the account
         Boolean activation = db.activateUser(payload);
 
         if (!activation){
-            Dispatch.dispatchError(req, res, "/sign", "activation has failed", req.getServletContext());
+            Dispatch.dispatchError(req, res, "/sign", "activation has failed");
             return;
         }
 
-        Loghandler.log("activation successfull", "info");
-        this.getServletContext().getRequestDispatcher("/login").forward(req, res);
+        Dispatch.dispatchSuccess(req, res, "", "", "/login");
+        return;
     }
 }

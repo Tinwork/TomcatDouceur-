@@ -18,13 +18,13 @@ public class Dispatch {
      * @param path
      * @param error
      */
-    public static void dispatchError(javax.servlet.http.HttpServletRequest req, javax.servlet.http.HttpServletResponse res, String path, String error, ServletContext context) throws ServletException, IOException{
+    public static void dispatchError(javax.servlet.http.HttpServletRequest req, javax.servlet.http.HttpServletResponse res, String path, String error) throws ServletException, IOException{
         Error e = new Error();
         e.setError(error);
 
         req.setAttribute("error", e);
         Loghandler.log("path "+path, "warning");
-        context.getRequestDispatcher(path).forward(req, res);
+        req.getServletContext().getRequestDispatcher(path).forward(req, res);
         return;
     }
 
