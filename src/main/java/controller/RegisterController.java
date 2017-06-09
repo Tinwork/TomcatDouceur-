@@ -34,13 +34,13 @@ public class RegisterController extends HttpServlet {
         // Check the validity of the token
 
         if (validityToken.get("token") == null)
-            Dispatch.dispatchError(req, res, "/sign", "token is null");
+            Dispatch.dispatchError(req, res, "/sign", "token is null", req.getServletContext());
 
         this.validity = new Validity("");
         Boolean isTokenValid = validity.parseToken(validityToken.get("token"));
 
         if (!isTokenValid) {
-            Dispatch.dispatchError(req, res, "/sign", "invalid token");
+            Dispatch.dispatchError(req, res, "/sign", "invalid token", req.getServletContext());
             return;
         }
 
@@ -48,7 +48,7 @@ public class RegisterController extends HttpServlet {
         String payload = this.validity.getPayload();
 
         if (payload == null) {
-            Dispatch.dispatchError(req, res, "/sign", "invalid payload");
+            Dispatch.dispatchError(req, res, "/sign", "invalid payload", req.getServletContext());
             return;
         }
 
@@ -58,7 +58,7 @@ public class RegisterController extends HttpServlet {
         Boolean activation = db.activateUser(payload);
 
         if (!activation){
-            Dispatch.dispatchError(req, res, "/sign", "activation has failed");
+            Dispatch.dispatchError(req, res, "/sign", "activation has failed", req.getServletContext());
             return;
         }
 

@@ -12,6 +12,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.regex.Matcher;
@@ -22,10 +24,17 @@ import java.util.regex.Pattern;
  */
 final public class Helper {
 
+    // Private fields
     private final static String secret = "6LfmAiIUAAAAAI1Q3PZPlFFm_Xp1fE9xDz-VmB7m";
+
+    // Regex
     private final static Pattern regexURL = Pattern.compile("(?i)^(?:(?:https?|ftp)://)(?:\\S+(?::\\S*)?@)?(?:(?!(?:10|127)(?:\\.\\d{1,3}){3})(?!(?:169\\.254|192\\.168)(?:\\.\\d{1,3}){2})(?!172\\.(?:1[6-9]|2\\d|3[0-1])(?:\\.\\d{1,3}){2})(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}(?:\\.(?:[1-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))|(?:(?:[a-z\\u00a1-\\uffff0-9]-*)*[a-z\\u00a1-\\uffff0-9]+)(?:\\.(?:[a-z\\u00a1-\\uffff0-9]-*)*[a-z\\u00a1-\\uffff0-9]+)*(?:\\.(?:[a-z\\u00a1-\\uffff]{2,}))\\.?)(?::\\d{2,5})?(?:[/?#]\\S*)?$");
+
+    // Other private fields
     private final static Date now = new Date();
     private static int userid;
+    private static final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
 
     /**
      * Validate Mail
@@ -246,8 +255,11 @@ final public class Helper {
      * @return
      */
     public static Boolean validateURL(String url) {
-        Loghandler.log("before regex "+url, "warn");
         Matcher matcher = regexURL.matcher(url);
+
+        if (url == null)
+            return false;
+
 
         if (matcher.find() == false){
             Loghandler.log("URL is not a valid url", "warn");
@@ -258,5 +270,29 @@ final public class Helper {
 
         Loghandler.log("URL is valid", "info");
         return true;
+    }
+
+    /**
+     *
+     * @param date
+     * @return
+     */
+    public static java.sql.Date StrToSQLDate(String date) {
+        java.sql.Date datec = null;
+
+        if (date == null)
+            return datec;
+
+        if (date.isEmpty())
+            return datec;
+
+        try {
+            Date parsed = format.parse(date);
+            datec = new java.sql.Date(parsed.getTime());
+        } catch (ParseException e) {
+            Loghandler.log(e.toString(), "warn");
+        }
+
+        return datec;
     }
 }

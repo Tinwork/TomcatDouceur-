@@ -56,14 +56,12 @@ public class InsertURL extends Connect{
             stmt.setBoolean(8, captcha);
             stmt.setString(9, json.length() == 0 ? null : json.toString());
 
-            updateState = stmt.executeUpdate();
-
-            if (updateState == 0)
-                throw new Exception("unable to add into the db");
-
+            stmt.executeUpdate();
             ResultSet res = stmt.getGeneratedKeys();
             if (res.next())
                 lastRow = res.getInt(1);
+            else
+                lastRow = 0;
 
         } catch (Exception e){
             Loghandler.log(e.toString()+" insert data", "fatal");
@@ -155,7 +153,4 @@ public class InsertURL extends Connect{
             Loghandler.log(e.toString(), "fatal");
         }
     }
-
-
-
 }

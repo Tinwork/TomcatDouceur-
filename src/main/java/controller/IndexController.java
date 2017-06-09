@@ -1,11 +1,9 @@
 package controller;
 
 import helper.Dispatch;
-import helper.Loghandler;
-import url.UrlEntry;
+import url.ShortFactory;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import java.io.IOException;
 import java.util.HashMap;
@@ -16,6 +14,7 @@ import java.util.HashMap;
 public class IndexController extends HttpServlet {
 
     private bean.Error errorBean = new bean.Error();
+    private final String path = "/WEB-INF/template/index.jsp";
 
     /**
      * Do Get
@@ -35,61 +34,27 @@ public class IndexController extends HttpServlet {
      * @throws IOException
      */
     public void doPost(javax.servlet.http.HttpServletRequest req, javax.servlet.http.HttpServletResponse res) throws ServletException, IOException{
-        String[] param = {"url", "password", "mail", "start_date", "end_date", "captcha"};
-        String []mulpwd = {"passwords-1", "passwords-2", "passwords-3"};
+        String[] param = {"url", "password", "mail", "start_date", "end_date", "captcha", "passwords-1", "passwords-2", "passwords-3"};
 
         HashMap<String, String> data = helper.RequestParse.getParams(req, param);
-        HashMap<String, String> datapwd = helper.RequestParse.getParams(req, mulpwd);
         int userID = helper.RequestParse.retrieveUser(req);
 
         if (data.isEmpty()){
-            req = setBeanAttr(req, "warning", "can't retrieve the URL");
-            this.getServletContext().getRequestDispatcher("/home").forward(req, res);
+            Dispatch.dispatchError(req, res, path, "can not retrieve the URL", req.getServletContext());
             return;
         }
 
         // If we get the URL we can init the URL encoding process
-        UrlEntry processURL = new UrlEntry(data, datapwd, userID);
+        //UrlEntry processURL = new UrlEntry(data, userID);
+        ShortFactory processURL = new ShortFactory(data, userID);
+        Boolean isInsert = processURL.initProcess();
 
-        try {
-            Loghandler.log("check url validity", "warn");
-            // Init check the validity of the URL and insert the original URL into the database
-            Boolean isPresValid = processURL.init();
-
-
-            if (!isPresValid) {
-                processURL.insertAction();
-            } else {
-                Loghandler.log("url does exist", "warn");
-                res.sendRedirect("/tinwork/home");
-                return;
-            }
-
-        } catch(Exception e){
-            Loghandler.log(e.toString(),"warn");
-
-            // Set the bean error
-            req = setBeanAttr(req, "fatal", "can't insert the URL");
-            res.sendRedirect("/tinwork/home");
+        if (!isInsert) {
+            Dispatch.dispatchError(req, res, path, "Insert failed for URL " + data.get("url"), req.getServletContext());
             return;
         }
 
-        Dispatch.dispatchSuccess(req, res, "Link successfully added", "200", "/home");
-    }
-
-
-    /**
-     *
-     * @param req
-     * @param level
-     * @param m
-     * @return
-     */
-    public javax.servlet.http.HttpServletRequest setBeanAttr(javax.servlet.http.HttpServletRequest req, String level, String m) {
-        errorBean.setLevel(level);
-        errorBean.setError(m);
-
-        req.setAttribute("error", errorBean);
-        return req;
+        Dispatch.dispatchSuccess(req, res, "Link successfully added", "200", path);
+        return;
     }
 }
