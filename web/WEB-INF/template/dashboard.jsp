@@ -50,7 +50,7 @@
                         <!-- user card -->
                         <div id="card" data-token="<c:out value="${token}"/>">
                             <img class="card-img-top" src="/tinwork/public/image/default-user.jpg" alt="Card image cap">
-                            <div class="card-block">
+                            <div class="card-block-profile">
                                 <h4 class="card-title">Dashboard</h4>
                                 <p class="card-text">Welcome <c:out value="${username}"></c:out></p>
                             </div>
@@ -87,25 +87,41 @@
 
             </div>
         </div>
-        <form action="csv" method="post" enctype="multipart/form-data">
-            <div class="input-group">
-                <span class="input-group-addon" id="basic-addon1">CSV</span>
-                <input type="file" class="form-control" placeholder="Link" name="csv" aria-describedby="basic-addon1" required>
+        <div class="user-actions">
+            <div class="row">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-block">
+                            <h4 class="card-title">Upload CSV</h4>
+                            <p class="card-text">Create link using a CSV file</p>
+                            <form action="csv" method="post" enctype="multipart/form-data">
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="basic-addon1">CSV</span>
+                                    <input type="file" class="form-control" placeholder="Link" name="csv" aria-describedby="basic-addon1" required>
+                                </div>
+                            </form>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card-block">
+                        <button type="button" class="btn btn-secondary" id="geturl">Get URL</button>
+                        <table id="url">
+                            <thead>
+                                <tr>
+                                    <th>Original link</th>
+                                    <th>Short link</th>
+                                    <th>Original link</th>
+                                    <th>#</th>
+                                </tr>
+                            </thead>
+                            <tbody id="body"></tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
-        <button type="button" class="btn btn-secondary" id="geturl">Get URL</button>
-        <table id="url">
-            <thead>
-                <tr>
-                    <th>Original link</th>
-                    <th>Short link</th>
-                    <th>Original link</th>
-                    <th>#</th>
-                </tr>
-            </thead>
-            <tbody id="body"></tbody>
-        </table>
+        </div>
     </div>
     <script type="text/javascript" src="/tinwork/public/js/dashboard.js"></script>
 </body>

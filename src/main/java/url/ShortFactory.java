@@ -16,6 +16,7 @@ public class ShortFactory {
     private HashMap<String, String> userDatas;
     private int UDID;
     protected int row;
+    private String shortURL;
 
     // sql date
     private java.sql.Date startDate;
@@ -103,11 +104,11 @@ public class ShortFactory {
      */
     private Boolean AddShortURL() {
         CreateLink short_link = new CreateLink(this.row);
-        String shortURL = short_link.encodeLongURL();
+        this.shortURL = short_link.encodeLongURL();
         long hashURL = short_link.getShortURLHash();
 
         try {
-            this.insertFactory.insertShortLink(hashURL, shortURL, this.row);
+            this.insertFactory.insertShortLink(hashURL, this.shortURL, this.row);
         } catch(Exception e){
             Loghandler.log("trying to insert the url "+e.toString(), "fatal");
             return false;
@@ -140,5 +141,13 @@ public class ShortFactory {
         }
 
         return json;
+    }
+
+    /**
+     * Get Short URL
+     * @return
+     */
+    final public String getShortURL() {
+        return this.shortURL;
     }
 }

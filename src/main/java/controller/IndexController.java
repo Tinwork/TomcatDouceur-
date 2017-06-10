@@ -1,6 +1,7 @@
 package controller;
 
 import helper.Dispatch;
+import helper.Loghandler;
 import url.ShortFactory;
 
 import javax.servlet.ServletException;
@@ -49,11 +50,12 @@ public class IndexController extends HttpServlet {
         Boolean isInsert = processURL.initProcess();
 
         if (!isInsert) {
+            Loghandler.log("error", "warn");
             Dispatch.dispatchError(req, res, path, "Insert failed for URL " + data.get("url"));
             return;
         }
 
-        Dispatch.dispatchSuccess(req, res, "Link successfully added", "200", path);
+        Dispatch.dispatchSuccess(req, res, "Link successfully added <a href='"+processURL.getShortURL()+"'>"+processURL.getShortURL()+"</a>", "200", path);
         return;
     }
 }

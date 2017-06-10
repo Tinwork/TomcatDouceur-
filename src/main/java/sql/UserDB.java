@@ -234,13 +234,14 @@ public class UserDB extends Connect{
             String salt = pwd.getSalt();
 
             // Now we can update the user
-            String sql = "UPDATE User SET user = ?, hash = ?, salt = ? where id = ?";
+            String sql = "UPDATE User SET user = ?, hash = ?, salt = ?, mail = ? where id = ?";
             PreparedStatement stmt = this.connection.prepareStatement(sql);
 
             stmt.setString(1, data.get("username"));
             stmt.setString(2, hashes);
             stmt.setString(3, salt);
-            stmt.setInt(4, userid);
+            stmt.setString(4, data.get("mail"));
+            stmt.setInt(5, userid);
 
             int resUpdate = stmt.executeUpdate();
 
