@@ -4,8 +4,11 @@ package bean;
  * Created by lookitsmarc on 15/05/2017.
  */
 public class Userstate {
+
+    // private fields
     private String username;
     private String token;
+    private String mail;
     private int userID;
 
     /**
@@ -13,10 +16,11 @@ public class Userstate {
      * @param username
      * @param token
      */
-    public Userstate(String username, String token, int userID){
+    public Userstate(String username, String token, int userID, String mail){
         this.username = username;
         this.token = token;
         this.userID = userID;
+        this.mail = mail;
     }
 
     /**
@@ -57,5 +61,13 @@ public class Userstate {
      */
     public int getUserID() {
         return userID;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getMail() {
+        return this.mail;
     }
 }

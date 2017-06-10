@@ -124,6 +124,11 @@ public class UserDB extends Connect{
         return assembly;
     }
 
+    /**
+     *
+     * @param username
+     * @return
+     */
     public int selectUserID(String username){
         String sql = "SELECT id FROM User where user = ?";
         int userID = 0;
@@ -147,6 +152,36 @@ public class UserDB extends Connect{
         }
 
         return userID;
+    }
+
+    /**
+     *
+     * @param username
+     * @return
+     */
+    public String selectUserMailByUsername(String username) {
+        String sql = "SELECT mail FROM User where user = ?";
+        String mail = "";
+
+        try {
+            PreparedStatement stmt = this.connection.prepareStatement(sql);
+            stmt.setString(1, username);
+
+            ResultSet res = stmt.executeQuery();
+
+            if (!res.next()) {
+                return null;
+            }
+
+            do {
+                mail = res.getString("mail");
+            } while(res.next());
+
+        } catch (SQLException e) {
+            Loghandler.log(e.toString(), "fatal");
+        }
+
+        return mail;
     }
 
     /**

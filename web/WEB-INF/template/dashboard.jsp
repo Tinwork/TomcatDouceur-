@@ -20,6 +20,7 @@
 <body>
     <c:set var = "token" value="${userstate.getToken()}"></c:set>
     <c:set var = "username" value="${userstate.getUsername()}"></c:set>
+    <c:set var = "mail" value="${userstate.getMail()}"></c:set>
     <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -59,7 +60,7 @@
                         <div class="form-group row">
                             <label for="username" class="col-2 col-form-label">Username</label>
                             <div class="col-10">
-                                <input class="form-control" type="text" value="" id="username" name="username">
+                                <input class="form-control" type="text" value="${username}" id="username" name="username">
                             </div>
                         </div>
                         <div class="form-group row">
@@ -77,7 +78,7 @@
                         <div class="form-group row">
                             <label for="mail" class="col-2 col-form-label">Email</label>
                             <div class="col-10">
-                                <input class="form-control" type="text" value="" id="mail" name="mail">
+                                <input class="form-control" type="text" value="${mail}" id="mail" name="mail">
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary" id="submit-update">Submit</button>

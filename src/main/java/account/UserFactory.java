@@ -117,4 +117,12 @@ public class UserFactory {
     public int getUserID() {
         return this.user.selectUserID(this.username);
     }
+
+    /**
+     *
+     * @return
+     */
+    public String getMail() {
+        return this.user.selectUserMailByUsername(this.username);
+    }
 }
