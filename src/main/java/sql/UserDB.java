@@ -26,12 +26,13 @@ public class UserDB extends Connect{
      * @param username
      * @return
      */
-    public boolean userExist(String username){
-        String sql = "SELECT * FROM User WHERE user = ?";
+    public boolean userExist(String username, String mail){
+        String sql = "SELECT * FROM User WHERE user = ? OR mail = ?";
 
         try {
             PreparedStatement stmt = this.connection.prepareStatement(sql);
             stmt.setString(1, username);
+            stmt.setString(2, mail);
 
             // Execute the request
             ResultSet res = stmt.executeQuery();

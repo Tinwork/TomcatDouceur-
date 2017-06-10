@@ -1,6 +1,7 @@
 package controller;
 
 import account.Mailer;
+import account.UserFactory;
 import helper.Dispatch;
 import helper.Helper;
 import helper.Loghandler;
@@ -43,43 +44,22 @@ public class SignController extends HttpServlet {
         // Retrieve the user, pwd
         String[] param = {"username","password","mail"};
         HashMap<String, String> usrData =  RequestParse.getParams(req, param);
-
-        // We need to check whenever the user is already present in the database
-        UserDB usr = new UserDB();
-        Boolean presence = usr.userExist(usrData.get("username"));
-
-        if (presence) {
-            Dispatch.dispatchError(req, res, PATH, "user already exist");
-            return;
-        }
-
-        if (!Helper.validateMail(usrData.get("mail"))) {
-            Dispatch.dispatchError(req, res, PATH, "mail address invalid");
-            return;
-        }
-
-        // As the user does not exist we can now encrypt it's password and save it into the database
-        Password pwd = new Password(usrData.get("password"));
+        UserFactory usr = new UserFactory(usrData);
 
         try {
-            String hash = pwd.encrypt();
-            String salt = pwd.getSalt();
-            Boolean isInsert = usr.insertUser(usrData.get("username"), hash, salt, usrData.get("mail"));
+            Boolean isRegisterDone = usr.registerProcess();
 
-            if (!isInsert) {
-                Dispatch.dispatchError(req, res, PATH, "user has not been saved");
+            if (isRegisterDone) {
+                // Otherwise send a mail
+                Mailer mail = new Mailer(usrData.get("mail"), usrData.get("username"));
+                mail.sendMail();
+
+                Dispatch.dispatchSuccess(req, res, "Congratulations", "Success", "/login");
+                return;
             }
-
-            // Otherwise send a mail
-            Mailer mail = new Mailer(usrData.get("mail"), usrData.get("username"));
-            mail.sendMail();
-
-            Dispatch.dispatchSuccess(req, res, "Congratulations", "Success", "/login");
-            return;
-
         } catch (Exception e) {
-            Dispatch.dispatchError(req, res, PATH, "unhandled error");
+            Dispatch.dispatchError(req, res, PATH, e.toString());
+            return;
         }
-
     }
 }
