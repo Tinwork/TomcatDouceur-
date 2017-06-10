@@ -26,7 +26,7 @@ public class UpdateAccount extends HttpServlet {
     public void doPost(javax.servlet.http.HttpServletRequest req, javax.servlet.http.HttpServletResponse res) throws IOException, ServletException {
         PrintWriter writer = res.getWriter();
         JSONObject json = new JSONObject();
-        String[] params = {"username", "password", "mail", "oldpwd", "data-token"};
+        String[] params = {"username", "oldpwd", "mail", "password", "data-token"};
         HashMap<String, String> data = RequestParse.getJSONParams(req, params);
 
         // check if one of the data is null

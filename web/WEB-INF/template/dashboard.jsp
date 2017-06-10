@@ -20,6 +20,7 @@
 <body>
     <c:set var = "token" value="${userstate.getToken()}"></c:set>
     <c:set var = "username" value="${userstate.getUsername()}"></c:set>
+    <c:set var = "mail" value="${userstate.getMail()}"></c:set>
     <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -49,7 +50,7 @@
                         <!-- user card -->
                         <div id="card" data-token="<c:out value="${token}"/>">
                             <img class="card-img-top" src="/tinwork/public/image/default-user.jpg" alt="Card image cap">
-                            <div class="card-block">
+                            <div class="card-block-profile">
                                 <h4 class="card-title">Dashboard</h4>
                                 <p class="card-text">Welcome <c:out value="${username}"></c:out></p>
                             </div>
@@ -59,7 +60,13 @@
                         <div class="form-group row">
                             <label for="username" class="col-2 col-form-label">Username</label>
                             <div class="col-10">
-                                <input class="form-control" type="text" value="" id="username" name="username">
+                                <input class="form-control" type="text" value="${username}" id="username" name="username">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="password" class="col-2 col-form-label">Old password</label>
+                            <div class="col-10">
+                                <input class="form-control" type="text" value="" id="old-password" name="old-password">
                             </div>
                         </div>
                         <div class="form-group row">
@@ -71,34 +78,50 @@
                         <div class="form-group row">
                             <label for="mail" class="col-2 col-form-label">Email</label>
                             <div class="col-10">
-                                <input class="form-control" type="text" value="" id="mail" name="mail">
+                                <input class="form-control" type="text" value="${mail}" id="mail" name="mail">
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" class="btn btn-primary" id="submit-update">Submit</button>
                     </div>
                 </div>
 
             </div>
         </div>
-        <form action="csv" method="post" enctype="multipart/form-data">
-            <div class="input-group">
-                <span class="input-group-addon" id="basic-addon1">CSV</span>
-                <input type="file" class="form-control" placeholder="Link" name="csv" aria-describedby="basic-addon1" required>
+        <div class="user-actions">
+            <div class="row">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-block">
+                            <h4 class="card-title">Upload CSV</h4>
+                            <p class="card-text">Create link using a CSV file</p>
+                            <form action="csv" method="post" enctype="multipart/form-data">
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="basic-addon1">CSV</span>
+                                    <input type="file" class="form-control" placeholder="Link" name="csv" aria-describedby="basic-addon1" required>
+                                </div>
+                            </form>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card-block">
+                        <button type="button" class="btn btn-secondary" id="geturl">Get URL</button>
+                        <table id="url">
+                            <thead>
+                                <tr>
+                                    <th>Original link</th>
+                                    <th>Short link</th>
+                                    <th>Original link</th>
+                                    <th>#</th>
+                                </tr>
+                            </thead>
+                            <tbody id="body"></tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
-        <button type="button" class="btn btn-secondary" id="geturl">Get URL</button>
-        <table id="url">
-            <thead>
-                <tr>
-                    <th>Original link</th>
-                    <th>Short link</th>
-                    <th>Original link</th>
-                    <th>#</th>
-                </tr>
-            </thead>
-            <tbody id="body"></tbody>
-        </table>
+        </div>
     </div>
     <script type="text/javascript" src="/tinwork/public/js/dashboard.js"></script>
 </body>

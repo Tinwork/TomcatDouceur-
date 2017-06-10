@@ -25,8 +25,7 @@ public class Token implements TokenIface{
     /**
      * Constructor
      */
-    public Token(){
-    }
+    public Token(){}
 
 
     /**
@@ -36,7 +35,6 @@ public class Token implements TokenIface{
      */
     protected Algorithm GenerateAlg() throws Exception{
         Algorithm HMAC256;
-        Loghandler.log("generating the algo", "info");
         try {
             HMAC256 = Algorithm.HMAC256("tinwork-java-of-death");
         } catch (IOException e) {

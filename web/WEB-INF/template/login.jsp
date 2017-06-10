@@ -38,8 +38,14 @@
 </nav>
 <div class="container-fluid">
     <div class="row">
+        <div class="img-wrapper">
+            <img src="/tinwork/public/image/logo.jpg" id="logo">
+            <p>Oops incorrect login. Please retry</p>
+        </div>
+    </div>
+    <div class="row">
         <div class="col">
-            <form action="login" method="POST">
+            <form action="login" method="POST" class="login-group">
                 <div class="input-group">
                     <span class="input-group-addon" id="basic-addon1">Username</span>
                     <input type="text" class="form-control" placeholder="Username" name="username" aria-describedby="basic-addon1" required>
@@ -48,7 +54,7 @@
                     <span class="input-group-addon" id="pwd">Password</span>
                     <input type="text" class="form-control" name="password" aria-describedby="pwd" required>
                 </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-primary long">Submit</button>
             </form>
         </div>
     </div>

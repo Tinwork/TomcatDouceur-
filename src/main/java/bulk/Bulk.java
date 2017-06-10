@@ -2,7 +2,7 @@ package bulk;
 
 import helper.Loghandler;
 import sql.InsertURL;
-import url.UrlEntry;
+import url.ShortFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,30 +31,20 @@ public class Bulk {
      *
      * @throws Exception
      */
-    public void insertData(){
+    public Boolean insertData(){
+        Boolean isInsert = false;
         // Loop threw the array list
         for (HashMap<String, String> data : this.list) {
             // if the data is empty then skip the data
             if (data.isEmpty())
                 continue;
 
-            // Get the password
-            Loghandler.log(data.toString(), "info");
-            UrlEntry processURL = new UrlEntry(data, getPassword(data.get("mulpwd")), userID);
-
-            try {
-                // Init check the validity of the URL and insert the original URL into the database
-                Boolean isPresValid = processURL.init();
-
-                if (!isPresValid) {
-                    processURL.insertAction();
-                } else {
-
-                }
-            } catch(Exception e){
-                Loghandler.log(e.toString(),"warn");
-            }
+            // Merge the datas
+            ShortFactory processURL = new ShortFactory(this.MergeHashMap(data, getPassword(data.get("mulpwd"))), userID);
+            isInsert = processURL.initProcess();
         }
+
+        return isInsert;
     }
 
     /**
@@ -83,5 +73,19 @@ public class Bulk {
         }
 
         return pwdMap;
+    }
+
+
+    /**
+     *
+     * @param current
+     * @param pwds
+     * @return
+     */
+    public HashMap<String, String> MergeHashMap(HashMap<String, String> current, HashMap<String, String> pwds) {
+        HashMap<String, String> merge = new HashMap<>(current);
+        merge.putAll(pwds);
+
+        return merge;
     }
 }

@@ -62,12 +62,10 @@
             </div>
         </c:if>
         <c:if test="${mulpwd eq true}">
-            <c:forEach var = "i" begin = "1" end = "${constraint.getMulPwdLength()}">
-                <div class="input-group">
-                    <span class="input-group-addon" id="mulpwd">Password ${i}</span>
-                    <input type="text" class="form-control" placeholder="Mail" name="passwords-${i}" aria-describedby="basic-addon1" required>
-                </div>
-            </c:forEach>
+            <div class="input-group">
+                <span class="input-group-addon" id="mulpwd">Passwords (c)</span>
+                <input type="text" class="form-control" placeholder="Mail" name="passwords" aria-describedby="basic-addon1" required>
+            </div>
         </c:if>
         <!-- Send back the bean.. As it's not present within the other request ... :(-->
         <input type="hidden" name="constraint" value="${constraint}">

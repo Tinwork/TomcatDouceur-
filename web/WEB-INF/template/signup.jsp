@@ -42,6 +42,12 @@
     </nav>
     <div class="container-fluid">
         <div class="row">
+            <div class="img-wrapper">
+                <img src="/tinwork/public/image/logo.jpg" id="logo">
+                <p>Sign up to tinwork shorter url</p>
+            </div>
+        </div>
+        <div class="row">
             <div class="col">
                 <div class="jumbotron jumbotron-fluid">
                     <div class="container signup">
@@ -58,7 +64,7 @@
                                 <span class="input-group-addon" id="mail">Mail address</span>
                                 <input type="text" class="form-control" placeholder="johndoe@gmail.com" name="mail" aria-describedby="mail" required>
                             </div>
-                            <button type="submit" class="btn btn-primary">Create account</button>
+                            <button type="submit" class="btn long btn-primary">Create account</button>
                         </form>
                     </div>
                 </div>

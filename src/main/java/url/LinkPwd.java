@@ -20,8 +20,10 @@ public class LinkPwd {
     final static private int ITERATION = 2;
     final static private int LENGTH = 64;
 
-
-    public void Hashpwd(){ }
+    /**
+     * Constructor
+     */
+    public void Hashpwd(){}
 
     /**
      * Hash pwd
@@ -29,7 +31,11 @@ public class LinkPwd {
      */
     public static String hash(String password) {
 
-        if (password.isEmpty() || password == null){
+        if (password == null){
+            return null;
+        }
+
+        if (password.isEmpty()) {
             return null;
         }
 

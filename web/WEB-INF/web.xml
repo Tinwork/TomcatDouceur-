@@ -30,11 +30,11 @@
     </servlet-mapping>
     <servlet>
         <servlet-name>Parse</servlet-name>
-        <servlet-class>controller.ParseController</servlet-class>
+        <servlet-class>controller.ParseShortURLController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Parse</servlet-name>
-        <url-pattern>/b/*</url-pattern>
+        <url-pattern>/</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>SignUp</servlet-name>
@@ -104,5 +104,19 @@
     <servlet-mapping>
         <servlet-name>ApiCount</servlet-name>
         <url-pattern>/api/stat</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ApiAccount</servlet-name>
+        <servlet-class>api.UpdateAccount</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ApiAccount</servlet-name>
+        <url-pattern>/api/account</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>/public/*</url-pattern>
     </servlet-mapping>
 </web-app>

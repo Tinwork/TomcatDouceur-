@@ -26,12 +26,13 @@ public class UserDB extends Connect{
      * @param username
      * @return
      */
-    public boolean userExist(String username){
-        String sql = "SELECT * FROM User WHERE user = ?";
+    public boolean userExist(String username, String mail){
+        String sql = "SELECT * FROM User WHERE user = ? OR mail = ?";
 
         try {
             PreparedStatement stmt = this.connection.prepareStatement(sql);
             stmt.setString(1, username);
+            stmt.setString(2, mail);
 
             // Execute the request
             ResultSet res = stmt.executeQuery();
@@ -123,6 +124,11 @@ public class UserDB extends Connect{
         return assembly;
     }
 
+    /**
+     *
+     * @param username
+     * @return
+     */
     public int selectUserID(String username){
         String sql = "SELECT id FROM User where user = ?";
         int userID = 0;
@@ -146,6 +152,36 @@ public class UserDB extends Connect{
         }
 
         return userID;
+    }
+
+    /**
+     *
+     * @param username
+     * @return
+     */
+    public String selectUserMailByUsername(String username) {
+        String sql = "SELECT mail FROM User where user = ?";
+        String mail = "";
+
+        try {
+            PreparedStatement stmt = this.connection.prepareStatement(sql);
+            stmt.setString(1, username);
+
+            ResultSet res = stmt.executeQuery();
+
+            if (!res.next()) {
+                return null;
+            }
+
+            do {
+                mail = res.getString("mail");
+            } while(res.next());
+
+        } catch (SQLException e) {
+            Loghandler.log(e.toString(), "fatal");
+        }
+
+        return mail;
     }
 
     /**
@@ -198,13 +234,14 @@ public class UserDB extends Connect{
             String salt = pwd.getSalt();
 
             // Now we can update the user
-            String sql = "UPDATE User SET user = ?, hash = ?, salt = ? where id = ?";
+            String sql = "UPDATE User SET user = ?, hash = ?, salt = ?, mail = ? where id = ?";
             PreparedStatement stmt = this.connection.prepareStatement(sql);
 
             stmt.setString(1, data.get("username"));
             stmt.setString(2, hashes);
             stmt.setString(3, salt);
-            stmt.setInt(4, userid);
+            stmt.setString(4, data.get("mail"));
+            stmt.setInt(5, userid);
 
             int resUpdate = stmt.executeUpdate();
 

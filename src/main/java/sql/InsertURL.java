@@ -35,14 +35,14 @@ public class InsertURL extends Connect{
      * Insert Data
      *      Insert datas in the database
      */
-    public int insertOriginalURL(String password, String mail, Date start, Date end, Boolean captcha, JSONObject json){
+    public int insertOriginalURL(String password, String mail, Date start, Date end, Boolean captcha, JSONObject json, int max_use){
         int updateState = 0;
         int lastRow = 0;
 
         try {
             // Otherwise we try to insert the Url in the db
             // There's no way to bind the param with variable... a part from using Spring framework...
-            String sql = "INSERT INTO Link (original_link, user_id, create_date, password, mail, start_date, end_date, captcha, multiple_password) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO Link (original_link, user_id, create_date, password, mail, start_date, end_date, captcha, multiple_password, set_max_use) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement stmt = this.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
             // Bind the params
@@ -56,14 +56,17 @@ public class InsertURL extends Connect{
             stmt.setBoolean(8, captcha);
             stmt.setString(9, json.length() == 0 ? null : json.toString());
 
-            updateState = stmt.executeUpdate();
+            if (max_use == 0)
+                stmt.setNull(10, java.sql.Types.INTEGER);
+            else
+                stmt.setInt(10, max_use);
 
-            if (updateState == 0)
-                throw new Exception("unable to add into the db");
-
+            stmt.executeUpdate();
             ResultSet res = stmt.getGeneratedKeys();
             if (res.next())
                 lastRow = res.getInt(1);
+            else
+                lastRow = 0;
 
         } catch (Exception e){
             Loghandler.log(e.toString()+" insert data", "fatal");
@@ -155,7 +158,4 @@ public class InsertURL extends Connect{
             Loghandler.log(e.toString(), "fatal");
         }
     }
-
-
-
 }

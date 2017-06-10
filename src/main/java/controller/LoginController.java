@@ -1,6 +1,8 @@
 package controller;
 
+import account.UserFactory;
 import bean.Userstate;
+import helper.Dispatch;
 import helper.RequestParse;
 import account.Password;
 import account.Token;
@@ -18,6 +20,8 @@ import java.util.HashMap;
  */
 public class LoginController extends HttpServlet {
 
+    protected final String PATH = "/WEB-INF/template/login.jsp";
+
     /**
      *
      * @param req
@@ -26,7 +30,7 @@ public class LoginController extends HttpServlet {
      * @throws IOException
      */
     public void doGet(javax.servlet.http.HttpServletRequest req, javax.servlet.http.HttpServletResponse res) throws ServletException, IOException {
-        this.getServletContext().getRequestDispatcher("/WEB-INF/template/login.jsp").forward(req,res);
+        Dispatch.dispatchSuccess(req, res, "", "", PATH);
     }
 
     /**
@@ -37,40 +41,27 @@ public class LoginController extends HttpServlet {
      * @throws IOException
      */
     public void doPost(javax.servlet.http.HttpServletRequest req, javax.servlet.http.HttpServletResponse res) throws ServletException, IOException {
-        UserDB usr = new UserDB();
         // Retrieve the user, pwd
         String[] param = {"username","password"};
         HashMap<String, String> usrData =  RequestParse.getParams(req, param);
 
-        if (usrData.get("username").isEmpty() || usrData.get("password").isEmpty())
-            this.getServletContext().getRequestDispatcher("/WEB-INF/template/login.jsp").forward(req, res);
+        UserFactory userfac = new UserFactory(usrData);
+        Boolean isUserValid = userfac.doLoginProcess();
 
-        // Select the hash and the salt from the user
-        byte[][] logData = usr.selectPwd(usrData.get("username"));
-
-        if (logData == null) {
-            res.sendRedirect("/tinwork/login");
-            return;
-        }
-
-        Password pwd = new Password(null);
-
-        // parse the user imput pwd with the one in the db
-        Boolean issame = pwd.compareHash(usrData.get("password").toCharArray(), logData[0], logData[1]);
-
-        if (issame) {
+        if (isUserValid) {
             Token tokenHandler = new Token();
-            int id = usr.selectUserID(usrData.get("username"));
+            int id = userfac.getUserID();
 
             // Set the id
             tokenHandler.setId(id);
 
             // Generate the token
             String token = tokenHandler.generateToken();
-            Userstate bean = setBean(usrData.get("username"), token, id);
+            Userstate bean = setBean(usrData.get("username"), token, id, userfac.getMail());
             RedirectWithBean(req, res, bean);
         } else {
-            this.getServletContext().getRequestDispatcher("/login").forward(req, res);
+            Dispatch.dispatchError(req, res, PATH, "invalid user");
+            return;
         }
     }
 
@@ -80,11 +71,11 @@ public class LoginController extends HttpServlet {
      * @param hash
      * @return
      */
-    public Userstate setBean(String username, String hash, int id) {
+    public Userstate setBean(String username, String hash, int id, String mail) {
         if (username.isEmpty() && hash.isEmpty())
             return null;
 
-        Userstate state = new Userstate(username, hash, id);
+        Userstate state = new Userstate(username, hash, id, mail);
 
         return state;
     }
