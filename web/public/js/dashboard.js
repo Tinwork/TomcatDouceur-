@@ -49,7 +49,7 @@
                 const data = Object.assign({}, {
                    username: document.getElementById('username').value,
                    oldpwd: document.getElementById('old-password').value,
-                   pwd: document.getElementById('password').value,
+                   password: document.getElementById('password').value,
                    mail: document.getElementById('mail').value,
                    'data-token': token['data-token']
                 });

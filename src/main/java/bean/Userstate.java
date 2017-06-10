@@ -58,5 +58,4 @@ public class Userstate {
     public int getUserID() {
         return userID;
     }
-
 }

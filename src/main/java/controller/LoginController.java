@@ -1,5 +1,6 @@
 package controller;
 
+import account.UserFactory;
 import bean.Userstate;
 import helper.Dispatch;
 import helper.RequestParse;
@@ -40,32 +41,16 @@ public class LoginController extends HttpServlet {
      * @throws IOException
      */
     public void doPost(javax.servlet.http.HttpServletRequest req, javax.servlet.http.HttpServletResponse res) throws ServletException, IOException {
-        UserDB usr = new UserDB();
         // Retrieve the user, pwd
         String[] param = {"username","password"};
         HashMap<String, String> usrData =  RequestParse.getParams(req, param);
 
-        if (usrData.get("username").isEmpty() || usrData.get("password").isEmpty()) {
-            Dispatch.dispatchError(req, res, PATH, "datas are empty");
-            return;
-        }
+        UserFactory userfac = new UserFactory(usrData);
+        Boolean isUserValid = userfac.doLoginProcess();
 
-        // Select the hash and the salt from the user
-        byte[][] logData = usr.selectPwd(usrData.get("username"));
-
-        if (logData == null) {
-            Dispatch.dispatchError(req, res, PATH, "login datas are empty");
-            return;
-        }
-
-        Password pwd = new Password(null);
-
-        // parse the user imput pwd with the one in the db
-        Boolean issame = pwd.compareHash(usrData.get("password").toCharArray(), logData[0], logData[1]);
-
-        if (issame) {
+        if (isUserValid) {
             Token tokenHandler = new Token();
-            int id = usr.selectUserID(usrData.get("username"));
+            int id = userfac.getUserID();
 
             // Set the id
             tokenHandler.setId(id);
