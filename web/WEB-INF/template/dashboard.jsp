@@ -16,6 +16,7 @@
     <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
 </head>
 <body>
     <c:set var = "token" value="${userstate.getToken()}"></c:set>
@@ -89,7 +90,7 @@
         </div>
         <div class="user-actions">
             <div class="row">
-                <div class="col">
+                <div class="col-lists">
                     <div class="card">
                         <div class="card-block">
                             <h4 class="card-title">Upload CSV</h4>
@@ -100,29 +101,41 @@
                                     <input type="file" class="form-control" placeholder="Link" name="csv" aria-describedby="basic-addon1" required>
                                 </div>
                             </form>
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <button type="submit" class="btn btn-primary long">Submit</button>
                         </div>
                     </div>
                 </div>
-                <div class="col">
+            </div>
+            <div class="row">
+                <div class="col-lists">
                     <div class="card-block">
-                        <button type="button" class="btn btn-secondary" id="geturl">Get URL</button>
-                        <table id="url">
-                            <thead>
+                        <h4 class="card-title">Your link</h4>
+                        <p class="card-text">Click on the button Get URL to get your url</p>
+                        <button type="button" class="btn btn-primary long" id="geturl">Get URL</button>
+                        <table id="url" class="table table-responsive long">
+                            <thead class="thead-inverse long">
                                 <tr>
-                                    <th>Original link</th>
-                                    <th>Short link</th>
-                                    <th>Original link</th>
-                                    <th>#</th>
+                                    <th >Original link</th>
+                                    <th >Short link</th>
+                                    <th >Date</th>
+                                    <th >#</th>
                                 </tr>
                             </thead>
-                            <tbody id="body"></tbody>
+                            <tbody id="body" class="long"></tbody>
                         </table>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="card-block" style="position: relative; height:20vh; width:50vw">
+                        <canvas id="chart" width="400" height="300"></canvas>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <script type="text/javascript" src="/tinwork/public/js/dashboard.js"></script>
+    <script  src="/tinwork/public/js/chart.js"></script>
+    <script  src="/tinwork/public/js/dashboard.js"></script>
 </body>
 </html>

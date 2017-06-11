@@ -4,9 +4,11 @@ import helper.Loghandler;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.sql.Array;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -41,6 +43,7 @@ public class CountURL extends Connect {
         }
     }
 
+
     /**
      *
      * @param id
@@ -48,10 +51,7 @@ public class CountURL extends Connect {
      */
     public JSONArray getCount(int id) {
         String sql = "SELECT date FROM count WHERE id_link = ? ORDER BY date DESC";
-        JSONObject data = new JSONObject();
-        Boolean flag = false;
-        int counter = 0;
-        HashMap<String, String> tempdate = new HashMap<String, String>();
+        ArrayList<HashMap<String, String>> datas = new ArrayList<HashMap<String, String>>();
 
         try {
             PreparedStatement stmt = this.connection.prepareStatement(sql);
@@ -60,47 +60,64 @@ public class CountURL extends Connect {
             ResultSet res = stmt.executeQuery();
 
             if (!res.next())
-                return null;
+                return new JSONArray();
 
-            // As getting the last row break everything we must find a walkaround...
             do {
-
-                if (!flag) {
-                    tempdate.put("date", res.getDate("date").toString());
-                    flag = true;
-                }
-
-                if (!tempdate.containsValue(res.getDate("date").toString())) {
-                    tempdate.put("date", res.getDate("date").toString());
-                    data.put("date", res.getDate("date").toString());
-                    data.put("counter", counter);
-                    jsonArr.put(data);
-
-                    // reset
-                    data = new JSONObject();
-                    counter = 0;
-                }
-                 counter++;
+                HashMap<String, String> d = new HashMap<>();
+                d.put("date", res.getDate("date").toString());
+                datas.add(d);
             } while (res.next());
-
-            // in the case that there's only one date
-            Loghandler.log("size "+tempdate.size(), "info");
-            if (tempdate.size() == 1) {
-                Loghandler.log("temp "+tempdate.toString(), "info");
-                data.put("date", tempdate.get("date"));
-                data.put("counter", counter);
-                jsonArr.put(data);
-
-                // reset
-                data = new JSONObject();
-                counter = 0;
-            }
 
         } catch (SQLException e) {
             Loghandler.log(e.toString(), "info");
         }
 
-        return this.jsonArr;
+
+        return this.buildDatas(datas);
     }
 
+    /**
+     *
+     * @param d
+     * @return
+     */
+    public JSONArray buildDatas(ArrayList<HashMap<String, String>> d) {
+
+        JSONObject json = new JSONObject();
+        JSONArray jsonArr = new JSONArray();
+        String tempdate = d.get(0).get("date");
+
+        int idx = 0;
+        int click = 0;
+        while(idx < d.size()) {
+
+            HashMap<String, String> date = d.get(idx);
+
+            if (!tempdate.equals(date.get("date"))) {
+                // set the date
+                json.put("counter", click);
+                json.put("date", tempdate);
+                jsonArr.put(json);
+
+                // reset
+                json = new JSONObject();
+                tempdate = date.get("date");
+                click = 0;
+            }
+
+            // if the ArrayList is going to end
+            if (idx == d.size() - 1) {
+                click++;
+                json.put("counter", click);
+                json.put("date", tempdate);
+                jsonArr.put(json);
+            }
+
+
+            click++;
+            idx++;
+        }
+
+        return jsonArr;
+    }
 }

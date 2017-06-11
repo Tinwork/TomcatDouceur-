@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import helper.Loghandler;
 
 /**
  * Created by lookitsmarc on 17/05/2017.

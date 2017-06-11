@@ -9,3 +9,28 @@
 #card{
     width: 320px;
 }
+
+.col-lists {
+    width: 100%;
+}
+
+.long {
+    width: 100%;
+}
+
+.mid-long {
+    width: 50%;
+}
+
+tr {
+    display: flex;
+}
+
+td, th {
+    flex-grow: 1;
+    text-align: center;
+}
+
+thead, tbody{
+    display: block;
+}

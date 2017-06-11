@@ -37,7 +37,10 @@
                     type: 'POST',
                     props: obj
                 })
-                .then(res => console.log(res))
+                .then(res => {
+                    let line = new Charts(res);
+                    line.buildChart();
+                })
                 .catch(e => console.log(e));
             },
             exclude: true
