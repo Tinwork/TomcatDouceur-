@@ -81,9 +81,9 @@
                             <div class="input-group">
                                 <span class="input-group-addon" id="mail">Type</span>
                                 <select class="form-control" id="exampleSelect2" name="type">
-                                    <option>Particulier</option>
+                                    <option>Personnel</option>
                                     <option>Association</option>
-                                    <option>Entreprise</option>
+                                    <option>Company</option>
                                 </select>
                             </div>
                             <button type="submit" class="btn long btn-primary">Create account</button>
