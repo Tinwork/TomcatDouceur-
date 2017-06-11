@@ -18,6 +18,8 @@
 </head>
 <body>
     <c:set var="error" value="${error.getError()}"/>
+    <c:set var="message" value="${success.getMessage()}"/>
+    <c:set var="status" value="${success.getStatus()}"/>
     <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -48,6 +50,11 @@
                 <p>${error}</p>
             </div>
         </c:if>
+        <c:if test = "${status == '200'}">
+            <div class="alert alert-success" role="alert">
+                <p>${message}</p>
+            </div>
+        </c:if>
         <div class="row">
             <div class="img-wrapper">
                 <img src="/tinwork/public/image/logo.jpg" id="logo">
@@ -70,6 +77,14 @@
                             <div class="input-group">
                                 <span class="input-group-addon" id="mail">Mail address</span>
                                 <input type="text" class="form-control" placeholder="johndoe@gmail.com" name="mail" aria-describedby="mail" required>
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon" id="mail">Type</span>
+                                <select class="form-control" id="exampleSelect2" name="type">
+                                    <option>Particulier</option>
+                                    <option>Association</option>
+                                    <option>Entreprise</option>
+                                </select>
                             </div>
                             <button type="submit" class="btn long btn-primary">Create account</button>
                         </form>

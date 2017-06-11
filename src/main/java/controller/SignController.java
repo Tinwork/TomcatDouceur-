@@ -42,7 +42,7 @@ public class SignController extends HttpServlet {
      */
     public void doPost(javax.servlet.http.HttpServletRequest req, javax.servlet.http.HttpServletResponse res) throws ServletException, IOException{
         // Retrieve the user, pwd
-        String[] param = {"username","password","mail"};
+        String[] param = {"username","password","mail", "type"};
         HashMap<String, String> usrData =  RequestParse.getParams(req, param);
         UserFactory usr = new UserFactory(usrData);
 
@@ -54,7 +54,7 @@ public class SignController extends HttpServlet {
                 Mailer mail = new Mailer(usrData.get("mail"), usrData.get("username"));
                 mail.sendMail();
 
-                Dispatch.dispatchSuccess(req, res, "Congratulations", "Success", "/login");
+                Dispatch.dispatchSuccess(req, res, "Congratulations you've just subscribe to tinwork. You should have received an activation email", "200", PATH);
                 return;
             }
         } catch (Exception e) {

@@ -55,18 +55,17 @@ public class UserDB extends Connect{
      * @param mail
      * @return
      */
-    public boolean insertUser(String username, String hash, String salt, String mail) throws Exception{
-        String sql = "INSERT INTO User (user, hash, salt, mail, subscribe_date) VALUES (?, ?, ?, ?, ?)";
+    public boolean insertUser(String username, String hash, String salt, String mail, String type) throws Exception{
+        String sql = "INSERT INTO User (user, hash, salt, mail, subscribe_date, type) VALUES (?, ?, ?, ?, ?, ?)";
 
         try {
-            // Convert the byte[] into a String ([]byte is just an hexadecimal representation of string.. at least it should be)
-
             PreparedStatement stmt = this.connection.prepareStatement(sql);
             stmt.setString(1, username);
             stmt.setString(2, hash);
             stmt.setString(3, salt);
             stmt.setString(4, mail);
             stmt.setDate(5, java.sql.Date.valueOf(java.time.LocalDate.now()));
+            stmt.setString(6, type);
 
             int insertstate = stmt.executeUpdate();
 

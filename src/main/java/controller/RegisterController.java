@@ -16,8 +16,7 @@ import java.util.HashMap;
  */
 public class RegisterController extends HttpServlet {
 
-    private Validity validity;
-    private final UserDB db = new UserDB();
+    protected final String PATH = "/WEB-INF/template/signup.jsp";
 
     /**
      *
@@ -27,27 +26,30 @@ public class RegisterController extends HttpServlet {
      * @throws IOException
      */
     public void doGet(javax.servlet.http.HttpServletRequest req, javax.servlet.http.HttpServletResponse res) throws ServletException, IOException{
+        Validity validity;
+        final UserDB db = new UserDB();
+
         String[] wanted = {"token"};
         // We does not call this registrationToken as it's not the same thing
         HashMap<String, String> validityToken = RequestParse.getParams(req, wanted);
         // Check the validity of the token
 
         if (validityToken.get("token") == null)
-            Dispatch.dispatchError(req, res, "/sign", "token is null");
+            Dispatch.dispatchError(req, res, PATH, "token is null");
 
-        this.validity = new Validity("");
+        validity = new Validity("");
         Boolean isTokenValid = validity.parseToken(validityToken.get("token"));
 
         if (!isTokenValid) {
-            Dispatch.dispatchError(req, res, "/sign", "invalid token");
+            Dispatch.dispatchError(req, res, PATH, "invalid token");
             return;
         }
 
         // Retrieve the payload. It should contain the username
-        String payload = this.validity.getPayload();
+        String payload = validity.getPayload();
 
         if (payload == null) {
-            Dispatch.dispatchError(req, res, "/sign", "invalid payload");
+            Dispatch.dispatchError(req, res, PATH, "invalid payload");
             return;
         }
 
@@ -55,7 +57,7 @@ public class RegisterController extends HttpServlet {
         Boolean activation = db.activateUser(payload);
 
         if (!activation){
-            Dispatch.dispatchError(req, res, "/sign", "activation has failed");
+            Dispatch.dispatchError(req, res, PATH, "activation has failed");
             return;
         }
 

@@ -15,6 +15,7 @@ public class UserFactory {
     protected String username;
     protected String pwd;
     protected String mail;
+    protected String type;
 
     // private field
     private UserDB user;
@@ -28,6 +29,8 @@ public class UserFactory {
         this.username = usrData.get("username");
         this.pwd = usrData.get("password");
         this.mail = usrData.get("mail");
+        this.type = usrData.get("type");
+
         this.user = new UserDB();
     }
 
@@ -63,6 +66,10 @@ public class UserFactory {
     public boolean registerProcess() throws Exception{
         Boolean isUserExist = this.user.userExist(this.username, this.mail);
 
+        if (this.mail == null || this.username == null || this.pwd == null) {
+            throw new Exception("one of the argument is empty");
+        }
+
         if (isUserExist)
             throw new Exception("user already exist");
 
@@ -88,7 +95,7 @@ public class UserFactory {
         try {
             String hash = this.pwdFactory.encrypt();
             String salt = this.pwdFactory.getSalt();
-            isInsert = this.user.insertUser(this.username, hash, salt, this.mail);
+            isInsert = this.user.insertUser(this.username, hash, salt, this.mail, this.type);
         } catch(Exception e) {
             Loghandler.log("encrypt user "+e.toString(), "fatal");
         }
