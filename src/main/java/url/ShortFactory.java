@@ -67,6 +67,7 @@ public class ShortFactory {
         return this;
     }
 
+
     /**
      * @private
      * @return
@@ -74,6 +75,15 @@ public class ShortFactory {
     private ShortFactory insertOriginalURL() throws Exception{
         // First insert the current url
         this.insertFactory = new InsertURL(this.userDatas.get("url"), this.UDID);
+
+        // Check that the url does not exist
+        String isExist = this.insertFactory.checkPresenceOfURL();
+
+        if (isExist != null) {
+            // retrieve the url with the short url
+            this.shortURL = isExist;
+            throw new Exception("url already exist: "+isExist);
+        }
 
         // Make the short url
         String hashUserPwd = LinkPwd.hash(this.userDatas.get("password"));

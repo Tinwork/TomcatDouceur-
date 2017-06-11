@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: lookitsmarc
@@ -16,6 +17,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
 </head>
 <body>
+    <c:set var="error" value="${error.getError()}"/>
     <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -41,6 +43,11 @@
         </div>
     </nav>
     <div class="container-fluid">
+        <c:if test = "${error != null}">
+            <div class="alert alert-danger" role="alert">
+                <p>${error}</p>
+            </div>
+        </c:if>
         <div class="row">
             <div class="img-wrapper">
                 <img src="/tinwork/public/image/logo.jpg" id="logo">

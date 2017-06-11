@@ -68,7 +68,7 @@ public class UserFactory {
 
         // Validate the mail
         if (!Helper.validateMail(this.mail))
-            throw new Exception("mail invalid");
+            throw new Exception("Invalid mail");
 
         this.pwdFactory = new Password(this.pwd);
         // Otherwise insert the user

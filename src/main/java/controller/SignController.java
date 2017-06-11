@@ -58,7 +58,7 @@ public class SignController extends HttpServlet {
                 return;
             }
         } catch (Exception e) {
-            Dispatch.dispatchError(req, res, PATH, e.toString());
+            Dispatch.dispatchError(req, res, PATH, e.getMessage());
             return;
         }
     }

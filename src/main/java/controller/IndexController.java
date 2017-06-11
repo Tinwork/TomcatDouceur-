@@ -51,8 +51,15 @@ public class IndexController extends HttpServlet {
 
         if (!isInsert) {
             Loghandler.log("error", "warn");
-            Dispatch.dispatchError(req, res, path, "Insert failed for URL " + data.get("url"));
-            return;
+
+            // Check that shortURL is different of null
+            if(processURL.getShortURL() == null) {
+                Dispatch.dispatchError(req, res, path, "Insert failed for URL " + data.get("url"));
+                return;
+            } else {
+                Dispatch.dispatchSuccess(req, res, "Link already present <a href='"+processURL.getShortURL()+"'>"+processURL.getShortURL()+"</a>", "200", path);
+                return;
+            }
         }
 
         Dispatch.dispatchSuccess(req, res, "Link successfully added <a href='"+processURL.getShortURL()+"'>"+processURL.getShortURL()+"</a>", "200", path);

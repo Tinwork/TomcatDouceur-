@@ -22,6 +22,9 @@
     <c:set var = "token" value="${userstate.getToken()}"></c:set>
     <c:set var = "username" value="${userstate.getUsername()}"></c:set>
     <c:set var = "mail" value="${userstate.getMail()}"></c:set>
+    <c:set var="message" value="${success.getMessage()}"/>
+    <c:set var="status" value="${success.getStatus()}"/>
+    <c:set var="error" value="${error.getError()}"/>
     <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -43,6 +46,16 @@
         </div>
     </nav>
     <div class="container-fluid">
+        <c:if test = "${status == '200'}">
+            <div class="alert alert-success" role="alert">
+                <p>${message}</p>
+            </div>
+        </c:if>
+        <c:if test = "${error != null}">
+            <div class="alert alert-danger" role="alert">
+                <p>${error}</p>
+            </div>
+        </c:if>
         <div class="jumbotron jumbotron-fluid">
             <div class="container">
                 <h3 class="display-6">Profile</h3>
@@ -100,8 +113,8 @@
                                     <span class="input-group-addon" id="basic-addon1">CSV</span>
                                     <input type="file" class="form-control" placeholder="Link" name="csv" aria-describedby="basic-addon1" required>
                                 </div>
+                                <button type="submit" class="btn btn-primary long">Submit</button>
                             </form>
-                            <button type="submit" class="btn btn-primary long">Submit</button>
                         </div>
                     </div>
                 </div>

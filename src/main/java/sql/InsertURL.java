@@ -2,15 +2,9 @@ package sql;
 
 import helper.Loghandler;
 import org.json.JSONObject;
-import sun.rmi.log.LogHandler;
-import sun.tools.tree.Expression;
-import sun.tools.tree.StringExpression;
-import url.Links;
 
-import javax.xml.transform.Result;
 import java.sql.*;
 import java.sql.Date;
-import java.util.*;
 
 /**
  * Created by lookitsmarc on 04/04/2017.
@@ -81,8 +75,9 @@ public class InsertURL extends Connect{
      *      Check the presence of the original_url or the short_link
      * @return boolean
      */
-    public boolean checkPresenceOfURL(){
-        String sql = "SELECT * FROM Link WHERE original_link = ?";
+    public String checkPresenceOfURL(){
+        String sURL = "";
+        String sql = "SELECT short_link FROM Link WHERE original_link = ?";
 
         try {
             PreparedStatement stmt = this.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -91,14 +86,18 @@ public class InsertURL extends Connect{
             ResultSet res = stmt.executeQuery();
 
             if (!res.next())
-                return false;
+                return null;
+
+            do {
+                sURL = res.getString("short_link");
+            } while(res.next());
 
         } catch (Exception e){
             Loghandler.log(e.toString()+" check presence of Url", "fatal");
-            return true;
+            return null;
         }
 
-        return true;
+        return sURL;
     }
 
     /**
