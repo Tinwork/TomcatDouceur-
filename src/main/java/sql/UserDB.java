@@ -158,9 +158,9 @@ public class UserDB extends Connect{
      * @param username
      * @return
      */
-    public String selectUserMailByUsername(String username) {
-        String sql = "SELECT mail FROM User where user = ?";
-        String mail = "";
+    public String[] selectUserExtraInfo(String username) {
+        String sql = "SELECT type, mail FROM User where user = ?";
+        String[] data = new String[2];
 
         try {
             PreparedStatement stmt = this.connection.prepareStatement(sql);
@@ -173,14 +173,15 @@ public class UserDB extends Connect{
             }
 
             do {
-                mail = res.getString("mail");
+                data[0] = res.getString("mail");
+                data[1] = res.getString("type");
             } while(res.next());
 
         } catch (SQLException e) {
             Loghandler.log(e.toString(), "fatal");
         }
 
-        return mail;
+        return data;
     }
 
     /**

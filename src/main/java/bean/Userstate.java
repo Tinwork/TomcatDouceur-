@@ -9,6 +9,7 @@ public class Userstate {
     private String username;
     private String token;
     private String mail;
+    private String type;
     private int userID;
 
     /**
@@ -16,11 +17,12 @@ public class Userstate {
      * @param username
      * @param token
      */
-    public Userstate(String username, String token, int userID, String mail){
+    public Userstate(String username, String token, int userID, String mail, String type){
         this.username = username;
         this.token = token;
         this.userID = userID;
         this.mail = mail;
+        this.type = type;
     }
 
     /**
@@ -70,4 +72,10 @@ public class Userstate {
     public String getMail() {
         return this.mail;
     }
+
+    /**
+     *
+     * @return
+     */
+    public String getType() { return this.type; }
 }

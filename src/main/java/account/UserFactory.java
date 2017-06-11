@@ -51,7 +51,6 @@ public class UserFactory {
         this.pwdFactory = new Password(null);
         // Compare the current password input with the one coming from the DB
         Boolean issame = this.pwdFactory.compareHash(this.pwd.toCharArray(), userDBDatas[0], userDBDatas[1]);
-        Loghandler.log("is same"+issame, "warn");
 
         if (issame)
             return true;
@@ -130,6 +129,14 @@ public class UserFactory {
      * @return
      */
     public String getMail() {
-        return this.user.selectUserMailByUsername(this.username);
+        return this.user.selectUserExtraInfo(this.username)[0];
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getType() {
+        return this.user.selectUserExtraInfo(this.username)[1];
     }
 }

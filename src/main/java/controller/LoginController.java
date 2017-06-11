@@ -57,7 +57,7 @@ public class LoginController extends HttpServlet {
 
             // Generate the token
             String token = tokenHandler.generateToken();
-            Userstate bean = setBean(usrData.get("username"), token, id, userfac.getMail());
+            Userstate bean = setBean(usrData.get("username"), token, id, userfac.getMail(), userfac.getType());
             RedirectWithBean(req, res, bean);
         } else {
             Dispatch.dispatchError(req, res, PATH, "invalid user");
@@ -71,11 +71,11 @@ public class LoginController extends HttpServlet {
      * @param hash
      * @return
      */
-    public Userstate setBean(String username, String hash, int id, String mail) {
+    public Userstate setBean(String username, String hash, int id, String mail, String type) {
         if (username.isEmpty() && hash.isEmpty())
             return null;
 
-        Userstate state = new Userstate(username, hash, id, mail);
+        Userstate state = new Userstate(username, hash, id, mail, type);
 
         return state;
     }

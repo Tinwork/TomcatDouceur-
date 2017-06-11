@@ -22,6 +22,8 @@
     <c:set var = "token" value="${userstate.getToken()}"></c:set>
     <c:set var = "username" value="${userstate.getUsername()}"></c:set>
     <c:set var = "mail" value="${userstate.getMail()}"></c:set>
+    <c:set var = "type" value="${userstate.getType()}"></c:set>
+
     <c:set var="message" value="${success.getMessage()}"/>
     <c:set var="status" value="${success.getStatus()}"/>
     <c:set var="error" value="${error.getError()}"/>
@@ -63,10 +65,11 @@
                     <div class="col">
                         <!-- user card -->
                         <div id="card" data-token="<c:out value="${token}"/>">
-                            <img class="card-img-top" src="/tinwork/public/image/default-user.jpg" alt="Card image cap">
+                            <img class="card-img-top" src="/tinwork/public/image/<c:out value="${type}"></c:out>.jpg" alt="Card image cap">
                             <div class="card-block-profile">
                                 <h4 class="card-title">Dashboard</h4>
                                 <p class="card-text">Welcome <c:out value="${username}"></c:out></p>
+                                <p class="card-text">Statut: <c:out value="${type}"></c:out></p>
                             </div>
                         </div>
                     </div>
