@@ -17,6 +17,7 @@ import java.util.HashMap;
 public class CountURL extends Connect {
 
     private JSONArray jsonArr = new JSONArray();
+    private int count = 0;
 
     /**
      * Constructor
@@ -66,6 +67,7 @@ public class CountURL extends Connect {
                 HashMap<String, String> d = new HashMap<>();
                 d.put("date", res.getDate("date").toString());
                 datas.add(d);
+                count++;
             } while (res.next());
 
         } catch (SQLException e) {
@@ -119,5 +121,13 @@ public class CountURL extends Connect {
         }
 
         return jsonArr;
+    }
+
+    /**
+     * Get Count
+     * @return
+     */
+    public int getCount() {
+        return this.count;
     }
 }

@@ -179,13 +179,11 @@ public class Links {
      */
     public Boolean checkCount() {
         CountURL counter = new CountURL();
-        JSONArray jarr = counter.getCount(this.sql_id);
+        counter.getCount(this.sql_id);
 
-        if (jarr == null)
+        if (this.max_use > counter.getCount()) {
             return true;
-
-        if (this.max_use > jarr.length())
-            return true;
+        }
 
         return false;
     }
