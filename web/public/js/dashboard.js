@@ -38,7 +38,7 @@
                     props: obj
                 })
                 .then(res => {
-                    let line = new Charts(res);
+                    let line = new Charts(res, id);
                     line.buildChart();
                 })
                 .catch(e => console.log(e));
@@ -127,7 +127,7 @@
         json.map(d => {
             DOMString += `
                 <tr>
-                    <td>${d.original_link}</td>
+                    <td class="mx">${d.original_link}</td>
                     <td>http://localhost:5000/tinwork/b/${d.short_link}</td>
                     <td>${d.create_date}</td>
                     <td id="link-${d.id}"><button type="button" class="btn btn-secondary">See more</button></td>

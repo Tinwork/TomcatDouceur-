@@ -144,12 +144,17 @@
             </div>
             <div class="row">
                 <div class="col">
-                    <div class="card-block" style="position: relative; height:20vh; width:50vw">
+                    <div class="" style="position: relative; width:50vw">
+                        <div id="hide"></div>
                         <canvas id="chart" width="400" height="300"></canvas>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+    <div class="bottom bg-faded">
+        <img src="/tinwork/public/image/logo.jpg" width="30" height="30" alt="">
+        Copyright tinwork
     </div>
     <script  src="/tinwork/public/js/chart.js"></script>
     <script  src="/tinwork/public/js/dashboard.js"></script>

@@ -4,8 +4,9 @@ class Charts {
      * Constructor
      * @param {Objects} datas 
      */
-    constructor(datas) {
+    constructor(datas, id) {
         this.data = datas;
+        this.id = id;
         this.ctx = document.getElementById('chart').getContext('2d')
     }
 
@@ -36,13 +37,19 @@ class Charts {
     buildChart() {
         let {datas, labels} = this.filterData(this.data);
 
-        if (datas.length == 0)
+        if (datas.length == 0) {
+            document.getElementById('hide').innerHTML = `
+            <div class="alert alert-warning" role="alert">
+                Nobody clicked on the link <strong>${this.id}</strong>
+            </div>
+            
+            `;
             return Promise.reject('data is empty');
+        }
 
         if (this.chart !== undefined || this.chart !== null)
             this.cleanChart();
 
-        console.log(datas);
         this.chart = new Chart(this.ctx, {
             type: 'bar',
             data: {
@@ -70,6 +77,7 @@ class Charts {
      */
     cleanChart() {
         try {
+            document.getElementById('hide').innerHTML = ``;
             this.chart.destroy();
         } catch(e) {
             console.log('chart already destroyed');

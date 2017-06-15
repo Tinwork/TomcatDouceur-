@@ -30,7 +30,7 @@ const formFactory = (() => {
             </div>
         `,
         captcha: `
-             <div class="form-check">
+             <div class="form-check captcha">
                 <label class="form-check-label">
                     <input type="radio" class="form-check-input" name="captcha" id="optionsRadios2" value="enable">
                     Enable captcha
@@ -38,7 +38,7 @@ const formFactory = (() => {
             </div>
         `,
         pwds: `
-            <div class="input-group pwd" >
+            <div class="input-group pwds" >
               <span class="input-group-addon" id="password">Password 1</span>
               <input type="text" class="form-control" placeholder="" name="passwords-1" aria-describedby="password">
             </div>
@@ -48,7 +48,7 @@ const formFactory = (() => {
             </div>
         `,
         maxUse: `
-            <div class="form-group">
+            <div class="form-group maxUse">
                 <label for="exampleSelect1">Example select</label>
                 <select class="form-control" name="max_use" id="exampleSelect1">
                     <option>1</option>
@@ -66,8 +66,8 @@ const formFactory = (() => {
      * @param {String} type
      */
     const addComponent = (type, DOMBind) => {
-        console.log(fields[type]);
-        document.getElementById(DOMBind).insertAdjacentHTML('beforeend', fields[type]);
+        if (document.getElementsByClassName(type).length === 0)
+            document.getElementById(DOMBind).insertAdjacentHTML('beforeend', fields[type]);
     };
 
     /**

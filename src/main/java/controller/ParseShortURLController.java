@@ -1,6 +1,7 @@
 package controller;
 
 import bean.Constraint;
+import helper.Dispatch;
 import helper.Loghandler;
 import sql.CountURL;
 import url.Links;
@@ -24,13 +25,15 @@ public class ParseShortURLController extends HttpServlet {
      * @throws ServletException
      */
     public void doGet(javax.servlet.http.HttpServletRequest req, javax.servlet.http.HttpServletResponse res) throws IOException, ServletException {
-        // methode variable
         CountURL counter = new CountURL();
         Links link;
 
         // Create an instance of the parseurl class
         ParseURL parser = new ParseURL(req.getRequestURL().toString());
         link = parser.retrieveLinks();
+
+        if (link == null)
+            Dispatch.dispatchError(req, res, "/WEB-INF/template/404.jsp", "invalid url");
 
         // Retrieve the constraint of the link
         HashMap<String,Boolean> constraint = link.getConstrain();

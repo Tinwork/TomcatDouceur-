@@ -20,6 +20,27 @@
             Container
         </res-auth>
     </resource-ref>
+
+    <error-page>
+        <!-- Missing resource -->
+        <error-code>404</error-code>
+        <location>/WEB-INF/template/404.jsp</location>
+    </error-page>
+    <error-page>
+        <!-- Uncaught exception -->
+        <error-code>404</error-code>
+        <location>/WEB-INF/template/500.jsp</location>
+    </error-page>
+
+    <filter>
+        <filter-name>URL</filter-name>
+        <filter-class>helper.Filter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>URL</filter-name>
+        <servlet-name>Parse</servlet-name>
+    </filter-mapping>
+
     <servlet>
         <servlet-name>Index</servlet-name>
         <servlet-class>controller.IndexController</servlet-class>

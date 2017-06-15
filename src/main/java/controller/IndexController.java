@@ -62,7 +62,7 @@ public class IndexController extends HttpServlet {
             }
         }
 
-        Dispatch.dispatchSuccess(req, res, "Link successfully added <a href='"+processURL.getShortURL()+"'>"+processURL.getShortURL()+"</a>", "200", path);
+        Dispatch.dispatchSuccess(req, res, "Link successfully added <a href='"+processURL.getShortURL()+"'>tinwork/"+processURL.getShortURL()+"</a>", "200", path);
         return;
     }
 }

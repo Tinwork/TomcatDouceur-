@@ -2,6 +2,10 @@
     margin-bottom: 0px;
 }
 
+.container-fluid{
+    min-height: calc(100vh - 106px);
+}
+
 .center-text {
     text-align: center;
     margin-top: 10px;
@@ -23,8 +27,6 @@ nav {
 }
 
 .bottom{
-    position: absolute;
-    bottom:0;
     width: 100%;
     padding: 10px;
 }
@@ -50,6 +52,11 @@ nav {
 
 .long {
     width: 100%;
+}
+
+.mx {
+    max-width: 200px;
+    overflow: hidden;
 }
 
 
