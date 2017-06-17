@@ -32,8 +32,10 @@ public class ParseShortURLController extends HttpServlet {
         ParseURL parser = new ParseURL(req.getRequestURL().toString());
         link = parser.retrieveLinks();
 
-        if (link == null)
+        if (link == null) {
             Dispatch.dispatchError(req, res, "/WEB-INF/template/404.jsp", "invalid url");
+            return;
+        }
 
         // Retrieve the constraint of the link
         HashMap<String,Boolean> constraint = link.getConstrain();
