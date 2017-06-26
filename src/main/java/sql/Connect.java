@@ -41,6 +41,5 @@ public class Connect {
             Loghandler.log(e.toString(), "fatal");
             // we should log the error here
         }
-
     }
 }

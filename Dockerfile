@@ -10,20 +10,23 @@ RUN apt-get update && apt-get upgrade -y && \
     -t jessie-backports  openjdk-8-jre-headless ca-certificates-java \
     openjdk-8-jdk \
     nano \
-    wget 
+    wget \
+    unzip \
+    rsync
 
 RUN which java
 
 # Change working directory 
 WORKDIR "/opt"
 
+
 # Download tomcat, extract and rename the folder 
-RUN wget http://mirrors.standaloneinstaller.com/apache/tomcat/tomcat-9/v9.0.0.M19/bin/apache-tomcat-9.0.0.M19.tar.gz && \
-    tar xvf apache-tomcat-9.0.0.M19.tar.gz
+RUN wget http://apache.mediamirrors.org/tomcat/tomcat-9/v9.0.0.M21/bin/apache-tomcat-9.0.0.M21.tar.gz && \
+    tar xvf apache-tomcat-9.0.0.M21.tar.gz
 
 # Rename the folder
-RUN mv apache-tomcat-9.0.0.M19 tomcat9 && \
-    rm apache-tomcat-9.0.0.M19.tar.gz
+RUN mv apache-tomcat-9.0.0.M21 tomcat9 && \
+    rm apache-tomcat-9.0.0.M21.tar.gz
 
 # Change the workdir 
 WORKDIR "tomcat9"
@@ -43,64 +46,18 @@ RUN sed -i.bak 's/<Context>/<Context reloadable="true">/g' conf/context.xml
 # Update the context
 RUN sed -i.bak '$ i\<Resource name="mail/Session" auth="Container" type="javax.mail.Session" mail.smtp.host="localhost"/>' conf/context.xml
 
+
 # Add a log files
 RUN touch logs/apps.log
 
-# Add the JDBC driver into the libs folder
-RUN wget https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.41.tar.gz && \
-    tar -xvf mysql-connector-java-5.1.41.tar.gz && \
-    cp mysql-connector-java-5.1.41/mysql-connector-java-5.1.41-bin.jar /opt/tomcat9/lib/ && \
-    rm mysql-connector-java-5.1.41.tar.gz
-
-# Add the Java-jwt dependency to tomcat
-RUN wget http://central.maven.org/maven2/com/auth0/java-jwt/3.2.0/java-jwt-3.2.0.jar && \
-    cp java-jwt-3.2.0.jar /opt/tomcat9/lib/ && \
-    rm java-jwt-3.2.0.jar
-
-# Add the Java jackson core to tomcat
-RUN wget http://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-core/2.8.8/jackson-core-2.8.8.jar && \
-    cp jackson-core-2.8.8.jar /opt/tomcat9/lib/ && \
-    rm jackson-core-2.8.8.jar
-
-# Add the Java jackson databind
-RUN wget http://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-databind/2.8.8/jackson-databind-2.8.8.jar && \
-    cp jackson-databind-2.8.8.jar /opt/tomcat9/lib/ && \
-    rm jackson-databind-2.8.8.jar
-
-# Add the Java jackson annotation
-RUN wget http://repo2.maven.org/maven2/com/fasterxml/jackson/core/jackson-annotations/2.8.0/jackson-annotations-2.8.0.jar && \
-    cp jackson-annotations-2.8.0.jar /opt/tomcat9/lib && \
-    rm jackson-annotations-2.8.0.jar
-
-# Add the apache stuff
-RUN wget http://central.maven.org/maven2/commons-codec/commons-codec/1.9/commons-codec-1.9.jar && \
-    cp commons-codec-1.9.jar /opt/tomcat9/lib && \
-    rm commons-codec-1.9.jar
-
-# Add apache validator
-RUN wget http://central.maven.org/maven2/commons-validator/commons-validator/1.6/commons-validator-1.6.jar && \
-    cp commons-validator-1.6.jar /opt/tomcat9/lib && \
-    rm commons-validator-1.6.jar
-
-# Add org.json
-RUN wget http://central.maven.org/maven2/org/json/json/20160810/json-20160810.jar && \
-    cp json-20160810.jar /opt/tomcat9/lib && \
-    rm json-20160810.jar
-
-# Add jstl
-RUN wget http://central.maven.org/maven2/javax/servlet/jstl/1.2/jstl-1.2.jar && \
-    cp jstl-1.2.jar /opt/tomcat9/lib && \
-    rm jstl-1.2.jar
-
-# Add java mail
-RUN wget http://central.maven.org/maven2/javax/mail/mail/1.4.7/mail-1.4.7.jar && \
-    cp mail-1.4.7.jar /opt/tomcat9/lib && \
-    rm mail-1.4.7.jar
-
-# Add csv parser
-RUN wget http://central.maven.org/maven2/org/apache/commons/commons-csv/1.4/commons-csv-1.4.jar && \
-    cp commons-csv-1.4.jar /opt/tomcat9/lib && \
-    rm commons-csv-1.4.jar
+# Add dependencies
+RUN wget https://marcintha.fr/war/libdl.zip && \
+    unzip libdl.zip && \
+    ls && \
+    cp *.jar /opt/tomcat9/lib && \
+    rm -rf libdl && \
+    rm libdl.zip && \
+    rm *.jar
 
 # Run tomcat 
 CMD ./bin/catalina.sh run

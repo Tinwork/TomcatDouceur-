@@ -1,15 +1,25 @@
 package sql;
 
+import entity.LinkEntity;
 import helper.Loghandler;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.json.JSONObject;
+import sun.plugin.javascript.navig.Link;
 
+import javax.persistence.EntityManager;
 import java.sql.*;
-import java.sql.Date;
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.List;
 
 /**
  * Created by lookitsmarc on 04/04/2017.
  */
-public class InsertURL extends Connect{
+public class InsertURL extends ConnectionFactory {
 
     private String original_url;
     private int userID;
@@ -22,7 +32,7 @@ public class InsertURL extends Connect{
     public InsertURL(String originalURL, int userID){
         this.original_url = originalURL;
         this.userID = userID;
-        this.connectToDB();
+        super.setUp();
     }
 
     /**
@@ -30,43 +40,36 @@ public class InsertURL extends Connect{
      *      Insert datas in the database
      */
     public int insertOriginalURL(String password, String mail, Date start, Date end, Boolean captcha, JSONObject json, int max_use){
-        int updateState = 0;
-        int lastRow = 0;
+        Date d = new Date();
+        Integer insert = null;
 
         try {
-            // Otherwise we try to insert the Url in the db
-            // There's no way to bind the param with variable... a part from using Spring framework...
-            String sql = "INSERT INTO Link (original_link, user_id, create_date, password, mail, start_date, end_date, captcha, multiple_password, set_max_use) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            PreparedStatement stmt = this.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            SessionFactory factory = this.getFactory();
+            Session session = factory.openSession();
 
-            // Bind the params
-            stmt.setString(1, this.original_url);
-            stmt.setInt(2, this.userID);
-            stmt.setDate(3, java.sql.Date.valueOf(java.time.LocalDate.now()));
-            stmt.setString(4, password);
-            stmt.setString(5, mail);
-            stmt.setDate(6, start);
-            stmt.setDate(7, end);
-            stmt.setBoolean(8, captcha);
-            stmt.setString(9, json.length() == 0 ? null : json.toString());
+            Transaction tr = session.getTransaction();
+            tr.begin();
 
-            if (max_use == 0)
-                stmt.setNull(10, java.sql.Types.INTEGER);
-            else
-                stmt.setInt(10, max_use);
+            LinkEntity link = new LinkEntity();
+            link.setOriginaLink(this.original_url);
+            link.setUserID(this.userID);
+            link.setCreateDate(d);
+            link.setPassword(password);
+            link.setMail(mail);
+            link.setStartDate(start);
+            link.setEndDate(end);
+            link.setCaptcha(captcha);
+            link.setMultiplePwd(json.length() == 0 ? null : json.toString());
+            link.setMaxUse(max_use == 0 ? null : max_use);
 
-            stmt.executeUpdate();
-            ResultSet res = stmt.getGeneratedKeys();
-            if (res.next())
-                lastRow = res.getInt(1);
-            else
-                lastRow = 0;
 
-        } catch (Exception e){
-            Loghandler.log(e.toString()+" insert data", "fatal");
+            insert = (Integer) session.save(link);
+            tr.commit();
+        } catch(Exception e) {
+            Loghandler.log("Hibernate insert url error "+e.toString(), "fatal");
         }
 
-        return lastRow;
+        return insert;
     }
 
 
@@ -75,29 +78,32 @@ public class InsertURL extends Connect{
      *      Check the presence of the original_url or the short_link
      * @return boolean
      */
-    public String checkPresenceOfURL(){
-        String sURL = "";
-        String sql = "SELECT short_link FROM Link WHERE original_link = ?";
+    public String checkPresenceOfURL() throws Exception{
+        String sURL = null;
 
-        try {
-            PreparedStatement stmt = this.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            stmt.setString(1, this.original_url);
+       try {
+           EntityManager en = null;
+           Session se = this.getFactory().openSession();
 
-            ResultSet res = stmt.executeQuery();
+           if (se == null) {
+               Loghandler.log("session is null ! ", "fatal");
+           }
 
-            if (!res.next())
-                return null;
+           Query query = se.createQuery("FROM LinkEntity Link where Link.original_link = :url");
+           query.setParameter("url", this.original_url);
 
-            do {
-                sURL = res.getString("short_link");
-            } while(res.next());
+           LinkEntity link = (LinkEntity) query.uniqueResult();
 
-        } catch (Exception e){
-            Loghandler.log(e.toString()+" check presence of Url", "fatal");
-            return null;
-        }
+           if (link == null) {
+             return null;
+           }
 
-        return sURL;
+           sURL = link.getShortLink();
+       } catch (Exception e) {
+            Loghandler.log("Get present url "+e, "fatal");
+       }
+
+       return sURL;
     }
 
     /**
@@ -105,22 +111,25 @@ public class InsertURL extends Connect{
      * @return
      */
     public boolean checkPresenceOfShortURL(String shortURL){
-        String sql = "SELECT * FROM Link WHERE short_link = ?";
-
         try {
-            PreparedStatement stmt = this.connection.prepareStatement(sql);
-            stmt.setString(1, shortURL);
+            Session se = this.getFactory().getCurrentSession();
 
-            ResultSet res = stmt.executeQuery();
+            if (se == null)
+                se = this.getFactory().openSession();
 
-            if (!res.next())
+            Query query = se.createQuery("FROM * LinkEntity Link WHERE Link.short_link = :shortLink");
+            query.setParameter("shortLink", shortURL);
+
+            LinkEntity link = (LinkEntity) query.uniqueResult();
+
+            if (link == null)
                 return false;
 
-        } catch (SQLException e){
-            Loghandler.log(e.toString(), "warn");
+        } catch (Exception e) {
+            Loghandler.log("check presence error "+e.toString(), "fatal");
         }
 
-        return true;
+      return true;
     }
 
 
@@ -131,30 +140,27 @@ public class InsertURL extends Connect{
      * @throws Exception
      */
     public void insertShortLink(long hash, String shortURL, int row) throws Exception{
-        String sql = "UPDATE Link SET hashnumber = ?, short_link = ? WHERE id = ?";
 
-        try {
-            // In order to avoid collision we need to check whenever the URL is present within the database
-            Boolean isPresent = this.checkPresenceOfShortURL(shortURL);
+       try {
+            Session session = this.getFactory().openSession();
+            Transaction ts = session.getTransaction();
+            ts.begin();
 
-            if (isPresent)
-                return;
+           /** LinkEntity entity = new LinkEntity();
+            entity.setId(row);
+            entity.setHashnumber(hash);
+            entity.setShortLink(shortURL);**/
 
-            PreparedStatement stmt = this.connection.prepareStatement(sql);
+           Query query = session.createQuery("UPDATE LinkEntity Link SET Link.hashnumber = :hashnumber, Link.short_link = :short_link");
+           query.setParameter("hashnumber", hash);
+           query.setParameter("short_link", shortURL);
+           query.executeUpdate();
 
-            stmt.setLong(1, hash);
-            stmt.setString(2, shortURL);
-            stmt.setInt(3, row);
+            //session.update(entity);
+            //ts.commit();
 
-            // Now execute the request
-            int isAdded = stmt.executeUpdate();
-
-            if (isAdded == 0){
-                throw new Exception("URL "+original_url+" has not been saved in the database");
-            }
-
-        } catch (SQLException e){
-            Loghandler.log(e.toString(), "fatal");
-        }
+       } catch (Exception e) {
+            Loghandler.log("Update link has failed "+e.toString(), "fatal");
+       }
     }
 }

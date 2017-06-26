@@ -2,6 +2,7 @@ package controller;
 
 import helper.Dispatch;
 import helper.Loghandler;
+import sql.ConnectionFactory;
 import url.ShortFactory;
 
 import javax.servlet.ServletException;
