@@ -39,6 +39,7 @@ public class ConnectionFactory {
     protected void setUp() {
         final Configuration config = new Configuration();
         config.addAnnotatedClass(entity.LinkEntity.class);
+        config.addAnnotatedClass(entity.UserEntity.class);
         config.configure();
 
         final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()

@@ -44,5 +44,5 @@ services:
       - ./maildata:/var/spool/postfix
     environment:
        GMAIL_USER: tinworkfiestar@gmail.com
-       GMAIL_PASSWORD: tinworkfiestarJei
+       GMAIL_PASSWORD: tinworkEunjin
       

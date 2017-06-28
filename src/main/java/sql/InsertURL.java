@@ -155,7 +155,7 @@ public class InsertURL extends ConnectionFactory {
            query.executeUpdate();
 
             //session.update(entity);
-            //ts.commit();
+            ts.commit();
             session.close();
        } catch (Exception e) {
             Loghandler.log("Update link has failed "+e.toString(), "fatal");

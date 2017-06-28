@@ -1,24 +1,26 @@
 package sql;
 
 import account.Password;
+import entity.UserEntity;
+import helper.Helper;
 import helper.Loghandler;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
+import javax.persistence.NoResultException;
 import javax.xml.bind.DatatypeConverter;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
  * Created by lookitsmarc on 14/05/2017.
  */
-public class UserDB extends Connect{
+public class UserDB extends ConnectionFactory{
 
     public UserDB(){
         // Connect to the database
-        this.connectToDB();
+        super.setUp();
     }
 
     /**
@@ -27,22 +29,23 @@ public class UserDB extends Connect{
      * @return
      */
     public boolean userExist(String username, String mail){
-        String sql = "SELECT * FROM User WHERE user = ? OR mail = ?";
+        Session session = this.getFactory().openSession();
 
         try {
-            PreparedStatement stmt = this.connection.prepareStatement(sql);
-            stmt.setString(1, username);
-            stmt.setString(2, mail);
+            Query query = session.createQuery("FROM UserEntity U WHERE U.user = :user OR U.mail = :mail");
+            query.setParameter("user", username);
+            query.setParameter("mail", mail);
 
-            // Execute the request
-            ResultSet res = stmt.executeQuery();
-
-            if (!res.next()) {
-                Loghandler.log("res next "+String.valueOf(res.next()), "info");
+            try {
+                query.getSingleResult();
+            } catch (NoResultException e ){
+                session.close();
                 return false;
             }
+
         } catch (Exception e) {
-            Loghandler.log(e.toString(), "warning");
+            session.close();
+            Loghandler.log(Helper.getStackTrace(e), "warning");
         }
 
         return true;
@@ -56,26 +59,34 @@ public class UserDB extends Connect{
      * @return
      */
     public boolean insertUser(String username, String hash, String salt, String mail, String type) throws Exception{
-        String sql = "INSERT INTO User (user, hash, salt, mail, subscribe_date, type) VALUES (?, ?, ?, ?, ?, ?)";
+        Date d = new Date();
+        Session session = this.getFactory().openSession();
 
         try {
-            PreparedStatement stmt = this.connection.prepareStatement(sql);
-            stmt.setString(1, username);
-            stmt.setString(2, hash);
-            stmt.setString(3, salt);
-            stmt.setString(4, mail);
-            stmt.setDate(5, java.sql.Date.valueOf(java.time.LocalDate.now()));
-            stmt.setString(6, type);
+            Transaction tr = session.getTransaction();
+            tr.begin();
 
-            int insertstate = stmt.executeUpdate();
+            UserEntity user = new UserEntity();
+            user.setUser(username);
+            user.setHash(hash);
+            user.setSalt(salt);
+            user.setMail(mail);
+            user.setSubscribe_date(d);
+            user.setType(UserEntity.Type.valueOf(type));
+            user.setStatus(false);
 
-            if (insertstate == 0)
+            Integer insertstate = (Integer) session.save(user);
+
+            if (insertstate == null)
                 return false;
 
-        } catch (SQLException e) {
-            Loghandler.log("SQLException " + e.toString(), "fatal");
+            session.close();
+        } catch (Exception e) {
+            session.close();
+            Loghandler.log("SQLException " +Helper.getStackTrace(e), "fatal");
             throw new Exception(e);
         }
+
         return true;
     }
 
@@ -85,39 +96,39 @@ public class UserDB extends Connect{
      * @return
      */
     public byte[][] selectPwd(String username){
-        String sql = "SELECT hash, salt FROM User WHERE user = ? AND status = ?";
         String pwd = "";
         String salt = "";
         byte[][] assembly = null;
+        UserEntity user;
+
+        Session session = this.getFactory().openSession();
 
         try {
-            PreparedStatement stmt = this.connection.prepareStatement(sql);
-            stmt.setString(1, username);
-            stmt.setBoolean(2, true);
+            Query query = session.createQuery("FROM UserEntity U WHERE U.user = :user AND U.status = :status");
+            query.setParameter("user", username);
+            query.setParameter("status", true);
 
-            ResultSet res = stmt.executeQuery();
-
-            Loghandler.log("res "+String.valueOf(res), "info");
-
-            if (!res.next()) {
-                return assembly;
+            try {
+                user = (UserEntity) query.getSingleResult();
+            } catch(NoResultException e) {
+                return null;
             }
 
-            do {
-                pwd = res.getString("hash");
-                salt = res.getString("salt");
+            if (user == null)
+                return assembly;
 
-            } while(res.next());
-
+            pwd = user.getHash();
+            salt = user.getSalt();
 
             // Convert the String password into a hash
             byte[] bpwd = DatatypeConverter.parseBase64Binary(pwd);
             byte[] bsalt = DatatypeConverter.parseBase64Binary(salt);
 
             assembly = new byte[][]{bsalt, bpwd};
-
-        } catch (SQLException e) {
-            Loghandler.log(e.toString(), "warning");
+            session.close();
+        } catch (Exception e) {
+            session.close();
+            Loghandler.log(Helper.getStackTrace(e), "warning");
         }
 
         return assembly;
@@ -129,24 +140,27 @@ public class UserDB extends Connect{
      * @return
      */
     public int selectUserID(String username){
-        String sql = "SELECT id FROM User where user = ?";
+
+        Session session = this.getFactory().openSession();
         int userID = 0;
+        UserEntity user;
 
         try {
-            PreparedStatement stmt = this.connection.prepareStatement(sql);
-            stmt.setString(1, username);
+            Query query = session.createQuery("FROM UserEntity U WHERE U.user = :user");
+            query.setParameter("user", username);
 
-            ResultSet res = stmt.executeQuery();
 
-            if (!res.next()) {
+            try {
+                user = (UserEntity) query.getSingleResult();
+            } catch (NoResultException e) {
+                session.close();
                 return 1;
             }
 
-            do {
-                userID = res.getInt("id");
-            } while(res.next());
-
-        } catch (SQLException e) {
+            userID = user.getId();
+            session.close();
+        } catch (Exception e) {
+            session.close();
             Loghandler.log(e.toString(), "fatal");
         }
 
@@ -159,28 +173,29 @@ public class UserDB extends Connect{
      * @return
      */
     public String[] selectUserExtraInfo(String username) {
-        String sql = "SELECT type, mail FROM User where user = ?";
+        Session session = this.getFactory().openSession();
         String[] data = new String[2];
+        UserEntity user;
 
         try {
-            PreparedStatement stmt = this.connection.prepareStatement(sql);
-            stmt.setString(1, username);
+            Query query = session.createQuery("FROM UserEntity U WHERE U.user = :user");
+            query.setParameter("user", username);
 
-            ResultSet res = stmt.executeQuery();
-
-            if (!res.next()) {
+            try {
+                user = (UserEntity) query.getSingleResult();
+            } catch (NoResultException e) {
+                session.close();
                 return null;
             }
 
-            do {
-                data[0] = res.getString("mail");
-                data[1] = res.getString("type");
-            } while(res.next());
+            data[0] = user.getMail();
+            data[1] = user.getType().toString();
 
-        } catch (SQLException e) {
+            session.close();
+        } catch (Exception e) {
+            session.close();
             Loghandler.log(e.toString(), "fatal");
         }
-
         return data;
     }
 
@@ -190,18 +205,22 @@ public class UserDB extends Connect{
      * @return
      */
     public Boolean activateUser(String username) {
-        String sql = "UPDATE User SET status = ? WHERE user = ?";
+        Session session = this.getFactory().openSession();
 
         try {
-            PreparedStatement stmt = this.connection.prepareStatement(sql);
-            stmt.setBoolean(1, true);
-            stmt.setString(2, username);
 
-            int isUpdate = stmt.executeUpdate();
+            Query query = session.createQuery("UPDATE UserEntity U SET U.status = :status WHERE U.user = :user");
+            query.setParameter("status", true);
+            query.setParameter("user", username);
 
-            if (isUpdate == 0)
+            Integer isUpdate = (Integer) query.executeUpdate();
+
+            session.close();
+
+            if (isUpdate == null)
                 return false;
-        } catch (SQLException e) {
+        } catch (Exception e) {
+            session.close();
             Loghandler.log(e.toString(), "warn");
             return false;
         }
@@ -229,30 +248,37 @@ public class UserDB extends Connect{
             return false;
         }
 
+        Session session = this.getFactory().openSession();
+
         try {
             String hashes = pwd.encrypt();
             String salt = pwd.getSalt();
 
+            Transaction ts = session.getTransaction();
+            ts.begin();
+
             // Now we can update the user
-            String sql = "UPDATE User SET user = ?, hash = ?, salt = ?, mail = ? where id = ?";
-            PreparedStatement stmt = this.connection.prepareStatement(sql);
+            Query query = session.createQuery("UPDATE UserEntity U SET U.user = :user, U.hash = :hash, U.salt = :salt, U.mail = :mail WHERE U.Id = :id");
 
-            stmt.setString(1, data.get("username"));
-            stmt.setString(2, hashes);
-            stmt.setString(3, salt);
-            stmt.setString(4, data.get("mail"));
-            stmt.setInt(5, userid);
+            query.setParameter("user", data.get("username"));
+            query.setParameter("hash", hashes);
+            query.setParameter("salt", salt);
+            query.setParameter("mail", data.get("mail"));
+            query.setParameter("id", userid);
 
-            int resUpdate = stmt.executeUpdate();
+            Integer resUpdate = query.executeUpdate();
 
-            if (resUpdate != 0)
+            ts.commit();
+            session.close();
+
+            if (resUpdate != null)
                 return false;
 
-        } catch (SQLException e) {
-            Loghandler.log("sql exception "+e.toString(), "warn");
         } catch (Exception e) {
-            Loghandler.log("Password exception "+e.toString(), "warn");
+            session.close();
+            Loghandler.log("Password exception "+Helper.getStackTrace(e), "warn");
         }
+
         return true;
     }
 
