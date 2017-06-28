@@ -40,6 +40,7 @@ public class ConnectionFactory {
         final Configuration config = new Configuration();
         config.addAnnotatedClass(entity.LinkEntity.class);
         config.addAnnotatedClass(entity.UserEntity.class);
+        config.addAnnotatedClass(entity.CountEntity.class);
         config.configure();
 
         final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()

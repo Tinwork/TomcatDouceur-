@@ -208,17 +208,19 @@ public class UserDB extends ConnectionFactory{
         Session session = this.getFactory().openSession();
 
         try {
-
+            Transaction ts = session.getTransaction();
+            ts.begin();
             Query query = session.createQuery("UPDATE UserEntity U SET U.status = :status WHERE U.user = :user");
             query.setParameter("status", true);
             query.setParameter("user", username);
 
             Integer isUpdate = (Integer) query.executeUpdate();
 
+            ts.commit();
             session.close();
-
             if (isUpdate == null)
                 return false;
+
         } catch (Exception e) {
             session.close();
             Loghandler.log(e.toString(), "warn");

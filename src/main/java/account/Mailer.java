@@ -11,6 +11,7 @@ import javax.mail.internet.MimeMessage;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import java.io.IOException;
 import java.util.Properties;
 
 /**
@@ -71,12 +72,12 @@ public class Mailer {
             message.setSubject("Activate your tinwork account");
 
             // Set message
-            message.setContent("<p>In order to active this account click on the following Url</p><a href='https://83a55f57.ngrok.io/tinwork/register?token="+this.token.generateToken()+"'>Validate your account</a>", "text/html");
+            message.setContent("<p>In order to active this account click on the following Url</p><a href='http://a8f273c6.ngrok.io/tinwork/register?token="+this.token.generateToken()+"'>Validate your account</a>", "text/html");
 
             // Send message
             Transport.send(message);
             Loghandler.log("send mail", "info");
-        }catch (MessagingException mex) {
+        } catch (MessagingException mex) {
             Loghandler.log("mail exception "+mex.toString(), "warn");
         }
     }

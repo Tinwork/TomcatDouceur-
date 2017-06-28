@@ -1,6 +1,11 @@
 package sql;
 
+import entity.CountEntity;
+import helper.Helper;
 import helper.Loghandler;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -8,13 +13,12 @@ import java.sql.Array;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 
 /**
  * Created by lookitsmarc on 27/05/2017.
  */
-public class CountURL extends Connect {
+public class CountURL extends ConnectionFactory {
 
     private JSONArray jsonArr = new JSONArray();
     private int count = 0;
@@ -23,7 +27,7 @@ public class CountURL extends Connect {
      * Constructor
      */
     public CountURL(){
-        super.connectToDB();
+        super.setUp();
     }
 
     /**
@@ -31,16 +35,23 @@ public class CountURL extends Connect {
      * @param id
      */
     public void updateCount(int id){
-        String sql = "INSERT INTO count (id_link, date) VALUES (?, ?)";
+        Loghandler.log("id "+id, "info");
+        Session session = this.getFactory().openSession();
+        Date now = new Date();
 
         try {
-            PreparedStatement stmt = this.connection.prepareStatement(sql);
-            stmt.setInt(1, id);
-            stmt.setDate(2, java.sql.Date.valueOf(java.time.LocalDate.now()));
+            Transaction tr = session.getTransaction();
+            tr.begin();
 
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            Loghandler.log(e.toString(), "info");
+            CountEntity count = new CountEntity();
+            count.setId_link(id);
+            count.setDate(now);
+
+            session.save(count);
+            session.close();
+        } catch (Exception e) {
+            session.close();
+            Loghandler.log(Helper.getStackTrace(e), "info");
         }
     }
 
@@ -51,26 +62,33 @@ public class CountURL extends Connect {
      * @return
      */
     public JSONArray getCount(int id) {
-        String sql = "SELECT date FROM count WHERE id_link = ? ORDER BY date DESC";
         ArrayList<HashMap<String, String>> datas = new ArrayList<HashMap<String, String>>();
 
+        Session session = this.getFactory().openSession();
+
         try {
-            PreparedStatement stmt = this.connection.prepareStatement(sql);
-            stmt.setInt(1, id);
 
-            ResultSet res = stmt.executeQuery();
+            Query query = session.createQuery("FROM CountEntity C WHERE C.id_link = :idLink ORDER BY date DESC");
+            query.setParameter("idLink", id);
+            List<CountEntity> listIterator = query.getResultList();
 
-            if (!res.next())
+            if (listIterator.isEmpty())
                 return new JSONArray();
 
-            do {
+            Iterator<CountEntity> iterator = listIterator.iterator();
+
+            while(iterator.hasNext()) {
                 HashMap<String, String> d = new HashMap<>();
-                d.put("date", res.getDate("date").toString());
+                CountEntity tempoCount = iterator.next();
+
+                d.put("date", tempoCount.getDate().toString());
                 datas.add(d);
                 count++;
-            } while (res.next());
+            }
 
-        } catch (SQLException e) {
+            session.close();
+        } catch (Exception e) {
+            session.close();
             Loghandler.log(e.toString(), "info");
         }
 

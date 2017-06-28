@@ -84,12 +84,9 @@ public class SelectLinks extends ConnectionFactory{
         Session session = this.getFactory().openSession();
 
         try {
-            Loghandler.log("create !!!!!!", "info");
-
             Query query = session.createQuery("FROM LinkEntity Link WHERE Link.short_link = :shortLink");
             query.setParameter("shortLink", short_url);
 
-            Loghandler.log("query fiiinndddd !!!!!!", "info");
 
             LinkEntity entity = (LinkEntity) query.getSingleResult();
 
@@ -107,7 +104,7 @@ public class SelectLinks extends ConnectionFactory{
 
             this.link = new Links(
                     datas,
-                    entity.getUserID(),
+                    entity.getId(),
                     entity.getHashnumber(),
                     entity.getCaptcha(),
                     entity.getStartDate() == null ? null : Helper.StrToSQLDate(entity.getStartDate().toString()),
