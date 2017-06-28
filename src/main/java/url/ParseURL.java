@@ -32,13 +32,13 @@ public class ParseURL {
      * Instead of retrieving the link directly this method will set 2 variable which will be use to get the original_ur
      * and the constraint
      * @return
-     * @TODO Return a Link instance and process the link inside the Controller as well as handling the constrain
      */
     public Links retrieveLinks(){
         try {
             link = linkSelector.SelectLinksByShortLink(this.shortURL);
+            Loghandler.log("retrieve link !!!", "info");
         } catch (Exception e){
-            Loghandler.log(e.toString(), "warn");
+            Loghandler.log("Link error "+e.toString(), "warn");
         }
 
         return link;

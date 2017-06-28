@@ -12,7 +12,8 @@ RUN apt-get update && apt-get upgrade -y && \
     nano \
     wget \
     unzip \
-    rsync
+    rsync \
+    xtail
 
 RUN which java
 

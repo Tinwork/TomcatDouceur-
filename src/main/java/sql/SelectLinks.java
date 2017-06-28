@@ -1,28 +1,32 @@
 package sql;
 
-import com.sun.org.apache.bcel.internal.generic.Select;
+import entity.LinkEntity;
+import helper.Helper;
 import helper.Loghandler;
+import org.hibernate.Session;
+import org.hibernate.query.Query;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import url.Links;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Created by lookitsmarc on 11/04/2017.
  */
-public class SelectLinks extends Connect{
+public class SelectLinks extends ConnectionFactory{
 
     // Instance of Links
     private Links link;
     private JSONArray jsonArr = new JSONArray();
 
     public SelectLinks(){
-        this.connectToDB();
+        super.setUp();
     }
 
     /**
@@ -32,33 +36,38 @@ public class SelectLinks extends Connect{
      * @throws Exception
      */
     public JSONArray selectLinksByUserID(int userID) throws Exception{
-        String sql = "SELECT id, original_link, short_link, create_date FROM Link WHERE user_id = ?";
+        Session session = this.getFactory().openSession();
 
         try {
-            PreparedStatement stmt = this.connection.prepareStatement(sql);
-            stmt.setInt(1, userID);
+            Query query = session.createQuery("FROM LinkEntity Link WHERE Link.user_id = :userID");
+            query.setParameter("userID", userID);
 
-            ResultSet res = stmt.executeQuery();
-            if (!res.next()) {
-                Loghandler.log("data is null for user id "+userID, "info");
+            List<LinkEntity> linkIterator = query.getResultList();
+
+            if (linkIterator.isEmpty())
                 return null;
-            }
 
-            do {
+            Iterator<LinkEntity> entityIterator = linkIterator.iterator();
+
+            // Iterate threw the the result of the Query
+            while(entityIterator.hasNext()) {
+
+                LinkEntity next = entityIterator.next();
+
                 JSONObject link = new JSONObject();
-                link.put("original_link", res.getString("original_link"))
-                    .put("short_link", res.getString("short_link"))
-                    .put("create_date", res.getDate("create_date"))
-                    .put("id", res.getInt("id"));
+                link.put("original_link", next.getOriginaLink())
+                    .put("short_link", next.getShortLink())
+                    .put("craete_date", next.getCreateDate())
+                    .put("id", next.getId());
 
                 this.jsonArr.put(link);
-            } while(res.next());
+            }
 
-        } catch (SQLException e) {
-            Loghandler.log("unexpected error while retrieving the link for user "+userID, "fatal");
-            Loghandler.log(e.toString(), "fatal");
-
-            throw new Exception("unable to retrieve links");
+            session.close();
+        } catch (Exception e) {
+            Loghandler.log("select link by user id error "+e.getMessage(), "fatal");
+            session.close();
+            throw new Exception("unable to retrieve the links");
         }
 
         return this.jsonArr;
@@ -72,40 +81,47 @@ public class SelectLinks extends Connect{
      */
     public Links SelectLinksByShortLink(String short_url) throws Exception{
 
+        Session session = this.getFactory().openSession();
+
         try {
-            PreparedStatement stmt = this.connection.prepareStatement("SELECT * FROM Link WHERE short_link = ?");
-            stmt.setString(1, short_url);
+            Loghandler.log("create !!!!!!", "info");
 
-            ResultSet res = stmt.executeQuery();
+            Query query = session.createQuery("FROM LinkEntity Link WHERE Link.short_link = :shortLink");
+            query.setParameter("shortLink", short_url);
 
-            if (!res.next()){
+            Loghandler.log("query fiiinndddd !!!!!!", "info");
+
+            LinkEntity entity = (LinkEntity) query.getSingleResult();
+
+            if (entity == null) {
                 return null;
             }
 
-            do{
-                HashMap<String, String> datas = new HashMap<String, String>();
-                datas.put("original_link", res.getString("original_link"));
-                datas.put("short_link", res.getString("short_link"));
-                datas.put("password", res.getString("password"));
-                datas.put("multiple_password", res.getString("multiple_password"));
-                datas.put("mail", res.getString("mail"));
+            // Create a hashmap of the datas
+            HashMap<String, String> datas = new HashMap<>();
+            datas.put("original_link", entity.getOriginaLink());
+            datas.put("short_link", entity.getShortLink());
+            datas.put("password", entity.getPassword());
+            datas.put("multiple_password", entity.getMultiplePwd());
+            datas.put("mail", entity.getMail());
 
-                link = new Links(
-                        datas,
-                        res.getInt("Id"),
-                        res.getLong("hashnumber"),
-                        res.getBoolean("captcha"),
-                        res.getDate("start_date"),
-                        res.getDate("end_date"),
-                        res.getInt("set_max_use")
-                );
-            } while(res.next());
+            this.link = new Links(
+                    datas,
+                    entity.getUserID(),
+                    entity.getHashnumber(),
+                    entity.getCaptcha(),
+                    entity.getStartDate() == null ? null : Helper.StrToSQLDate(entity.getStartDate().toString()),
+                    entity.getEndDate() == null ? null : Helper.StrToSQLDate(entity.getEndDate().toString()),
+                    entity.getMaxUse()
+            );
 
-        } catch (SQLException e){
-            Loghandler.log("exception "+e.toString(), "warn");
+            session.close();
+        } catch (Exception e) {
+            Loghandler.log("exception "+Helper.getStackTrace(e), "fatal");
+            session.close();
         }
 
-        return link;
+        return this.link;
     }
 
 }

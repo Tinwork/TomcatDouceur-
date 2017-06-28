@@ -5,10 +5,7 @@ import bean.Userstate;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -286,9 +283,23 @@ final public class Helper {
             Date parsed = format.parse(date);
             datec = new java.sql.Date(parsed.getTime());
         } catch (ParseException e) {
-            Loghandler.log(e.toString(), "warn");
+            Loghandler.log("Helper date "+e.toString(), "warn");
         }
 
         return datec;
     }
+
+    /**
+     *
+     * @param e
+     * @return
+     */
+    public static String getStackTrace(Exception e) {
+        StringWriter sw = new StringWriter();
+        e.printStackTrace(new PrintWriter(sw));
+        String exceptionAsString = sw.toString();
+
+        return exceptionAsString;
+    }
+
 }

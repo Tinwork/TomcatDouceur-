@@ -7,14 +7,10 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.json.JSONObject;
-import sun.plugin.javascript.navig.Link;
 
 import javax.persistence.EntityManager;
-import java.sql.*;
 import java.util.Date;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.List;
+
 
 /**
  * Created by lookitsmarc on 04/04/2017.
@@ -65,6 +61,8 @@ public class InsertURL extends ConnectionFactory {
 
             insert = (Integer) session.save(link);
             tr.commit();
+
+            session.close();
         } catch(Exception e) {
             Loghandler.log("Hibernate insert url error "+e.toString(), "fatal");
         }
@@ -80,10 +78,10 @@ public class InsertURL extends ConnectionFactory {
      */
     public String checkPresenceOfURL() throws Exception{
         String sURL = null;
+        Session se = this.getFactory().openSession();
 
-       try {
+        try {
            EntityManager en = null;
-           Session se = this.getFactory().openSession();
 
            if (se == null) {
                Loghandler.log("session is null ! ", "fatal");
@@ -93,7 +91,7 @@ public class InsertURL extends ConnectionFactory {
            query.setParameter("url", this.original_url);
 
            LinkEntity link = (LinkEntity) query.uniqueResult();
-
+           se.close();
            if (link == null) {
              return null;
            }
@@ -101,6 +99,7 @@ public class InsertURL extends ConnectionFactory {
            sURL = link.getShortLink();
        } catch (Exception e) {
             Loghandler.log("Get present url "+e, "fatal");
+            se.close();
        }
 
        return sURL;
@@ -111,8 +110,9 @@ public class InsertURL extends ConnectionFactory {
      * @return
      */
     public boolean checkPresenceOfShortURL(String shortURL){
+        Session se = this.getFactory().getCurrentSession();
+
         try {
-            Session se = this.getFactory().getCurrentSession();
 
             if (se == null)
                 se = this.getFactory().openSession();
@@ -125,8 +125,10 @@ public class InsertURL extends ConnectionFactory {
             if (link == null)
                 return false;
 
+            se.close();
         } catch (Exception e) {
             Loghandler.log("check presence error "+e.toString(), "fatal");
+            se.close();
         }
 
       return true;
@@ -140,27 +142,24 @@ public class InsertURL extends ConnectionFactory {
      * @throws Exception
      */
     public void insertShortLink(long hash, String shortURL, int row) throws Exception{
+        Session session = this.getFactory().openSession();
 
-       try {
-            Session session = this.getFactory().openSession();
-            Transaction ts = session.getTransaction();
-            ts.begin();
+        try {
+           Transaction ts = session.getTransaction();
+           ts.begin();
 
-           /** LinkEntity entity = new LinkEntity();
-            entity.setId(row);
-            entity.setHashnumber(hash);
-            entity.setShortLink(shortURL);**/
-
-           Query query = session.createQuery("UPDATE LinkEntity Link SET Link.hashnumber = :hashnumber, Link.short_link = :short_link");
+           Query query = session.createQuery("UPDATE LinkEntity Link SET Link.hashnumber = :hashnumber, Link.short_link = :short_link WHERE id = :id");
            query.setParameter("hashnumber", hash);
            query.setParameter("short_link", shortURL);
+           query.setParameter("id", row);
            query.executeUpdate();
 
             //session.update(entity);
             //ts.commit();
-
+            session.close();
        } catch (Exception e) {
             Loghandler.log("Update link has failed "+e.toString(), "fatal");
+            session.close();
        }
     }
 }

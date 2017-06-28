@@ -107,7 +107,7 @@ public class LinkEntity {
         this.multiple_password = multiplePwd;
     }
 
-    public boolean isCaptcha() {
+    public boolean getCaptcha() {
         return captcha;
     }
 
@@ -140,7 +140,11 @@ public class LinkEntity {
     }
 
     public int getMaxUse() {
-        return set_max_use;
+
+        if (this.set_max_use == null)
+            return 0;
+
+        return this.set_max_use;
     }
 
     public void setMaxUse(Integer maxUse) {
