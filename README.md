@@ -1,37 +1,112 @@
-# Tinwork tomcat
+### Tinwork TOMCAT (with Hibernate)
 
-# Project 
+### Description:
 
-This project is a shorten URL webapp made using Java's web technology J2EE. This project is a work given during the Java Course. Two version will be released. This first one using no framework, only Plain Java Classes, Object, Interfaces...) 
-This shorten URL app give you the following possibilites: 
+Tinwork tomcat is a Java web app which allow you to create short link. The code is avaible by clicking on this link : [Code](https://github.com/Tinwork/TomcatDouceur-/tree/hibernate)
 
-* Adding a single to a multiple password to your short url
-* Make it private by restricting the access to an email (Multi email support will be analysis)
-* Restrict during an amount of time 
-* Verify by a captcha 
-* For user's URL you'll get statistics of the popularity of your shortern URL
+### Functionnality
 
-# Install 
+- Shorting url 
+- Password / Multiple password
+- Timeout
+- Maximum use
+- Email verification 
+- Captcha verification
+- Dashboard
 
-In order to launch the project you will need to use Docker. Otherwise i suggest you to download docker for your version by clicking on the next link (Download docker)[https://www.docker.com/community-edition]. After installing docker follow the instructions below 
 
-* Clone this repository and go in there :) 
-* docker-compose up (This will create 3 containers which will be controlled by docker-compose)
-* Access the tomcat project using localhost:5000
+### Technology uses in this version
 
-Accessing to the database using mysql command
-* Use docker exec -ti mysql_container_id /bin/bash 
+- Tomcat
+- JEE
+- JDBC mysql driver
+- JWT
+- Chart.js (rendering chart)
+- Bootstrap
+- Docker
+- Hibernate
 
-Accessing to the database using phpmyadmin
-* Access to phpmyadmin using localhost:8080
-* Use docker inspect mysql_container_id and look for the **IP_ADRESS** 
-* Enter the container IP and the logs 
+### Launch the project
 
-Et voilà ! 
+/!\ This project required to be used with Docker. 
+For windows please install the following questions: [Install docker](https://www.docker.com/products/docker-toolbox)
 
-# Code 
+/!\ For windows user **be careful to note the IP ADRESS of the container**
 
-* JDK >= 8
-* We use Intellij IDEA to help us with the development
-* Download the JDBC driver and the Tomcat driver 
-* Use maven to import every libs which are used by the project
+* Before starting the docker engine we need to update sompe parameters
+* In the docker-compose.yml file please modify the following section
+
+```yml
+
+ volumes:
+      - ./web/<platform (window | linux)>:/opt/tomcat9/webapps/
+
+environment:
+       GMAIL_USER: <Your address mail>
+       GMAIL_PASSWORD: <Your adress password>
+```
+
+* This modification allow you to be able to send mails (we use an external smtp server)
+
+
+```shell
+
+// First go to the root of the project
+cd tinworktomcat_hibernate
+
+// Run docker
+docker-compose up -d 
+
+```
+* The project is now available at **http://localhost:5000/tinwork/home**
+* If you encounter any error with Docker, please contact the administrator at: marc.inthaamnouay@gmail.com
+
+### Note for window user
+
+* For windows user you need to add the **docker adress IP** in your hosts
+* Add the IP address in your **hosts** like below
+
+```shell
+local.dev     <IP adress>  
+```
+
+* The project should then be accessible by using this adresses **http://local.dev:5000/tinwork/home**
+
+
+### Debugging
+
+* For debugging the project you need to locate the **container id** of the container name **tinwork-tomcat** using the command **docker ps**
+* Follow these steps below: 
+
+```shell
+// Accessing to the container
+docker exec -ti <CONTAINER ID ID: eg: 009fbbc40606> /bin/bash 
+
+// Navigate to the logs file
+cd logs
+
+// Listen to the logs
+xtail .
+```
+
+### Debugging the database
+
+* Database is available at the following address: **http://localhost:8080** 
+
+```shell
+database: tomcat-db
+username: root
+password: tinwork
+```
+
+
+### Misc
+
+* If you encounter any issue related to the project, please contact **marc.inthaamnouay@gmail.com**
+* If you encounter an issue with the mail server smtp, please try an other address. In the worst cases contact Marc Inthaamnouay.
+
+# Maintainers
+
+* Marc Intha-amnouay
+* Antoine Renault
+* Didier Youn 
