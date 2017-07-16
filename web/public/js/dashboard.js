@@ -1,3 +1,4 @@
+
 /**
  * Dashboard.js
  *          Control the front-end of the dashboard
@@ -62,8 +63,23 @@
                     type: 'POST',
                     props: data
                 })
-                .then(res => console.log(res))
-                .catch(e => console.log(e));
+                .then(res => {
+                    console.log(res);
+                    if (res.error) {
+                        swal(
+                            'Oops!',
+                            `We haven't been able to update your profile, please retry`,
+                            'error'
+                        )
+                    } else {
+                         window.location = 'logout?type=profile';
+                    }
+                })
+                .catch(e => swal(
+                    'Oops!',
+                    `We haven't been able to update your profile, please retry`,
+                    'error'
+                ));
             },
             exclude: false
         }
@@ -80,9 +96,12 @@
         // Define the params of the request
         let fetchParams = {
             method: type,
-            headers: HEADERS,
-            body: JSON.stringify(props)        
+            headers: HEADERS
         };
+
+        if (type === 'POST') {
+            fetchParams.body = JSON.stringify(props)        
+        }
 
         HEADERS.append('param', JSON.stringify(props));
 
@@ -120,6 +139,15 @@
      * _.Build Table
      */
     _.buildTable = json => {
+        if (json == null) {
+            swal(
+                'Oops!',
+                `No url has been found for your profile`,
+                'warning'
+            );
+
+            return;
+        }
         // Construct a table
         DOMString = '';
         let idArr = [];

@@ -64,14 +64,14 @@ final public class Helper {
         for (int i = 0; i < constraintList.length - 1; i++) {
             switch (constraintList[i]) {
                 case "mulPwd":
-                        if (!Helper.containMulPwd(postDatas)) {
-                            return false;
-                        }
+                    if (!Helper.containMulPwd(postDatas)) {
+                        return false;
+                    }
                     break;
                 case "captcha":
-                        if (postDatas.get("g-recaptcha-response") == null) {
-                            return false;
-                        }
+                    if (postDatas.get("g-recaptcha-response") == null) {
+                        return false;
+                    }
                     break;
                 case "start_date":
                     break;
@@ -104,7 +104,7 @@ final public class Helper {
         String optskey = "passwords";
 
         if (postDatas.containsKey(optskey))
-                ispresent = true;
+            ispresent = true;
 
         return ispresent;
     }
@@ -219,6 +219,23 @@ final public class Helper {
         return true;
     }
 
+    /**
+     *
+     * @param req
+     */
+    public static void removeAttrFromReq(javax.servlet.http.HttpServletRequest req) {
+        Object beanProfile = req.getSession().getAttribute("userstate");
+
+        if (beanProfile == null) {
+            Loghandler.log("profile is null", "info");
+            return;
+        }
+
+
+        // remove the profile (use when the user want to disconnect)
+        req.getSession().removeAttribute("userstate");
+    }
+
 
     /**
      *
@@ -239,7 +256,7 @@ final public class Helper {
      * @return
      */
     public static int retrieveUserID(){
-       return userid;
+        return userid;
     }
 
     /**

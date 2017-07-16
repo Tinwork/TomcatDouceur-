@@ -11,6 +11,7 @@
 <head>
     <title>$Title$</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <link rel="stylesheet" href="/tinwork/public/css/style.css">
     <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
@@ -37,40 +38,67 @@
         </ul>
     </div>
 </nav>
+<div class="container-fluid">
     <c:set var = "password" value="${constraint.getConstrain('password')}"></c:set>
     <c:set var = "mail"  value="${constraint.getConstrain('mail')}"></c:set>
     <c:set var = "captcha"  value="${constraint.getConstrain('captcha')}"></c:set>
     <c:set var = "mulpwd" value="${constraint.getConstrain('mulPwd')}"></c:set>
 
-    <form method="post" action="/tinwork/dao">
-        <c:if test="${password eq true}">
-            <div class="input-group">
-                <span class="input-group-addon" id="password">Password</span>
-                <input type="text" class="form-control" placeholder="password" name="password" aria-describedby="basic-addon1" required>
-            </div>
-        </c:if>
-        <c:if test="${mail eq true}">
-            <div class="input-group">
-                <span class="input-group-addon" id="mail">Mail</span>
-                <input type="text" class="form-control" placeholder="Mail" name="mail" aria-describedby="basic-addon1" required>
-            </div>
-        </c:if>
-        <c:if test="${captcha eq true}">
-            <div class="input-group">
-                <span class="input-group-addon" id="captcha">Catpcha</span>
-                <div class="g-recaptcha" data-sitekey="6LfmAiIUAAAAAAIzd9O1o_0lu63QWhx5GYB5frIf"></div>
-            </div>
-        </c:if>
-        <c:if test="${mulpwd eq true}">
-            <div class="input-group">
-                <span class="input-group-addon" id="mulpwd">Passwords (c)</span>
-                <input type="text" class="form-control" placeholder="Mail" name="passwords" aria-describedby="basic-addon1" required>
-            </div>
-        </c:if>
-        <!-- Send back the bean.. As it's not present within the other request ... :(-->
-        <input type="hidden" name="constraint" value="${constraint}">
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
+    <c:set var="message" value="${success.getMessage()}"/>
+    <c:set var="status" value="${success.getStatus()}"/>
+    <c:set var="error" value="${error.getError()}"/>
+    <div class="row">
+        <div class="img-wrapper">
+            <img src="/tinwork/public/image/logo.jpg" id="logo">
+            <p style="text-align: center">Tinwork constraint checking</p>
+            <p style="text-align: center">Please enter the following information below</p>
+            <c:if test = "${status == '200'}">
+                <div class="alert alert-success" role="alert">
+                    <p>${message}</p>
+                </div>
+            </c:if>
+            <c:if test = "${error != null}">
+                <div class="alert alert-danger" role="alert">
+                    <p>${error}</p>
+                </div>
+            </c:if>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <form method="post" action="/tinwork/dao">
+                <c:if test="${password eq true}">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="password">Password</span>
+                        <input type="password" class="form-control" placeholder="password" name="password" aria-describedby="basic-addon1" required>
+                    </div>
+                </c:if>
+                <c:if test="${mail eq true}">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="mail">Mail</span>
+                        <input type="text" class="form-control" placeholder="Mail" name="mail" aria-describedby="basic-addon1" required>
+                    </div>
+                </c:if>
+                <c:if test="${captcha eq true}">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="captcha">Catpcha</span>
+                        <div class="g-recaptcha" data-sitekey="6LfmAiIUAAAAAAIzd9O1o_0lu63QWhx5GYB5frIf"></div>
+                    </div>
+                </c:if>
+                <c:if test="${mulpwd eq true}">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="mulpwd">Passwords (c)</span>
+                        <input type="password" class="form-control" placeholder="Password" name="passwords" aria-describedby="basic-addon1" required>
+                    </div>
+                </c:if>
+                <!-- Send back the bean.. As it's not present within the other request ... :(-->
+                <input type="hidden" name="constraint" value="${constraint}">
+                <button type="submit" class="btn btn-primary long">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
+   
     <script src="/tinwork/public/js/validation.js"></script>
 </body>
 </html>

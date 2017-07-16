@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: lookitsmarc
@@ -16,6 +17,9 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
 </head>
 <body>
+<c:set var="message" value="${success.getMessage()}"/>
+<c:set var="status" value="${success.getStatus()}"/>
+<c:set var="error" value="${error.getError()}"/>
 <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
     <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -40,7 +44,16 @@
     <div class="row">
         <div class="img-wrapper">
             <img src="/tinwork/public/image/logo.jpg" id="logo">
-            <p>Oops incorrect login. Please retry</p>
+            <c:if test = "${status == '200'}">
+                <div class="alert alert-success" role="alert">
+                    <p>${message}</p>
+                </div>
+            </c:if>
+            <c:if test = "${error != null}">
+                <div class="alert alert-danger" role="alert">
+                    <p>${error}</p>
+                </div>
+            </c:if>
         </div>
     </div>
     <div class="row">
@@ -52,7 +65,7 @@
                 </div>
                 <div class="input-group">
                     <span class="input-group-addon" id="pwd">Password</span>
-                    <input type="text" class="form-control" name="password" aria-describedby="pwd" required>
+                    <input type="password" class="form-control" name="password" aria-describedby="pwd" required>
                 </div>
                 <button type="submit" class="btn btn-primary long">Submit</button>
             </form>

@@ -72,7 +72,7 @@ public class Mailer {
             message.setSubject("Activate your tinwork account");
 
             // Set message
-            message.setContent("<p>In order to active this account click on the following Url</p><a href='http://a8f273c6.ngrok.io/tinwork/register?token="+this.token.generateToken()+"'>Validate your account</a>", "text/html");
+            message.setContent("<p>In order to active this account click on the following Url</p><a href='http://localhost:5000/tinwork/register?token="+this.token.generateToken()+"'>Validate your account</a>", "text/html");
 
             // Send message
             Transport.send(message);

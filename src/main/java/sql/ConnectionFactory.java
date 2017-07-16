@@ -38,6 +38,7 @@ public class ConnectionFactory {
      */
     protected void setUp() {
         final Configuration config = new Configuration();
+        //config.configure("/sql/hibernate.cfg.xml");
         config.addAnnotatedClass(entity.LinkEntity.class);
         config.addAnnotatedClass(entity.UserEntity.class);
         config.addAnnotatedClass(entity.CountEntity.class);

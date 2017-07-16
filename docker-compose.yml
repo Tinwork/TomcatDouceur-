@@ -2,20 +2,20 @@ version: '2'
 services: 
   tomcat: 
     build: .
-    image: tinwork/tomcat
-    container_name: tinwork-tomcat
+    image: tinwork/tomcat-hib
+    container_name: tinwork-hib-tomcat
     depends_on: 
-      - tomcat-db
+      - tomcat-db-hib
     ports: 
       - 5000:8080
     volumes:
       - ./web:/opt/tomcat9/webapps/tinwork
     links:
-      - tomcat-db
+      - tomcat-db-hib
 
-  tomcat-db:
+  tomcat-db-hib:
     image: mysql:5.7
-    container_name: tomcat-db
+    container_name: tomcat-db-hib
     volumes:
       - ./sql_data:/var/lib/mysql
     environment: 
@@ -26,9 +26,9 @@ services:
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
-    container_name: tomcat_phpmyadmin
+    container_name: tomcat_phpmyadmin-hib
     depends_on: 
-      - tomcat-db
+      - tomcat-db-hib
     environment:
       - PMA_ARBITRARY=1
     external_links: 

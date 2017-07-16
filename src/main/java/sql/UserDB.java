@@ -273,7 +273,7 @@ public class UserDB extends ConnectionFactory{
             ts.commit();
             session.close();
 
-            if (resUpdate != null)
+            if (resUpdate == null)
                 return false;
 
         } catch (Exception e) {

@@ -13,10 +13,12 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
     <link rel="stylesheet" href="/tinwork/public/css/style.css">
     <link rel="stylesheet" href="/tinwork/public/css/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.css">
     <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.js"></script>
 </head>
 <body>
     <c:set var = "token" value="${userstate.getToken()}"></c:set>
@@ -43,6 +45,9 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/tinwork/sign">Signup</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/tinwork/logout">Logout</a>
                 </li>
             </ul>
         </div>
@@ -83,13 +88,13 @@
                         <div class="form-group row">
                             <label for="password" class="col-2 col-form-label">Old password</label>
                             <div class="col-10">
-                                <input class="form-control" type="text" value="" id="old-password" name="old-password">
+                                <input class="form-control" type="password" value="" id="old-password" name="old-password">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="password" class="col-2 col-form-label">Password</label>
                             <div class="col-10">
-                                <input class="form-control" type="text" value="" id="password" name="password">
+                                <input class="form-control" type="password" value="" id="password" name="password">
                             </div>
                         </div>
                         <div class="form-group row">

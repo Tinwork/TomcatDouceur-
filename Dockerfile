@@ -1,13 +1,12 @@
 # The os that we're going to be based off 
-FROM debian:latest
+FROM ubuntu
 
 # Update the sources list 
-RUN echo "deb http://ftp.de.debian.org/debian jessie-backports main" >> /etc/apt/sources.list
+#RUN echo "deb http://ftp.de.debian.org/debian jessie-backports main" >> /etc/apt/sources.list
 
 # Install the dependencies and the lib that need tomcat 
 RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y \
-    -t jessie-backports  openjdk-8-jre-headless ca-certificates-java \
     openjdk-8-jdk \
     nano \
     wget \
@@ -22,12 +21,12 @@ WORKDIR "/opt"
 
 
 # Download tomcat, extract and rename the folder 
-RUN wget http://apache.mediamirrors.org/tomcat/tomcat-9/v9.0.0.M21/bin/apache-tomcat-9.0.0.M21.tar.gz && \
-    tar xvf apache-tomcat-9.0.0.M21.tar.gz
+RUN wget http://apache.mediamirrors.org/tomcat/tomcat-9/v9.0.0.M22/bin/apache-tomcat-9.0.0.M22.tar.gz && \
+    tar xvf apache-tomcat-9.0.0.M22.tar.gz
 
 # Rename the folder
-RUN mv apache-tomcat-9.0.0.M21 tomcat9 && \
-    rm apache-tomcat-9.0.0.M21.tar.gz
+RUN mv apache-tomcat-9.0.0.M22 tomcat9 && \
+    rm apache-tomcat-9.0.0.M22.tar.gz
 
 # Change the workdir 
 WORKDIR "tomcat9"
