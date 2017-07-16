@@ -46,7 +46,7 @@
         <c:if test="${password eq true}">
             <div class="input-group">
                 <span class="input-group-addon" id="password">Password</span>
-                <input type="text" class="form-control" placeholder="password" name="password" aria-describedby="basic-addon1" required>
+                <input type="password" class="form-control" placeholder="password" name="password" aria-describedby="basic-addon1" required>
             </div>
         </c:if>
         <c:if test="${mail eq true}">
@@ -64,7 +64,7 @@
         <c:if test="${mulpwd eq true}">
             <div class="input-group">
                 <span class="input-group-addon" id="mulpwd">Passwords (c)</span>
-                <input type="text" class="form-control" placeholder="Mail" name="passwords" aria-describedby="basic-addon1" required>
+                <input type="password" class="form-control" placeholder="Mail" name="passwords" aria-describedby="basic-addon1" required>
             </div>
         </c:if>
         <!-- Send back the bean.. As it's not present within the other request ... :(-->

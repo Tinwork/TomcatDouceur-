@@ -74,6 +74,14 @@
         <url-pattern>/login</url-pattern>
     </servlet-mapping>
     <servlet>
+        <servlet-name>Logout</servlet-name>
+        <servlet-class>controller.LogoutController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Logout</servlet-name>
+        <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
+    <servlet>
         <servlet-name>Dashboard</servlet-name>
         <servlet-class>controller.DashboardController</servlet-class>
     </servlet>

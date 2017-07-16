@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 /**
- * Created by lookitsmarc on 18/05/2017.
+ * Created by Marc Intha-amnouay, Didier Youn and Antoine Renault on 18/05/2017.
  */
 public class DaoController extends HttpServlet{
 

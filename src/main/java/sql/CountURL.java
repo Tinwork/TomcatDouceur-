@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Created by lookitsmarc on 27/05/2017.
+ * Created by Marc Intha-amnouay, Didier Youn and Antoine Renault on 27/05/2017.
  */
 public class CountURL extends Connect {
 

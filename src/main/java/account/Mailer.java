@@ -14,7 +14,7 @@ import javax.naming.NamingException;
 import java.util.Properties;
 
 /**
- * Created by lookitsmarc on 19/05/2017.
+ *  on 19/05/2017.
  */
 public class Mailer {
 

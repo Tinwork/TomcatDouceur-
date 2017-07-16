@@ -12,7 +12,7 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 
 /**
- * Created by lookitsmarc on 06/06/2017.
+ * Created by Marc Intha-amnouay, Didier Youn and Antoine Renault on 06/06/2017.
  */
 public class UpdateAccount extends HttpServlet {
 

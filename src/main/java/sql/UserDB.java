@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 
 /**
- * Created by lookitsmarc on 14/05/2017.
+ * Created by Marc Intha-amnouay, Didier Youn and Antoine Renault on 14/05/2017.
  */
 public class UserDB extends Connect{
 
@@ -245,7 +245,7 @@ public class UserDB extends Connect{
 
             int resUpdate = stmt.executeUpdate();
 
-            if (resUpdate != 0)
+            if (resUpdate == 0)
                 return false;
 
         } catch (SQLException e) {

@@ -7,7 +7,7 @@ import java.sql.*;
 import java.sql.Date;
 
 /**
- * Created by lookitsmarc on 04/04/2017.
+ * Created by Marc Intha-amnouay, Didier Youn and Antoine Renault on 04/04/2017.
  */
 public class InsertURL extends Connect{
 

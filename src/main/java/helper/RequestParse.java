@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 /**
- * Created by lookitsmarc on 08/04/2017.
+ * Created by Marc Intha-amnouay, Didier Youn and Antoine Renault on 08/04/2017.
  */
 public class RequestParse {
 

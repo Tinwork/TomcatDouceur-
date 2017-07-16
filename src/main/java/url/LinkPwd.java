@@ -12,7 +12,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
 
 /**
- * Created by lookitsmarc on 16/05/2017.
+ * Created by Marc Intha-amnouay, Didier Youn and Antoine Renault on 16/05/2017.
  */
 public class LinkPwd {
 

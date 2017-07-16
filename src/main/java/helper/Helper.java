@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
 import helper.Loghandler;
 
 /**
- * Created by lookitsmarc on 17/05/2017.
+ * Created by Marc Intha-amnouay, Didier Youn and Antoine Renault on 17/05/2017.
  */
 final public class Helper {
 
@@ -220,6 +220,23 @@ final public class Helper {
             return false;
 
         return true;
+    }
+
+    /**
+     *
+     * @param req
+     */
+    public static void removeAttrFromReq(javax.servlet.http.HttpServletRequest req) {
+        Object beanProfile = req.getSession().getAttribute("userstate");
+
+        if (beanProfile == null) {
+            Loghandler.log("profile is null", "info");
+            return;
+        }
+
+
+        // remove the profile (use when the user want to disconnect)
+        req.getSession().removeAttribute("userstate");
     }
 
 

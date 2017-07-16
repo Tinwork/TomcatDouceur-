@@ -1,7 +1,7 @@
 package bean;
 
 /**
- * Created by lookitsmarc on 15/05/2017.
+ * Created by Marc Intha-amnouay, Didier Youn and Antoine Renault on 15/05/2017.
  */
 public class Userstate {
 

@@ -39,7 +39,7 @@
             </ul>
             <form class="form-inline" id="no-margin" action="login" method="POST">
                 <input class="form-control mr-sm-2" type="text" name="username" placeholder="Username" required>
-                <input class="form-control mr-sm-2" type="text" name="password" placeholder="Password" required>
+                <input class="form-control mr-sm-2" type="password" name="password" placeholder="Password" required>
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Sign in</button>
             </form>
         </div>
@@ -72,7 +72,7 @@
                             </div>
                             <div class="input-group">
                                 <span class="input-group-addon" id="pwd">Password</span>
-                                <input type="text" class="form-control" name="password" aria-describedby="pwd" required>
+                                <input type="password" class="form-control" name="password" aria-describedby="pwd" required>
                             </div>
                             <div class="input-group">
                                 <span class="input-group-addon" id="mail">Mail address</span>

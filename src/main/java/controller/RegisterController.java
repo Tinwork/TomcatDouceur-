@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 /**
- * Created by lookitsmarc on 20/05/2017.
+ * Created by Marc Intha-amnouay, Didier Youn and Antoine Renault on 20/05/2017.
  */
 public class RegisterController extends HttpServlet {
 

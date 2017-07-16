@@ -15,7 +15,7 @@ import static java.util.logging.Level.SEVERE;
 import static java.util.logging.Level.WARNING;
 
 /**
- * Created by lookitsmarc on 04/04/2017.
+ * Created by Marc Intha-amnouay, Didier Youn and Antoine Renault on 04/04/2017.
  */
 public class Loghandler {
 

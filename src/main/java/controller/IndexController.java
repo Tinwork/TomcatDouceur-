@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 /**
- * Created by lookitsmarc on 08/04/2017.
+ * Created by Marc Intha-amnouay, Didier Youn and Antoine Renault on 08/04/2017.
  */
 public class IndexController extends HttpServlet {
 

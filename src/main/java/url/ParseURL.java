@@ -8,7 +8,7 @@ import sql.SelectLinks;
 import java.util.HashMap;
 
 /**
- * Created by lookitsmarc on 13/04/2017.
+ * Created by Marc Intha-amnouay, Didier Youn and Antoine Renault on 13/04/2017.
  */
 public class ParseURL {
 

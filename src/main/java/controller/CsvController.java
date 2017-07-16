@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Created by lookitsmarc on 23/05/2017.
+ * Created by Marc Intha-amnouay, Didier Youn and Antoine Renault on 23/05/2017.
  */
 @MultipartConfig
 public class CsvController extends HttpServlet {

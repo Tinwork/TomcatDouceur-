@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServlet;
 import java.io.IOException;
 
 /**
- * Created by lookitsmarc on 15/05/2017.
+ * Created by Marc Intha-amnouay, Didier Youn and Antoine Renault on 15/05/2017.
  */
 public class DashboardController extends HttpServlet{
 

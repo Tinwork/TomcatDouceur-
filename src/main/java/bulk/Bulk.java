@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Created by lookitsmarc on 25/05/2017.
+ * Created by Marc Intha-amnouay, Didier Youn and Antoine Renault on 25/05/2017.
  * In the first impression i though that we would be able to do a seperate thread
  * In order to not alter the UI rendering. But it looks like that well.. actually not
  */

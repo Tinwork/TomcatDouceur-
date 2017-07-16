@@ -11,7 +11,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 /**
- * Created by lookitsmarc on 04/04/2017.
+ * Created by Marc Intha-amnouay, Didier Youn and Antoine Renault on 04/04/2017.
  */
 public class Connect {
     // Define protected fields

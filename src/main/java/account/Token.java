@@ -13,7 +13,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- * Created by lookitsmarc on 15/05/2017.
+ * Created by Marc Intha-amnouay, Didier Youn and Antoine Renault on 15/05/2017.
  */
 public class Token implements TokenIface{
 

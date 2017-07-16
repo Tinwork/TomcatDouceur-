@@ -10,7 +10,8 @@ RUN apt-get update && apt-get upgrade -y && \
     -t jessie-backports  openjdk-8-jre-headless ca-certificates-java \
     openjdk-8-jdk \
     nano \
-    wget 
+    wget \
+    xtail
 
 RUN which java
 
