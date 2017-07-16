@@ -70,7 +70,7 @@ public class DaoController extends HttpServlet{
 
         if (!ParseURL.checkConstraint(listConstraint, postChecking, linkInstance)) {
             Loghandler.log("data is bad", "warn");
-            Dispatch.dispatchError(req, res, PATH,"datas are invalid");
+            Dispatch.dispatchError(req, res, PATH,"Constraint are invalid. If you use he set Max use, it might be possible that the link has been already been used too much");
             return;
         }
 

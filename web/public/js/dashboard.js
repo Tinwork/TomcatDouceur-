@@ -139,6 +139,15 @@
      * _.Build Table
      */
     _.buildTable = json => {
+        if (json == null) {
+            swal(
+                'Oops!',
+                `No url has been found for your profile`,
+                'warning'
+            );
+
+            return;
+        }
         // Construct a table
         DOMString = '';
         let idArr = [];
